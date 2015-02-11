@@ -1,3 +1,62 @@
-Premier succés : http://fr.wikipedia.org/w/api.php?action=help&modules=parse
+Deux grandes manières d'attaquer :
+	1) Avec action=query
+	2) Avec action=parse
+	
+1) Action=query :
+
+Avantage : plusieurs requètes en une possible (titles=Req1|Req2).
+Problème : date à recpérer avec une autre requete
+
+Aide : http://fr.wikipedia.org/w/api.php?action=help&modules=query
+
+Forme générale :
+
+http://fr.wikipedia.org/w/api.php?action=query&prop=[PROP]&titles=Bataille%20de%20Verdun%20%281916%29&continue=
+
+PROP :
+categories|coordinates|extracts|info|langlinks|links|revisions|images|pageterms
+
+Indispensables : (sous parametre)
+categories
+coordinates
+extracts
+info (&inprop=url)
+langlinks
+links (vs linkshere ?)
+revisions (&rvprop=content&rvsection=0)
+
+Utiles :
+images
+pageterms
+
+Autres "prop" inutiles dans notre context.
+
+
+Requete pour la date (via la Infobox) :
+
+http://fr.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvsection=0&titles=Bataille%20de%20Verdun%20%281916%29&continue=
+
+Donc, la forme globale :
+
+http://fr.wikipedia.org/w/api.php?action=query&prop=categories|coordinates|info|langlinks|links|revisions$inprop=url&rvprop=content&rvsection=0&titles=Bataille%20de%20Verdun%20%281916%29&continue=
+
+
+2) Action=parse :
+
+Avantage : possibilité de tout récupérer.
+Problème : impossible de faire plusieurs requètes en une.
+
+Aide : http://fr.wikipedia.org/w/api.php?action=help&modules=parse
+
+Forme générale :
 
 http://fr.wikipedia.org/w/api.php?format=jsonfm&action=parse&page=Bataille de Verdun (1916)
+
+
+3) Décision :
+
+L'Action=query permet d'avoir plus d'information, directement en JSON et de consulter plusieurs pages d'un seul coup. On se dirige donc vers ce format.
+
+Forme générale finale :
+
+http://fr.wikipedia.org/w/api.php?action=query&titles=[TITRES]&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=
