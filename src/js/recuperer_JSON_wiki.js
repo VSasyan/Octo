@@ -29,24 +29,29 @@ function recuperer_JSON_wiki(titres, distanceOrigine, portail_id) {
 	var data = [];
 	$.each(retour.contents.query.pages, function(i, page) {
 		var coor = getCoor(page.coordinates);
-		tps = {
-			page: {
-				id: page.pageid,
-				titre: page.title,
-				nb_langue: getLength(page.langlinks),
-				nb_visite: 0,
-				longueur: page['length'],
-				lien: page.fullurl,
-				data_evenement: getDate(page.revisions),
-				long: coor.lon,
-				lat: coor.lat,
-				distance_Portail: distanceOrigine+1,
-				importance: 0
-			},
+		var date = getDate(page.revisions);
+		console.log(date);
+		pages = {
+			id: page.pageid,
+			titre: page.title,
+			long: coor.lon,
+			lat: coor.lat,
+			nb_langue: getLength(page.langlinks),
+			nb_visite: 0,
+			longueur: page['length'],
+			lien: page.fullurl,
+			//date_maj: ,
+			debut_annee: date.debut_annee,
+			debut_mois: date.debut_mois,
+			debut_jour: date.debut_jour,
+			fin_annee: date.fin_annee,
+			fin_mois: date.fin_mois,
+			fin_jour: date.fin_jour,
+			importance: 0,
+			distance_Portail: distanceOrigine+1,
 			portail_id : portail_id
 		};
-		console.log(getDate(page.revisions));
-		data.push(tps);
+		data.push(pages);
 	});
 
 	// 4) Convertion en string et retour :
@@ -66,22 +71,56 @@ function getLength(elm) {
 }
 
 function getDate(rev) {
-	console.log(rev[0]['*']);
-	if (typeof rev != 'undefined') {
-		var date = /Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(rev[0]['*']);
-		if (date != null) {
-			// Il y a deux date (début/fin)
-			return JSON.stringify([date[1]+' '+date[2]+' '+date[3], date[4]+' '+date[5]+' '+date[6]]);
-		} else {
-			// Une seule date ?
-		var date = /Date\|([0-9]{1,2})\|([^|])+\|([0-9]+)/.exec(rev[0]['*']);
-			if (date != null) {
-				// Une seule date
-				return JSON.stringify([date[1]+' '+date[2]+' '+date[3]]);
-			} else {
-				// Aucune date
-				return '[10000]';
-			}
+	var txt = /date[^=]*= *(.*)[\s]*\| *[a-zA-Z]+ *=/.exec(rev[0]['*']);
+	if (txt) {
+		txt = txt[1].replace(/\[|\]|,/g, '');
+		if (/Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+			return date;
+		} else if (/([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
+			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
+			return date;
+		} else if (/([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
+			date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[1], fin_mois:info[2], fin_jour:0};
+			return date;
+		} else if (/av\. J\.-C\./.test(txt)) {
+			var info = /([0-9]{1,4})/.exec(txt);
+			date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
+			return date;
+		} else if (/(-?[0-9]{1,4})/.test(txt)) {
+			var info = /(-?[0-9]{1,4})/.exec(txt);
+			date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
+			return date;
 		}
-	} else {return '[10000]';}
+	}
+	date = {debut_annee:10000, debut_mois:0, debut_jour:0, fin_annee:10000, fin_mois:0, fin_jour:0};
+	return date;
 }
+
+/*
+
+Tests :
+il y a différents formats de date sur Wikipedia
+donc différentes manières de récupérer la date
+Voici les dates types trouvéées pour tester.
+
+pages = [
+	["Bataille_de_la_Porte_Colline", "av JC, mois", " |guerre=[[Deuxième Guerre civile Marius-Sylla]] |date= Novembre, [[-82|82 {{av JC}}]] |lieu=[[Rome]] ([[Italie]])"],
+	["Bataille de Verdun (1916)", "ap JC, mois, jour, deux dates", "| guerre=[[Première Guerre mondiale]] | date={{Date|21|février|1916}}  – {{Date|19|décembre|1916}} (9 mois, 3 semaines et 6 jours) | lieu=[[Verdun (Meuse)|Verdun]]"],
+	["Bataille_de_Dyrrachium_(48_av._J.-C.)", "av JC, mois, jour", "| guerre=[[Guerre civile de César]]| date=[[10 juillet]] [[-48|48 {{av JC}}]]| lieu=[[Durrës|Dyrrachium]] (de nos jours [[Durrës]], [[Albanie]])"],
+	["Siège_d'Alésia", "av JC", "| légende      = ''[[Vercingétorix]] jette ses armes aux pieds de [[Jules César|César]]'' (tableau de [[Lionel Royer]], [[1899]]) | date         = [[52 av. J.-C.]] | lieu         = [[Historiographie du débat sur la localisation d'Alésia|Alésia]]"],
+	["Bataille_de_Ctésiphon_(363)", "ap JC", "|guerre=[[Guerres perso-romaines]]|date=[[363|363 ap. J.-C.]]|lieu=[[Ctesiphon]], [[Mesopotamie]]"],
+];
+
+// Code à ajouter au window.onload :
+	$.each(pages, function (i, elm) {
+		tps = [{'*':''}];
+		tps[0]['*'] = elm[2];
+		elm.push(getDate(tps));
+		console.log(elm[3]);
+	});
+
+*/
