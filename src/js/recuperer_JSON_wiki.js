@@ -30,8 +30,8 @@ function recuperer_JSON_wiki(titres, distanceOrigine, portail_id) {
 	$.each(retour.contents.query.pages, function(i, page) {
 		var coor = getCoor(page.coordinates);
 		var date = getDate(page.revisions);
-		console.log(date);
-		pages = {
+
+		var pages = {
 			id: page.pageid,
 			titre: page.title,
 			long: coor.lon,
@@ -51,6 +51,7 @@ function recuperer_JSON_wiki(titres, distanceOrigine, portail_id) {
 			distance_Portail: distanceOrigine+1,
 			portail_id : portail_id
 		};
+
 		data.push(pages);
 	});
 
@@ -84,12 +85,14 @@ function getDate(rev) {
 			return date;
 		} else if (/([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
 			var info = /([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
-			date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[1], fin_mois:info[2], fin_jour:0};
+			date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
 			return date;
 		} else if (/av\. J\.-C\./.test(txt)) {
 			var info = /([0-9]{1,4})/.exec(txt);
-			date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
-			return date;
+			if (info) { // /!\ arrive parfois d'avoir que des lettre (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
+				date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
+				return date;
+			}
 		} else if (/(-?[0-9]{1,4})/.test(txt)) {
 			var info = /(-?[0-9]{1,4})/.exec(txt);
 			date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
@@ -97,6 +100,7 @@ function getDate(rev) {
 		}
 	}
 	date = {debut_annee:10000, debut_mois:0, debut_jour:0, fin_annee:10000, fin_mois:0, fin_jour:0};
+	//console.log(txt, rev[0]['*']); /!\ Loupe les dates dans le corp de text. Il faut réfléchir à comment les récupérer.
 	return date;
 }
 
@@ -113,6 +117,9 @@ pages = [
 	["Bataille_de_Dyrrachium_(48_av._J.-C.)", "av JC, mois, jour", "| guerre=[[Guerre civile de César]]| date=[[10 juillet]] [[-48|48 {{av JC}}]]| lieu=[[Durrës|Dyrrachium]] (de nos jours [[Durrës]], [[Albanie]])"],
 	["Siège_d'Alésia", "av JC", "| légende      = ''[[Vercingétorix]] jette ses armes aux pieds de [[Jules César|César]]'' (tableau de [[Lionel Royer]], [[1899]]) | date         = [[52 av. J.-C.]] | lieu         = [[Historiographie du débat sur la localisation d'Alésia|Alésia]]"],
 	["Bataille_de_Ctésiphon_(363)", "ap JC", "|guerre=[[Guerres perso-romaines]]|date=[[363|363 ap. J.-C.]]|lieu=[[Ctesiphon]], [[Mesopotamie]]"],
+	["Bataille_d%27Aricie", "siècle en chiffre romain", "| l\u00e9gende      = \n | date         = fin du {{VIe si\u00e8cle av. J.-C.}}\n | lieu         = [[Ariccia|Aricie]] ([[Latium]]), pr\u00e8s de Rome\n "],
+
+
 ];
 
 // Code à ajouter au window.onload :
