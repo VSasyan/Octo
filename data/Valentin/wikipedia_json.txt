@@ -21,7 +21,7 @@ categories
 coordinates
 extracts
 info (&inprop=url)
-langlinks
+langlinks (&lllimit=5000)
 links (vs linkshere ?)
 revisions (&rvprop=content&rvsection=0)
 
@@ -59,4 +59,4 @@ L'Action=query permet d'avoir plus d'information, directement en JSON et de cons
 
 Forme générale finale :
 
-http://fr.wikipedia.org/w/api.php?action=query&titles=[TITRES]&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=
+http://fr.wikipedia.org/w/api.php?action=query&titles=[TITRES]&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&lllimit=5000&rvprop=content&rvsection=0&continue=

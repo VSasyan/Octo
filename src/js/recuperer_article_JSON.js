@@ -13,7 +13,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	proxy = 'proxy.php?url=';
 	console.log(titres);
 	pages = titres.join('|');
-	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
+	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
 
 	// 2) envoie de la requete AJAX :
 	remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
@@ -66,7 +66,7 @@ function getCoor(coor) {
 }
 
 function getLength(elm) {
-	if (typeof coor != 'undefined') {
+	if (typeof elm != 'undefined') {
 		return elm.length;
 	} else {return 0;}
 }
@@ -75,8 +75,8 @@ function getDate(rev) {
 	var txt = /date[^=]*= *(.*)[\s]*\| *[a-zA-Z]+ *=/.exec(rev[0]['*']);
 	if (txt) {
 		txt = txt[1].replace(/\[|\]|,/g, '');
-		if (/Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
-			var info = /Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+		if (/Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 			return date;
 		} else if (/([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
@@ -89,7 +89,7 @@ function getDate(rev) {
 			return date;
 		} else if (/av\. J\.-C\./.test(txt)) {
 			var info = /([0-9]{1,4})/.exec(txt);
-			if (info) { // /!\ arrive parfois d'avoir que des lettre (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
+			if (info) { // /!\ arrive parfois d'avoir que des lettres (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
 				date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
 				return date;
 			}

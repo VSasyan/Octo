@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tests unitaires associés à la récupération d'informations JSON sur wikipedia</title>
+
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="recuperer_portail_HTML.js"></script>
+</head>
+
+<style type="text/css">
+.titres {
+	width: 75%;
+	margin-left:50px;
+}
+.test {
+	margin:auto;
+	margin-top: 50px;
+	border: 1px solid #000;
+	width: 90%;
+	padding: 25px;
+}
+.test>div {
+	margin-top: 0;
+	margin-left:50px;
+	margin-right: 50px;
+	border: 1px solid #000;
+	padding: 25px;
+	overflow: auto;
+}
+div.test div.resultat {
+	border: 1px solid #00F;
+}
+div.test div.resultat_attendu {
+	border: 1px solid #F00;
+}
+span.oui {
+	color:green;
+	font-weight: bold;
+	display: none;
+}
+span.non {
+	color:red;
+	font-weight: bold;
+	display: none;
+}
+</style>
+
+<script type="text/javascript">
+	window.onload = function () {
+		$('.test').each(function() {
+			var table = $(this).find('.titres').val();
+			$(this).find('.resultat').append(recuperer_portail_HTML(table));
+		});
+	}
+</script>
+
+<body>
+
+<div class="test">
+	<p>Test 1 : contenu du tableau "titre" en JSON</p>
+	<p><input class="titres" value='Portail:Première_Guerre_mondiale' type="text"/></p>
+	<p>Résultat :</p>
+	<div class="resultat"></div>
+	<p>Résultat attendu :</p>
+	<div class="resultat_attendu"></div>
+	<p>Test unitaire validé ? <span class="oui">Oui !</span><span class="non">Non !</span></p>
+</div>
+
+</body>
+</html>
