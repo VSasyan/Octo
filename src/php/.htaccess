@@ -1,0 +1,11 @@
+<IfModule mod_alias.c>
+    RewriteEngine on
+    RewriteRule ^/portail/(.*)/$ script.php?p=$1
+
+
+
+#RewriteEngine on
+#RewriteCond %REQUEST_URI !^/portail/
+#RewriteRule ^(.*)$ sous-dossier/$1 
+
+</IfModule>
