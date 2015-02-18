@@ -1,4 +1,4 @@
-function recuperer_JSON_wiki(titres, distanceOrigine, portail_id) {
+function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	/***
 		Entrée :
 			titres = tableau des pages à récupérer
