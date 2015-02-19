@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tests unitaires associés à la récupération d'informations JSON sur wikipedia</title>
+
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery_ghosttype.js"></script>
+</head>
+
+<style type="text/css">
+.titres {
+	width: 75%;
+	margin-left:50px;
+}
+.test {
+	margin:auto;
+	margin-top: 50px;
+	border: 1px solid #000;
+	width: 90%;
+	padding: 25px;
+}
+.test>div {
+	margin-top: 0;
+	margin-left:50px;
+	margin-right: 50px;
+	border: 1px solid #000;
+	padding: 25px;
+	overflow: auto;
+}
+div.test div.resultat {
+	border: 1px solid #00F;
+}
+div.test div.resultat_attendu {
+	border: 1px solid #F00;
+}
+span.oui {
+	color:green;
+	font-weight: bold;
+	display: none;
+}
+span.non {
+	color:red;
+	font-weight: bold;
+	display: none;
+}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		machine_log('machine', 'Connexion !');
+		machine_log('machine', 'Connecté ! Lancement de la récuperation des données pour le portail...');
+		machine_log('machine', 'Connecté ! Lancement de la récuperation des données pour les pages...');
+	});
+</script>
+
+<body>
+
+<div id="machine">
+</div>
+
+</body>
+</html>

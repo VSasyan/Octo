@@ -26,7 +26,10 @@ CREATE TABLE IF NOT EXISTS `lien` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- L'exportation de données n'était pas sélectionnée.
+-- Export de données de la table octo.lien : 0 rows
+DELETE FROM `lien`;
+/*!40000 ALTER TABLE `lien` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lien` ENABLE KEYS */;
 
 
 -- Export de la structure de table octo. page
@@ -51,7 +54,10 @@ CREATE TABLE IF NOT EXISTS `page` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- L'exportation de données n'était pas sélectionnée.
+-- Export de données de la table octo.page : 0 rows
+DELETE FROM `page`;
+/*!40000 ALTER TABLE `page` DISABLE KEYS */;
+/*!40000 ALTER TABLE `page` ENABLE KEYS */;
 
 
 -- Export de la structure de table octo. portail
@@ -62,9 +68,16 @@ CREATE TABLE IF NOT EXISTS `portail` (
   `date_MAJ` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `lien` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- L'exportation de données n'était pas sélectionnée.
+-- Export de données de la table octo.portail : 2 rows
+DELETE FROM `portail`;
+/*!40000 ALTER TABLE `portail` DISABLE KEYS */;
+INSERT INTO `portail` (`id`, `nom`, `date_MAJ`, `lien`) VALUES
+	(1, 'Guerre de 23 ans', '2015-02-18 19:45:29', 'http://www.google.fr'),
+	(2, 'Conflit des boutons', '2015-02-18 19:45:54', 'http://www.yahoo.fr'),
+	(3, 'Siege de LaTable', '2015-02-18 19:50:26', 'http://www.apple.fr');
+/*!40000 ALTER TABLE `portail` ENABLE KEYS */;
 
 
 -- Export de la structure de table octo. status
@@ -78,7 +91,10 @@ CREATE TABLE IF NOT EXISTS `status` (
   PRIMARY KEY (`idPortail`,`idLien`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- L'exportation de données n'était pas sélectionnée.
+-- Export de données de la table octo.status : 0 rows
+DELETE FROM `status`;
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
