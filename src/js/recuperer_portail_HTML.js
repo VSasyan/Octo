@@ -1,36 +1,54 @@
- function recuperer_portail_HTML(portail) {
-	var startTime = new Date().getTime(); 
+ function boucler_portail_HTML(portail) {
+	var startTime = new Date().getTime();
 	/***
 		Entrée :
-			titres = tableau des pages à récupérer
-			distanceOrigine = distance entre le portail/la page d'origne et cette page
-			portail_id : Id du portail/de la page d'origine
-		Sortie :
-			sortie = string JSON à envoyer au serveur php soit :
-				un tableau de type {{id, titre, nb_long, nb_visites, longueur, lien, data_evenement, long, lat}, portail_id};
+			portail = titre du portail dont il faut récuperer les Articles Liés
+
+		Sortie : le tableau suivant au format JSON
+			{
+				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
+				e : [[{url, sens, http_code}]] (tableau des erreurs gérées rencontrées)
+			}
 	***/
 
 	// Generation de l'url : (on attaque directement la page "Articles Liés")
-	var wiki = 'http://fr.wikipedia.org/wiki/Catégorie:'+portail+'/Articles_liés';
-	var retour = traiterURL(portail, wiki, 2);
+	var retour = recuperer_portail_HTML(portail, 2, '');
 
  	console.log('Temps d\'execution : ' + (new Date().getTime() - startTime) + ' ms');
  	console.log(retour);
-	return JSON.stringify(retour);
+	return JSON.stringify({a:retour.a, e:retour.e});
 }
 
 var i=0;
 
-function traiterURL(portail, wiki, sens) {
+function recuperer_portail_HTML(portail, sens, page) {
 	/***
-	Recupere les url de la page et des suivantes ou précédentes selon le "sens" :
-		- sens == -1 : uniquement prec
-		- sens == 0 : aucun
-		- sens == 1 : uniquement suiv
-		- sens == 2 : dans les deux sens
+		Entrée :
+			portail = titre du portail dont il faut récuperer les Articles Liés
+			sens = sens de déplacement (voir ci-dessous, par défaut = 0)
+			page : page de la liste des articles où il faut commencer (par défaut = '')
+
+		Sortie :
+			{
+				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
+				e : [[{url, sens, http_code}]] (tableau des erreurs gérées rencontrées),
+				suiv : 'page' pour la page de la liste suivante si existante
+				prec : 'page' pour la page de la liste précédente si existante
+			}
+
+		Recupere les url de la page et des suivantes ou précédentes selon le "sens" :
+			- sens == -1 : uniquement prec
+			- sens == 0 : aucun
+			- sens == 1 : uniquement suiv
+			- sens == 2 : dans les deux sens
 	***/
+	sens = sens || 0;
+	page = page || '';
+
 	proxy = 'proxy.php?url=';
-	remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés' + page;
+	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
+	
 	// Envoie de la requete AJAX :
 	var remote = $.ajax({
 		type: 'GET',
@@ -40,6 +58,8 @@ function traiterURL(portail, wiki, sens) {
 	var data = JSON.parse(remote);
  	var articles = [];
  	var errors = [];
+ 	var suiv = '';
+ 	var prec = '';
 
  	// Recuperation des liens Articles :
  	if (data.status.http_code == 200) {
@@ -54,8 +74,8 @@ function traiterURL(portail, wiki, sens) {
 	 	if (sens == 2 || sens == -1) {
 			tps = /pageuntil=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
 			if (tps) {
-				var prec = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés&pageuntil=' + decodeURIComponent(tps[1].replace(/\+/g, '_'));
-	 			var retour = traiterURL(portail, prec, -1);
+				prec = '&pageuntil=' + decodeURIComponent(tps[1].replace(/\+/g, '_'));
+	 			var retour = recuperer_portail_HTML(portail, -1, prec);
 				var articles = $.merge(articles, retour.a);
 				var errors = $.merge(errors, retour.e);
 			}
@@ -65,20 +85,20 @@ function traiterURL(portail, wiki, sens) {
 	 	if (sens == 2 || sens == 1) {
 	 		tps = /pagefrom=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
 	 		if (tps) {
-				var suiv = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés&pagefrom=' + decodeURIComponent(tps[1].replace(/\+/g, '_'));
-	 			var retour = traiterURL(portail, suiv, 1);
+				suiv = '&pagefrom=' + decodeURIComponent(tps[1].replace(/\+/g, '_'));
+	 			var retour = recuperer_portail_HTML(portail, 1, suiv);
 				var articles = $.merge(articles, retour.a);
 				var errors = $.merge(errors, retour.e);
 	 		}
 	 	}
  	} else {
  		errors.push({
- 			url : wiki,
+ 			url : url,
  			sens : sens,
  			http_code : data.status.http_code
  		});
  	}
 
- 	var retour = {a:articles, e:errors};
+ 	var retour = {a:articles, e:errors, s:suiv, p:prec};
 	return retour;
 }
