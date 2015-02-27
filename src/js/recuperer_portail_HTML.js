@@ -1,226 +1,146 @@
-<<<<<<< HEAD
- 
- function boucler_portail_HTML(portail, sens) {
-=======
- function boucler_portail_HTML(portail) {
->>>>>>> origin/master
-	var startTime = new Date().getTime();
+function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	/***
 		Entrée :
-			portail = titre du portail dont il faut récuperer les Articles Liés
-
-<<<<<<< HEAD
-		Sortie : PAS au format JSON (PAS en string)
-			{
-				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
-				nb_a : nombre de liens d'articles récupérés
-				nb_t : nombre total de liens d'articles présents d'après wikipedia
-				e : [{url, http_code}] (tableau des erreurs gérées rencontrées),
-				t : temps nécessaire en secondes // En fait non car trop compliqué pour les TU
-			}
-
-		Recupere les url de la page et des suivantes ou précédentes selon le "sens" :
-			- sens == -1 : uniquement prec
-			- sens == 0 : aucun
-			- sens == 1 : uniquement suiv
-			- sens == 2 : dans les deux sens
-=======
-		Sortie : le tableau suivant au format JSON
-			{
-				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
-				e : [[{url, sens, http_code}]] (tableau des erreurs gérées rencontrées)
-			}
->>>>>>> origin/master
-	***/
- 	var articles = [];
- 	var errors = [];
-
-	// Generation de l'url : (on attaque directement la page "Articles Liés")
-<<<<<<< HEAD
-	var initialisation = recuperer_portail_HTML(portail);
-
-	// On relance sur les précédents ?
-	if ((sens == 2 || sens == -1) & initialisation.prec != '') {
-		var prec = initialisation.prec;
-		while (prec != '') {
-			var tps = recuperer_portail_HTML(portail, prec);
-			var articles = $.merge(articles, tps.a);
-			var errors = $.merge(errors, tps.e);
-			prec = tps.prec;
-		}
-	}
-
-	// On relance sur les suivants ?
-	if ((sens == 2 || sens == 1) & initialisation.suiv != '') {
-		var suiv = initialisation.suiv;
-		while (suiv != '') {
-			var tps = recuperer_portail_HTML(portail, suiv);
-			var articles = $.merge(articles, tps.a);
-			var errors = $.merge(errors, tps.e);
-			suiv = tps.suiv;
-		}
-	}
-
-	// Recuperation du nombre total d'articles :
-	nb_total = recuperer_nb_liens_portail_HTML(portail);
-
-	var retour = {
-		a : articles,
-		nb_a : articles.length,
-		nb_t : nb_total,
-		e : errors,
-		//t : (new Date().getTime() - startTime)/1000
-	};
-
-	return retour;
-}
-
-function recuperer_portail_HTML(portail, page) {
-=======
-	var retour = recuperer_portail_HTML(portail, 2, '');
-
- 	console.log('Temps d\'execution : ' + (new Date().getTime() - startTime) + ' ms');
- 	console.log(retour);
-	return JSON.stringify({a:retour.a, e:retour.e});
-}
-
-var i=0;
-
-function recuperer_portail_HTML(portail, sens, page) {
->>>>>>> origin/master
-	/***
-		Entrée :
-			portail = titre du portail dont il faut récuperer les Articles Liés
-			sens = sens de déplacement (voir ci-dessous, par défaut = 0)
-			page : page de la liste des articles où il faut commencer (par défaut = '')
-
-<<<<<<< HEAD
-		Sortie : PAS au format JSON (PAS en string)
-			{
-				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
-				e : [{url, http_code}] (tableau des erreurs gérées rencontrées),
-				suiv : 'page' pour la page de la liste suivante si existante,
-				prec : 'page' pour la page de la liste précédente si existante,
-				t : temps nécessaire en ms // En fait non car trop compliqué pour les TU
-			}
-	***/
-	var startTime = new Date().getTime();
-=======
+			titres = tableau des pages à récupérer
+			distanceOrigine = distance entre le portail/la page d'origne et cette page
+			portail_id : Id du portail/de la page d'origine
 		Sortie :
-			{
-				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
-				e : [[{url, sens, http_code}]] (tableau des erreurs gérées rencontrées),
-				suiv : 'page' pour la page de la liste suivante si existante
-				prec : 'page' pour la page de la liste précédente si existante
-			}
-
-		Recupere les url de la page et des suivantes ou précédentes selon le "sens" :
-			- sens == -1 : uniquement prec
-			- sens == 0 : aucun
-			- sens == 1 : uniquement suiv
-			- sens == 2 : dans les deux sens
+			sortie = PAS au format JSON (PAS en string)
+				un tableau de type {[id, titre, nb_long, nb_visites, longueur, lien, data_evenement, long, lat], portail_id};
 	***/
-	sens = sens || 0;
->>>>>>> origin/master
-	page = page || '';
 
+	// 1) Generation de l'url :
 	proxy = 'proxy.php?url=';
-	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés' + page;
-	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
-	
-	// Envoie de la requete AJAX :
+	pages = titres.join('|');
+	//wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
+	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=5000&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
+
+	// 2) envoie de la requete AJAX :
+	remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+
 	var remote = $.ajax({
 		type: 'GET',
 		url: remote_url,
 		async: false,
 	}).responseText;
-	var data = JSON.parse(remote);
- 	var articles = [];
- 	var errors = [];
- 	var suiv = '';
- 	var prec = '';
+	retour = JSON.parse(remote);
 
- 	// Recuperation des liens Articles :
- 	if (data.status.http_code == 200) {
-		$(data.contents).find('#mw-pages li a').each(function() {
-			articles.push({
-<<<<<<< HEAD
-				url : 'http://fr.wikipedia.org' + decodeURIComponent($(this).attr('href').replace(/\+/g, '_')),
-=======
-				url : 'http://fr.wikipedia.org' + $(this).attr('href'),
->>>>>>> origin/master
-				titre : $(this).attr('title')
-			});
-		});
+	// 3) On traite le retour :
+	var data = [];
+	$.each(retour.contents.query.pages, function(i, page) {
+		var coor = getCoor(page.coordinates);
+		var date = getDate(page.revisions);
 
-<<<<<<< HEAD
-		// On recupere le lien vers les precedents :
-		tps = /pageuntil=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
-		if (tps) {prec = '&pageuntil=' + decodeURIComponent(tps[1]).replace(/\+/g, '_');}
+		var pages = {
+			id: page.pageid,
+			titre: page.title,
+			long: coor.lon,
+			lat: coor.lat,
+			nb_langue: getLength(page.langlinks),
+			nb_visite: 0,
+			longueur: page['length'],
+			lien: page.fullurl,
+			//date_maj: ,
+			debut_annee: date.debut_annee,
+			debut_mois: date.debut_mois,
+			debut_jour: date.debut_jour,
+			fin_annee: date.fin_annee,
+			fin_mois: date.fin_mois,
+			fin_jour: date.fin_jour,
+			importance: 0,
+			distance_Portail: distanceOrigine+1,
+			portail_id : portail_id
+		};
 
-		// On recupere le lien vers les suivants :
-		tps = /pagefrom=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
-		if (tps) {suiv = '&pagefrom=' + decodeURIComponent(tps[1]).replace(/\+/g, '_');}
- 	} else {
- 		errors.push({
- 			url : url,
-=======
-	 	// On relance sur les précédents ?
-	 	if (sens == 2 || sens == -1) {
-			tps = /pageuntil=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
-			if (tps) {
-				prec = '&pageuntil=' + decodeURIComponent(tps[1].replace(/\+/g, '_'));
-	 			var retour = recuperer_portail_HTML(portail, -1, prec);
-				var articles = $.merge(articles, retour.a);
-				var errors = $.merge(errors, retour.e);
-			}
-		}
+		data.push(pages);
+	});
 
-	 	// On relance sur les suivants ?
-	 	if (sens == 2 || sens == 1) {
-	 		tps = /pagefrom=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
-	 		if (tps) {
-				suiv = '&pagefrom=' + decodeURIComponent(tps[1].replace(/\+/g, '_'));
-	 			var retour = recuperer_portail_HTML(portail, 1, suiv);
-				var articles = $.merge(articles, retour.a);
-				var errors = $.merge(errors, retour.e);
-	 		}
-	 	}
- 	} else {
- 		errors.push({
- 			url : url,
- 			sens : sens,
->>>>>>> origin/master
- 			http_code : data.status.http_code
- 		});
- 	}
-
-<<<<<<< HEAD
- 	var retour = {a:articles, e:errors, suiv:suiv, prec:prec};//, t:(new Date().getTime() - startTime)};
-=======
- 	var retour = {a:articles, e:errors, s:suiv, p:prec};
->>>>>>> origin/master
-	return retour;
+	// 4) Convertion en string et retour :
+	return data;
 }
 
-function recuperer_nb_liens_portail_HTML(portail) {
-	proxy = 'proxy.php?url=';
-	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés';
-	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
-	
-	// Envoie de la requete AJAX :
-	var remote = $.ajax({
-		type: 'GET',
-		url: remote_url,
-		async: false,
-	}).responseText;
-	var data = JSON.parse(remote);
+function getCoor(coor) {
+	if (typeof coor != 'undefined') {
+		return {lat:coor[0].lat, lon:coor[0].lon};
+	} else {return {lat:0, lon:0};}
+}
 
-	if (data.status.http_code == 200) {
-		tps = /Cette catégorie contient (.*) pages/.exec($(data.contents).find('#mw-pages').html());
-		if (tps) {
-			return tps[1].replace(/&nbsp;/g, '');
+function getLength(elm) {
+	if (typeof elm != 'undefined') {
+		return elm.length;
+	} else {return 0;}
+}
+
+function getDate(rev) {
+	var txt = /date[^=]*= *(.*)[^.]/.exec(rev[0]['*']);
+	if (txt) {
+		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
+		//console.log(txt);
+		if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+			return date;
+		} else if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+			return date;
+			// 5 septembre|5 - date|12|septembre|1914
+		} else if (/[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+			return date;
+		} else if (/([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
+			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
+			return date;
+		} else if (/([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
+			date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
+			return date;
+		} else if (/av\. J\.-C\./.test(txt)) {
+			var info = /([0-9]{1,4})/.exec(txt);
+			if (info) { // /!\ arrive parfois d'avoir que des lettres (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
+				date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
+				return date;
+			}
+		} else if (/(-?[0-9]{1,4})/.test(txt)) {
+			var info = /(-?[0-9]{1,4})/.exec(txt);
+			date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
+			return date;
 		}
 	}
-	return -1;
+	date = {debut_annee:10000, debut_mois:0, debut_jour:0, fin_annee:10000, fin_mois:0, fin_jour:0};
+	//console.log(txt, rev[0]['*']); /!\ Loupe les dates dans le corp de text. Il faut réfléchir à comment les récupérer.
+	return date;
 }
+
+/*
+
+Tests :
+il y a différents formats de date sur Wikipedia
+donc différentes manières de récupérer la date
+Voici les dates types trouvéées pour tester.
+
+pages = [
+	["Bataille_de_la_Porte_Colline", "av JC, mois", " |guerre=[[Deuxième Guerre civile Marius-Sylla]] |date= Novembre, [[-82|82 {{av JC}}]] |lieu=[[Rome]] ([[Italie]])"],
+	["Bataille de Verdun (1916)", "ap JC, mois, jour, deux dates", "| guerre=[[Première Guerre mondiale]] | date={{Date|21|février|1916}}  – {{Date|19|décembre|1916}} (9 mois, 3 semaines et 6 jours) | lieu=[[Verdun (Meuse)|Verdun]]"],
+	["Bataille_de_Dyrrachium_(48_av._J.-C.)", "av JC, mois, jour", "| guerre=[[Guerre civile de César]]| date=[[10 juillet]] [[-48|48 {{av JC}}]]| lieu=[[Durrës|Dyrrachium]] (de nos jours [[Durrës]], [[Albanie]])"],
+	["Siège_d'Alésia", "av JC", "| légende      = ''[[Vercingétorix]] jette ses armes aux pieds de [[Jules César|César]]'' (tableau de [[Lionel Royer]], [[1899]]) | date         = [[52 av. J.-C.]] | lieu         = [[Historiographie du débat sur la localisation d'Alésia|Alésia]]"],
+	["Bataille_de_Ctésiphon_(363)", "ap JC", "|guerre=[[Guerres perso-romaines]]|date=[[363|363 ap. J.-C.]]|lieu=[[Ctesiphon]], [[Mesopotamie]]"],
+	["Bataille_d%27Aricie", "siècle en chiffre romain", "| l\u00e9gende      = \n | date         = fin du {{VIe si\u00e8cle av. J.-C.}}\n | lieu         = [[Ariccia|Aricie]] ([[Latium]]), pr\u00e8s de Rome\n "],
+	["Bataille_d%27Hulluch", "du X au Y mois année", "| guerre = [[Première Guerre mondiale]] date = du [[27 avril|27]] au {{date|29|avril|1916}} | lieu = [[Hulluch]], [[France]]"],
+	["Bataille_de_Messines_(1914)", "X mois1 - Y mois2 année", "|guerre = [[Première Guerre mondiale]] |date = [[12 octobre]] - {{date|2|novembre|1914}} |lieu = [[Messines]] ([[Belgique]]) "],
+
+
+
+];
+
+// Code à ajouter au window.onload :
+	$.each(pages, function (i, elm) {
+		tps = [{'*':''}];
+		tps[0]['*'] = elm[2];
+		elm.push(getDate(tps));
+		console.log(elm[3]);
+	});
+
+*/
