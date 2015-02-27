@@ -1,86 +1,147 @@
- function recuperer_portail_HTML(portail) {
-	var startTime = new Date().getTime(); 
+ 
+ function boucler_portail_HTML(portail, sens) {
+	var startTime = new Date().getTime();
 	/***
 		Entrée :
-			titres = tableau des pages à récupérer
-			distanceOrigine = distance entre le portail/la page d'origne et cette page
-			portail_id : Id du portail/de la page d'origine
-		Sortie :
-			sortie = string JSON à envoyer au serveur php soit :
-				un tableau de type {{id, titre, nb_long, nb_visites, longueur, lien, data_evenement, long, lat}, portail_id};
+			portail = titre du portail dont il faut récuperer les Articles Liés
+
+		Sortie : PAS au format JSON (PAS en string)
+			{
+				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
+				nb_a : nombre de liens d'articles récupérés
+				nb_t : nombre total de liens d'articles présents d'après wikipedia
+				e : [{url, http_code}] (tableau des erreurs gérées rencontrées),
+				t : temps nécessaire en secondes // En fait non car trop compliqué pour les TU
+			}
+
+		Recupere les url de la page et des suivantes ou précédentes selon le "sens" :
+			- sens == -1 : uniquement prec
+			- sens == 0 : aucun
+			- sens == 1 : uniquement suiv
+			- sens == 2 : dans les deux sens
 	***/
+ 	var articles = [];
+ 	var errors = [];
 
 	// Generation de l'url : (on attaque directement la page "Articles Liés")
-	wiki = 'http://fr.wikipedia.org/wiki/Catégorie:'+portail+'/Articles_liés';
-	retour = traiterURL(encodeURIComponent(wiki.replace(/ /g, '_')), 2);
-	console.log(retour);
+	var initialisation = recuperer_portail_HTML(portail);
 
- 	console.log('Temps d\'execution : ' + (new Date().getTime() - startTime) + ' ms');
-	return JSON.stringify(retour);
+	// On relance sur les précédents ?
+	if ((sens == 2 || sens == -1) & initialisation.prec != '') {
+		var prec = initialisation.prec;
+		while (prec != '') {
+			var tps = recuperer_portail_HTML(portail, prec);
+			var articles = $.merge(articles, tps.a);
+			var errors = $.merge(errors, tps.e);
+			prec = tps.prec;
+		}
+	}
+
+	// On relance sur les suivants ?
+	if ((sens == 2 || sens == 1) & initialisation.suiv != '') {
+		var suiv = initialisation.suiv;
+		while (suiv != '') {
+			var tps = recuperer_portail_HTML(portail, suiv);
+			var articles = $.merge(articles, tps.a);
+			var errors = $.merge(errors, tps.e);
+			suiv = tps.suiv;
+		}
+	}
+
+	// Recuperation du nombre total d'articles :
+	nb_total = recuperer_nb_liens_portail_HTML(portail);
+
+	var retour = {
+		a : articles,
+		nb_a : articles.length,
+		nb_t : nb_total,
+		e : errors,
+		//t : (new Date().getTime() - startTime)/1000
+	};
+
+	return retour;
 }
 
-function traiterURL(wiki, sens) {
+function recuperer_portail_HTML(portail, page) {
 	/***
-	Recupere les url de la page et des suivantes ou précédentes selon le "sens" :
-		- sens == -1 : uniquement prec
-		- sens == 0 : aucun
-		- sens == 1 : uniquement suiv
-		- sens == 2 : dans les deux sens
+		Entrée :
+			portail = titre du portail dont il faut récuperer les Articles Liés
+			sens = sens de déplacement (voir ci-dessous, par défaut = 0)
+			page : page de la liste des articles où il faut commencer (par défaut = '')
+
+		Sortie : PAS au format JSON (PAS en string)
+			{
+				a : [{url, titre}] (tableau (url, titre) des articles liés trouvés),
+				e : [{url, http_code}] (tableau des erreurs gérées rencontrées),
+				suiv : 'page' pour la page de la liste suivante si existante,
+				prec : 'page' pour la page de la liste précédente si existante,
+				t : temps nécessaire en ms // En fait non car trop compliqué pour les TU
+			}
 	***/
+	var startTime = new Date().getTime();
+	page = page || '';
+
 	proxy = 'proxy.php?url=';
-	remote_url = proxy + wiki + '&full_headers=0&full_status=0';
+	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés' + page;
+	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
+	
 	// Envoie de la requete AJAX :
 	var remote = $.ajax({
 		type: 'GET',
 		url: remote_url,
 		async: false,
 	}).responseText;
-	data = JSON.parse(remote);
- 	articles = [];
- 	errors = [];
+	var data = JSON.parse(remote);
+ 	var articles = [];
+ 	var errors = [];
+ 	var suiv = '';
+ 	var prec = '';
 
  	// Recuperation des liens Articles :
  	if (data.status.http_code == 200) {
-		$(data.contents).find('#mw-pages table li a').each(function() {
+		$(data.contents).find('#mw-pages li a').each(function() {
 			articles.push({
-				url : 'http://fr.wikipedia.org' + $(this).attr('href'),
-				titre : $(this).html()
+				url : 'http://fr.wikipedia.org' + decodeURIComponent($(this).attr('href').replace(/\+/g, '_')),
+				titre : $(this).attr('title')
 			});
 		});
 
-	 	// On relance sur les précédents ?
-	 	if (sens == 2 || sens == -1) {
-			tps = /(\/w\/index\.php\?title=Cat.*gorie:.*\/Articles_li%C3%A9s&amp;pageuntil=.*#mw-pages)/.exec($(data.contents).find('#mw-pages').html());
-			if (tps) {
-				prec = 'http://fr.wikipedia.org' + encodeURIComponent(tps[1].replace(/ /g, '_'));
-	 			retour = traiterURL(prec, -1);
-				articles = articles.concat(retour.a);
-				errors = errors.concat(retour.e);
-			}
-		}
+		// On recupere le lien vers les precedents :
+		tps = /pageuntil=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
+		if (tps) {prec = '&pageuntil=' + decodeURIComponent(tps[1]).replace(/\+/g, '_');}
 
-	 	// On relance sur les suivants ?
-	 	if (sens == 2 || sens == 1) {
-	 		console.log($(data.contents).find('#mw-pages').html());
-	 		tps = /(\/w\/index\.php\?title=Cat.*gorie:.*\/Articles_li%C3%A9s&amp;pagefrom=.*#mw-pages)/.exec($(data.contents).find('#mw-pages').html());
-	 			console.log(tps);
-	 		if (tps) {
-	 			suiv = 'http://fr.wikipedia.org' + encodeURIComponent(tps[1].replace(/ /g, '_'));
-	 			//suiv = 'http://fr.wikipedia.org/w/index.php?title=Cat%C3%A9gorie:Portail:Premi%C3%A8re_Guerre_mondiale/Articles_li%C3%A9s&pagefrom=284e+r%C3%A9giment+d%27infanterie+territoriale#mw-pages';
-	 			retour = traiterURL(suiv, 1);
-				articles = articles.concat(retour.a);
-				errors = errors.concat(retour.e);
-	 		}
-	 	}
+		// On recupere le lien vers les suivants :
+		tps = /pagefrom=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
+		if (tps) {suiv = '&pagefrom=' + decodeURIComponent(tps[1]).replace(/\+/g, '_');}
  	} else {
  		errors.push({
- 			url : wiki,
- 			sens : sens,
+ 			url : url,
  			http_code : data.status.http_code
  		});
  	}
 
- 	var retour = {a:articles, e:errors};
-
+ 	var retour = {a:articles, e:errors, suiv:suiv, prec:prec};//, t:(new Date().getTime() - startTime)};
 	return retour;
+}
+
+function recuperer_nb_liens_portail_HTML(portail) {
+	proxy = 'proxy.php?url=';
+	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés';
+	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
+	
+	// Envoie de la requete AJAX :
+	var remote = $.ajax({
+		type: 'GET',
+		url: remote_url,
+		async: false,
+	}).responseText;
+	var data = JSON.parse(remote);
+
+	if (data.status.http_code == 200) {
+		tps = /Cette catégorie contient (.*) pages/.exec($(data.contents).find('#mw-pages').html());
+		if (tps) {
+			return tps[1].replace(/&nbsp;/g, '');
+		}
+	}
+	return -1;
 }

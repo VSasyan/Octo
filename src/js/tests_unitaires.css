@@ -1,0 +1,28 @@
+body {
+	width: 700px;
+	margin:auto;
+	background-color: #99F;
+}
+
+h2 {text-align: center;}
+
+body>div {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	border: 1px solid #000;
+	padding: 25px;
+	background-color: #D9F;
+}
+
+#statut {font-weight: bolder;}
+.en_cours {color:blue;}
+.succes {color:green;}
+.rate {color:red;}
+
+#erreurs {display: none;}
+#erreurs p {margin: 0;}
+
+textarea#attendu {
+	width: 600px;
+	height: 400px;
+}

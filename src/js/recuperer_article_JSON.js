@@ -5,19 +5,15 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 			distanceOrigine = distance entre le portail/la page d'origne et cette page
 			portail_id : Id du portail/de la page d'origine
 		Sortie :
-			sortie = string JSON à envoyer au serveur php soit :
-				un tableau de type {{id, titre, nb_long, nb_visites, longueur, lien, data_evenement, long, lat}, portail_id};
+			sortie = PAS au format JSON (PAS en string)
+				un tableau de type {[id, titre, nb_long, nb_visites, longueur, lien, data_evenement, long, lat], portail_id};
 	***/
 
 	// 1) Generation de l'url :
 	proxy = 'proxy.php?url=';
-	console.log(titres);
 	pages = titres.join('|');
-<<<<<<< HEAD
-	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
-=======
+	//wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
 	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=5000&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
->>>>>>> origin/master
 
 	// 2) envoie de la requete AJAX :
 	remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
@@ -60,7 +56,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	});
 
 	// 4) Convertion en string et retour :
-	return JSON.stringify(data);
+	return data;
 }
 
 function getCoor(coor) {
@@ -76,19 +72,16 @@ function getLength(elm) {
 }
 
 function getDate(rev) {
-	console.log(rev[0]['*']);
-	var txt = /date[^=]*= *(.*)[^.]/.exec(rev[0]['*']); //[\s]*\| *[a-zA-Z]+ *=
+	var txt = /date[^=]*= *(.*)[^.]/.exec(rev[0]['*']);
 	if (txt) {
-<<<<<<< HEAD
-		txt = txt[1].replace(/\[|\]|,/g, '');
-		if (/Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
-			var info = /Date\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
-=======
 		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
-		console.log(txt);
-		if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+		//console.log(txt);
+		if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
 			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
->>>>>>> origin/master
+			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+			return date;
+		} else if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 			return date;
 			// 5 septembre|5 - date|12|septembre|1914
