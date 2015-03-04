@@ -5,32 +5,44 @@
         <title></title>
     </head>
     <body>
-        <?php
-            
-        
-        
-        ?>
+
+        <div id="content1"></div>
+
         <script>
-                // création de l'objet xhr
-                var ajax = new XMLHttpRequest();
+            var ajax = new XMLHttpRequest();
+            ajax.open('POST', 'http://localhost/octo/php/script.php?p=add', true);
+            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajax.addEventListener('readystatechange', function (e) {
+                if (ajax.readyState === 4 && ajax.status === 200) {
 
-                // destination et type de la requête AJAX (asynchrone ou non)
-                ajax.open('GET', 'http://localhost/octo/php/script.php?p=list', true);
-
-                // métadonnées de la requête AJAX
-                ajax.setRequestHeader('Content-type', 'application/json');
-
-                // evenement de changement d'état de la requête
-                ajax.addEventListener('readystatechange',  function(e) {
-                    // si l'état est le numéro 4 et que la ressource est trouvée
-                    if(ajax.readyState === 4 && ajax.status === 200) {
-                        var o = JSON.parse(ajax.responseText);
-                        console.log(o[1].nom);
-                    }
-                }); 
-
-                // envoi de la requête
-                ajax.send();
+                    var ajax2 = new XMLHttpRequest();
+                    ajax2.open('GET', 'http://localhost/octo/php/script.php?p=list', true);
+                    ajax2.setRequestHeader('Content-type', 'application/json');
+                    ajax2.addEventListener('readystatechange', function (e) {
+                        if (ajax2.readyState === 4 && ajax2.status === 200) {
+                            var o = JSON.parse(ajax2.responseText);
+                            var table = document.createElement("table");
+                            o.forEach(function (element, index, array) {
+                                var row = document.createElement("tr");
+                                var id = document.createElement("td");
+                                id.innerHTML = element.id;
+                                row.appendChild(id);
+                                var nom = document.createElement("td");
+                                nom.innerHTML = element.nom;
+                                row.appendChild(nom);
+                                var url = document.createElement("td");
+                                url.innerHTML = element.lien;
+                                row.appendChild(url);
+                                table.appendChild(row);
+                            });
+                            document.getElementById("content1").appendChild(table);
+                        }
+                    });
+                    ajax2.send();
+                }
+            });
+            var data = "nom=toto&url=" + encodeURIComponent("http://machin.truc");
+            ajax.send(data);
         </script>
     </body>
 </html>

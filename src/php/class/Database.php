@@ -31,6 +31,11 @@ class Database {
         return $r;
     }
     
+    public function addQuery($sql){
+        $this->mysqli->query($sql);
+        return $this->mysqli->insert_id;
+    }
+    
     public function close(){
         //print_r("Connection Close");
         $this->mysqli->close();
