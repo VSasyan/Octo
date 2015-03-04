@@ -34,19 +34,19 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 		var pages = {
 			id: page.pageid,
 			titre: page.title,
-			long: coor.lon,
+			lon: coor.lon,
 			lat: coor.lat,
 			nb_langue: getLength(page.langlinks),
 			nb_visite: 0,
 			longueur: page['length'],
 			lien: page.fullurl,
 			//date_maj: ,
-			debut_annee: date.debut_annee,
-			debut_mois: date.debut_mois,
-			debut_jour: date.debut_jour,
-			fin_annee: date.fin_annee,
-			fin_mois: date.fin_mois,
-			fin_jour: date.fin_jour,
+			debut_annee: parseInt(date.debut_annee),
+			debut_mois: moisEnChiffre(date.debut_mois),
+			debut_jour: parseInt(date.debut_jour),
+			fin_annee: parseInt(date.fin_annee),
+			fin_mois: moisEnChiffre(date.fin_mois),
+			fin_jour: parseInt(date.fin_jour),
 			importance: 0,
 			distance_Portail: distanceOrigine+1,
 			portail_id : portail_id
@@ -55,7 +55,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 		data.push(pages);
 	});
 
-	// 4) Convertion en string et retour :
+	// 4) Retour :
 	return data;
 }
 
@@ -112,6 +112,32 @@ function getDate(rev) {
 	date = {debut_annee:10000, debut_mois:0, debut_jour:0, fin_annee:10000, fin_mois:0, fin_jour:0};
 	//console.log(txt, rev[0]['*']); /!\ Loupe les dates dans le corp de text. Il faut réfléchir à comment les récupérer.
 	return date;
+}
+
+function moisEnChiffre(mois) {
+	if (typeof mois != undefined) {
+		var mois = (mois + '').toLowerCase();
+		var liste_mois = {
+			'0' : 0,
+			'janvier' : 1,
+			'fevrier' : 2,
+			'février' : 2,
+			'mars' : 3,
+			'avril' : 4,
+			'mai' : 5,
+			'juin' : 6,
+			'juillet' : 7,
+			'août' : 8,
+			'aout' : 8,
+			'septembre' : 9,
+			'octobre' : 10,
+			'novembre' : 11,
+			'décembre' : 12,
+			'decembre' : 12
+		};
+		var retour = liste_mois[mois] || 0;
+	} else {retour = 0;}
+	return retour;
 }
 
 /*
