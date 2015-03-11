@@ -17,9 +17,9 @@ class Database {
             case 4: $this->mysqli = new mysqli($host, $user, $pwd, $bdd); break;
             default : throw new Exception();
         }
+        
         if(!$this->mysqli)
             throw new Exception();
-        //print_r("Connection Open");
     }
     
     public function query($sql){
@@ -36,8 +36,13 @@ class Database {
         return $this->mysqli->insert_id;
     }
     
+    public function multipleQuery($sql){
+        $this->mysqli->multi_query($sql);
+    }
+    
     public function close(){
         //print_r("Connection Close");
+        
         $this->mysqli->close();
     }
 }

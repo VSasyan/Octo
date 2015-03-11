@@ -5,7 +5,6 @@ class App {
 
     
     private $portails;
-    
     private $connect;
     
     public function __construct(){
@@ -42,8 +41,18 @@ class App {
         foreach ($this->getPortails() as $n => $p) {
             $json[$n] = $p->getJSON($opt);
         }
-        //print_r($json);
         return json_encode($json);
+    }
+    
+    public function savePages($json){
+        $pages = json_decode($json);
+        $sql = "";
+        foreach( $pages as $key=>$page){
+            $p = new Page($page, $this->getConnect());
+            $sql = $sql.$p->getFullQuery();
+        }
+        print_r($sql);
+        $this->getConnect()->multipleQuery($sql);
     }
     
     public function close(){
