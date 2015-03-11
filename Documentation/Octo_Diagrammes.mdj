@@ -1646,7 +1646,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+force: BOOL",
+											"text": "+contraint: BOOL",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5
 										},
@@ -6129,7 +6129,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFLm/hGH02eA4w="
 							},
-							"name": "force",
+							"name": "contraint",
 							"visibility": "public",
 							"isStatic": false,
 							"isLeaf": false,
