@@ -13,7 +13,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	proxy = 'proxy.php?url=';
 	pages = titres.join('|');
 	//wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
-	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=5000&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
+	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=500&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
 
 	// 2) envoie de la requete AJAX :
 	remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
@@ -28,31 +28,33 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	// 3) On traite le retour :
 	var data = [];
 	$.each(retour.contents.query.pages, function(i, page) {
-		var coor = getCoor(page.coordinates);
-		var date = getDate(page.revisions);
+		if (!(typeof page['pageid'] === 'undefined')) {
+			var coor = getCoor(page.coordinates);
+			var date = getDate(page.revisions);
 
-		var pages = {
-			id: page.pageid,
-			titre: page.title,
-			lon: coor.lon,
-			lat: coor.lat,
-			nb_langue: getLength(page.langlinks),
-			nb_visite: 0,
-			longueur: page['length'],
-			lien: page.fullurl,
-			//date_maj: ,
-			debut_annee: parseInt(date.debut_annee),
-			debut_mois: moisEnChiffre(date.debut_mois),
-			debut_jour: parseInt(date.debut_jour),
-			fin_annee: parseInt(date.fin_annee),
-			fin_mois: moisEnChiffre(date.fin_mois),
-			fin_jour: parseInt(date.fin_jour),
-			importance: 0,
-			distance_Portail: distanceOrigine+1,
-			portail_id : portail_id
-		};
+			var pages = {
+				id: page.pageid,
+				titre: page.title,
+				lon: coor.lon,
+				lat: coor.lat,
+				nb_langue: getLength(page.langlinks),
+				nb_visite: 0,
+				longueur: page['length'],
+				lien: page.fullurl,
+				//date_maj: ,
+				debut_annee: parseInt(date.debut_annee),
+				debut_mois: moisEnChiffre(date.debut_mois),
+				debut_jour: parseInt(date.debut_jour),
+				fin_annee: parseInt(date.fin_annee),
+				fin_mois: moisEnChiffre(date.fin_mois),
+				fin_jour: parseInt(date.fin_jour),
+				importance: 0,
+				distance_Portail: distanceOrigine+1,
+				portail_id : portail_id
+			};
 
-		data.push(pages);
+			data.push(pages);
+		}
 	});
 
 	// 4) Retour :
@@ -72,6 +74,7 @@ function getLength(elm) {
 }
 
 function getDate(rev) {
+	var rev = rev || [{'*':''}];
 	var txt = /date[^=]*= *(.*)[^.]/.exec(rev[0]['*']);
 	if (txt) {
 		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
@@ -81,12 +84,13 @@ function getDate(rev) {
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 			return date;
 		} else if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
-			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 			return date;
 			// 5 septembre|5 - date|12|septembre|1914
 		} else if (/[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
 			var info = /[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			console.log(info[2]);
 			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
 			return date;
 		} else if (/([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
