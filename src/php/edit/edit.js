@@ -1,6 +1,7 @@
 var nb_traite;
 var portails;
 var errors;
+var dir = '../../';
 
 $(document).ready(function() {
 	// On recupère la liste des portails :
