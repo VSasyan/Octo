@@ -77,7 +77,6 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	});
 
 	// 4) Retour :
-console.log(JSON.stringify(data));
 	return data;
 }
 
