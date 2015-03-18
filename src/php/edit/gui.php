@@ -38,7 +38,7 @@
 			</p>
 		</div>
 		<div id="loading" class="center">
-			<img src="images/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
+			<img src="../../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
 		</div>
 		<div id="ajax"></div>
 	</article>

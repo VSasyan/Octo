@@ -18,7 +18,7 @@ function verifierPortail() {
 		// On charge la création d'un nouveau portail :
 		$('#ajax').html(html_chargement);
 		$.ajax({
-			url: 'gui_ajouter_portail.php'
+			url: 'ajax.php?fct=ajouter_portail'
 		}).done(function(data) {
 			$('#ajax').html(data);
 			$('#nom').val(nom);
@@ -28,7 +28,7 @@ function verifierPortail() {
 		// On charge l'edition de portail :
 		$('#ajax').html(html_chargement);
 		$.ajax({
-			url: 'gui_editer_portail.php'
+			url: 'ajax.php?fct=editer_portail'
 		}).done(function(data) {
 			$('#ajax').html(data);
 			$('#nom').html(portail.nom);
@@ -46,7 +46,7 @@ function ajouterPortail() {
 	var url = $('#url').val();
 	// Si adresse non précisée on récupère le tire :
 	if (url == '') {url = 'http://fr.wikipedia.org/wiki/' + encodeURIComponent(nom.replace(/ /g, '_'));}
-	var url_verif = 'proxy.php?url=' + encodeURIComponent(url.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+	var url_verif = '../../js/proxy.php?url=' + encodeURIComponent(url.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
 	// On vérifie que le portail est correct :
 	$.ajax({
 		url : url_verif,

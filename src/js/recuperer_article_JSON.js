@@ -90,7 +90,7 @@ function getDate(rev) {
 			// 5 septembre|5 - date|12|septembre|1914
 		} else if (/[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
 			var info = /[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
-			console.log(info[2]);
+			//console.log(info[2]);
 			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
 			return date;
 		} else if (/([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
