@@ -81,7 +81,7 @@ function recuperer_portail_HTML(portail, page) {
 	var startTime = new Date().getTime();
 	page = page || '';
 
-	proxy = '../../js/proxy.php?url=';
+	proxy = dir+'js/proxy.php?url=';
 	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail.replace(/ /g, '_') + '/Articles_liés' + page;
 	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
 	
@@ -132,7 +132,7 @@ function recuperer_portail_HTML(portail, page) {
 }
 
 function recuperer_nb_liens_portail_HTML(portail) {
-	proxy = '../../js/proxy.php?url=';
+	proxy = dir+'js/proxy.php?url=';
 	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés';
 	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
 	

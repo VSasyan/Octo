@@ -6,13 +6,31 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 			portail_id : Id du portail/de la page d'origine
 		Sortie :
 			sortie = PAS au format JSON (PAS en string)
-				un tableau de type {[id, titre, nb_long, nb_visites, longueur, lien, data_evenement, long, lat], portail_id};
+				un tableau de type 
+					{
+						id,
+						titre,
+						nb_langue,
+						nb_visite,
+						longueur,
+						lien,
+						debut_annee,
+						debut_mois,
+						debut_jour,
+						fin_annee,
+						fin_mois,
+						fin_jour,
+						data_maj,
+						lon,
+						lat,
+						type_infobox,
+						portail_id
+					}
 	***/
 
 	// 1) Generation de l'url :
-	proxy = '../../js/proxy.php?url=';
+	proxy = dir+'js/proxy.php?url=';
 	pages = titres.join('|');
-	//wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
 	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=500&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
 
 	// 2) envoie de la requete AJAX :
@@ -31,6 +49,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 		if (!(typeof page['pageid'] === 'undefined')) {
 			var coor = getCoor(page.coordinates);
 			var date = getDate(page.revisions);
+			var infobox = getInfobox(page.revisions);
 
 			var pages = {
 				id: page.pageid,
@@ -41,14 +60,14 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 				nb_visite: 0,
 				longueur: page['length'],
 				lien: page.fullurl,
-				//date_maj: ,
+				date_maj: page.touched.replace('T', ' ').replace('Z', ''),
 				debut_annee: parseInt(date.debut_annee),
 				debut_mois: moisEnChiffre(date.debut_mois),
 				debut_jour: parseInt(date.debut_jour),
 				fin_annee: parseInt(date.fin_annee),
 				fin_mois: moisEnChiffre(date.fin_mois),
 				fin_jour: parseInt(date.fin_jour),
-				importance: 0,
+				type_infobox: infobox,
 				distance_Portail: distanceOrigine+1,
 				portail_id : portail_id
 			};
@@ -58,6 +77,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	});
 
 	// 4) Retour :
+console.log(JSON.stringify(data));
 	return data;
 }
 
@@ -71,6 +91,12 @@ function getLength(elm) {
 	if (typeof elm != 'undefined') {
 		return elm.length;
 	} else {return 0;}
+}
+
+function getInfobox(rev) {
+	var rev = rev || [{'*':''}];
+	var infobox = /Infobox ([A-Za-z ]*)/.exec(rev[0]['*']);
+	if (infobox) {return infobox[1];} else {return '';}
 }
 
 function getDate(rev) {
