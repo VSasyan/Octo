@@ -23,6 +23,7 @@ class Database {
     }
     
     public function query($sql){
+        //print_r($sql."\n");
         $result = $this->mysqli->query($sql);
         $r = [];
         while($obj = $result->fetch_array()){ 

@@ -25,5 +25,13 @@
         }
     }
     
+    if(isset($_GET['a']) && $_GET['a']=='list'){
+        if( isset($_POST["idPortail"]) ){
+            $app->listPagesPortail($_POST["idPortail"]);
+        }else{
+            throw new Exception;
+        }
+    }
+    
     $app->close();
    

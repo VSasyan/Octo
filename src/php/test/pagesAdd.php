@@ -7,7 +7,7 @@
         
         <script>
             var ajax = new XMLHttpRequest();
-            ajax.open('POST', 'http://localhost/octo/php/script.php?a=add', true);
+            ajax.open('POST', '../php/script.php?a=add', true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.addEventListener('readystatechange', function (e) {
                 if (ajax.readyState === 4 && ajax.status === 200) {

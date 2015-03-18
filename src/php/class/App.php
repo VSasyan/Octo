@@ -30,7 +30,7 @@ class App {
             $resultat = $this->getConnect()->query($sql);
             $this->portails = [];
             foreach ($resultat as $p) {
-                $this->portails[] = new Portail($p['nom'], $p['lien'], $p['date_MAJ'], $p['id'] );
+                $this->portails[] = new Portail($p['nom'], $p['lien'], $p['id'] ,$p['date_MAJ'] );
             }
         }
         return $this->portails;
@@ -51,8 +51,29 @@ class App {
             $p = new Page($page, $this->getConnect());
             $sql = $sql.$p->getFullQuery();
         }
-        print_r($sql);
         $this->getConnect()->multipleQuery($sql);
+    }
+    
+    public function listPagesPortail($idPortail){
+        $sql = "SELECT id, nom, lien FROM portail WHERE id=".$idPortail;
+        $portail = $this->getConnect()->query($sql);
+        $portail = $portail[0];
+        $p = new Portail($portail["nom"], $portail["lien"], $portail["id"]);
+        $pages = $this->getConnect()->query($p->getRequeteListPages());
+        $new_pages = [];
+        foreach ($pages as $page) {
+            $tmp = [];
+            foreach ($page as $key => $value) {
+                if(!is_int($key)){
+                    $tmp[$key] = $value;
+                }
+            }
+            $new_pages[] = $tmp;
+        }
+        $p->setTabArticles($new_pages);
+        $opt = ['id', 'nom', 'lien', 'tabArticles'];
+        $json = json_encode($p->getJSON($opt));
+        print_r($json);
     }
     
     public function close(){
