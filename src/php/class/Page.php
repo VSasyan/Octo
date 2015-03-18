@@ -40,7 +40,7 @@ class Page extends Lien{
                 . $this->json->nb_langue.", ".$this->json->nb_visite.", ".$this->json->longueur.", "
                 . $this->json->debut_annee.", ".$this->json->debut_mois.", ".$this->json->debut_jour.", "
                 . $this->json->fin_annee.", ".$this->json->fin_mois.", ".$this->json->fin_jour.", "
-                . "NOW(), ".$this->json->type_infobox.", ".$this->json->distance_Portail.", "
+                . "NOW(), \"".$this->json->type_infobox."\", ".$this->json->distance_Portail.", "
                 . $this->json->portail_id.");\n";
         
         $sql = $sql.parent::getQueryAdd();
