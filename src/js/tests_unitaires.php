@@ -25,6 +25,7 @@
     ?>
     		<script type="text/javascript" src="<?php echo $page; ?>.js"></script>
 			<script type="text/javascript">
+				var dir = '../';
 				var page = "<?php echo $page; ?>";
 			</script>
 	<?php
