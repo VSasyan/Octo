@@ -19,11 +19,12 @@ function boucler_portail_HTML(portail, sens) {
 			- sens == 1 : uniquement suiv
 			- sens == 2 : dans les deux sens
 	***/
- 	var articles = [];
- 	var errors = [];
+ 	var portail = portail.replace(/ /g, '_');
 
 	// Generation de l'url : (on attaque directement la page "Articles Liés")
 	var initialisation = recuperer_portail_HTML(portail);
+	var articles =initialisation.a;
+	var errors = initialisation.e;
 
 	// On relance sur les précédents ?
 	if ((sens == 2 || sens == -1) & initialisation.prec != '') {
@@ -81,7 +82,7 @@ function recuperer_portail_HTML(portail, page) {
 	page = page || '';
 
 	proxy = 'proxy.php?url=';
-	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés' + page;
+	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail.replace(/ /g, '_') + '/Articles_liés' + page;
 	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
 	
 	// Envoie de la requete AJAX :
@@ -96,14 +97,21 @@ function recuperer_portail_HTML(portail, page) {
  	var suiv = '';
  	var prec = '';
 
- 	// Recuperation des liens Articles :
  	if (data.status.http_code == 200) {
-		$(data.contents).find('#mw-pages li a').each(function() {
-			articles.push({
-				url : 'http://fr.wikipedia.org' + decodeURIComponent($(this).attr('href').replace(/\+/g, '_')),
-				titre : $(this).attr('title')
-			});
-		});
+ 		// Recuperation des liens Articles :
+		var regLiens = new RegExp('href="([^"]*)" title="([^"]*)"', 'g');
+		var html = $(data.contents).find('#mw-pages .mw-category').html();
+		var liens = html.match(regLiens);
+
+ 		for (i = 0; i < liens.length; i++) {
+ 			var tps = /href="([^"]*)" title="([^"]*)"/.exec(liens[i]);
+ 			if (tps) {
+ 				articles.push({
+ 					url : tps[1],
+ 					titre : tps[2]
+ 				});
+ 			}
+ 		}
 
 		// On recupere le lien vers les precedents :
 		tps = /pageuntil=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
@@ -137,7 +145,7 @@ function recuperer_nb_liens_portail_HTML(portail) {
 	var data = JSON.parse(remote);
 
 	if (data.status.http_code == 200) {
-		tps = /Cette catégorie contient (.*) pages/.exec($(data.contents).find('#mw-pages').html());
+		tps = /Cette catégorie contient[ les]* (.*) pages/.exec($(data.contents).find('#mw-pages').html());
 		if (tps) {
 			return tps[1].replace(/&nbsp;/g, '');
 		}
