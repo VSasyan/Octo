@@ -19,11 +19,11 @@
 	<script type="text/javascript" src="../../js/lib/jquery-ui.js"></script>
 	<link rel="stylesheet" type="text/css" href="../../js/lib/jquery-ui.css" />
 	<script type="text/javascript" src="../../js/utilitaires.js"></script>
-	<script type="text/javascript" src="gui.js"></script>
+	<script type="text/javascript" src="edit.js"></script>
 	<script type="text/javascript" src="../../js/recuperer_article_JSON.js"></script>
 	<script type="text/javascript" src="../../js/recuperer_portail_HTML.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="gui.css" />
+	<link rel="stylesheet" type="text/css" href="edit.css" />
 
 </head>
 
