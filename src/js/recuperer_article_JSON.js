@@ -10,7 +10,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	***/
 
 	// 1) Generation de l'url :
-	proxy = 'proxy.php?url=';
+	proxy = '../../js/proxy.php?url=';
 	pages = titres.join('|');
 	//wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&format=json&prop=categories|coordinates|info|langlinks|links|revisions&lllimit=5000&inprop=url&rvprop=content&rvsection=0&continue=';
 	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=500&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';

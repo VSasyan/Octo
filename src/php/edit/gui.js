@@ -41,7 +41,7 @@ function verifierPortail() {
 
 function ajouterPortail() {
 	$('#resultat').html('<p>Vérification du portail...</p>' + html_chargement);
-	var lien = "../php/script.php?p=add";
+	var lien = "../script.php?p=add";
 	var nom = $('#nom').val();
 	var url = $('#url').val();
 	// Si adresse non précisée on récupère le tire :
@@ -99,7 +99,7 @@ function majArticlesPortail(portail) {
 		// On recupère les info :
 		var info_article = recuperer_article_JSON(titres, 1, portail.id);
 		// On envoie au serveur :
-		var url = '../php/script.php?a=add';
+		var url = '../script.php?a=add';
 		var data = "json=" + JSON.stringify(info_article);
 		$.ajax({
 			type: 'POST',
@@ -122,7 +122,7 @@ function recupererPortails() {
 	$('#loading').html('Chargement de la liste des portails...'+html_chargement);
 	tps = [];
 	$.ajax({
-		url: '../php/script.php?p=list'
+		url: '../script.php?p=list'
 	}).done(function(data) {
 		var o = JSON.parse(data);
 		$.each(o, function(i, elm) {

@@ -1,1 +1,1 @@
-var html_chargement = '<div class="center"><img src="images/load.gif" alt="Chargement en cours..." title="Chargement en cours..."/></div>';
+var html_chargement = '<div class="center"><img src="../../image/load.gif" alt="Chargement en cours..." title="Chargement en cours..."/></div>';

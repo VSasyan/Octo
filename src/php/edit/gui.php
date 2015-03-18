@@ -15,13 +15,13 @@
   <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 	<title><?php echo $Titres[$type]; ?></title>
-	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="lib/jquery-ui.js"></script>
-	<link rel="stylesheet" type="text/css" href="lib/jquery-ui.css" />
-	<script type="text/javascript" src="utilitaires.js"></script>
+	<script type="text/javascript" src="../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../js/lib/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../js/lib/jquery-ui.css" />
+	<script type="text/javascript" src="../../js/utilitaires.js"></script>
 	<script type="text/javascript" src="gui.js"></script>
-	<script type="text/javascript" src="recuperer_article_JSON.js"></script>
-	<script type="text/javascript" src="recuperer_portail_HTML.js"></script>
+	<script type="text/javascript" src="../../js/recuperer_article_JSON.js"></script>
+	<script type="text/javascript" src="../../js/recuperer_portail_HTML.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="gui.css" />
 
