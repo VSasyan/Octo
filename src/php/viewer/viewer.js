@@ -87,7 +87,7 @@ function recupererCartes() {
 					$.post(url, data, function(data) {
 						var info = JSON.parse(data);
 						// On converti les elements :
-						var eve = convertionArticles(info.tabArticles);
+						var eve = conversionArticles(info.tabArticles);
 						// On affiche la carte :
 						afficherCarte(eve);
 					});
