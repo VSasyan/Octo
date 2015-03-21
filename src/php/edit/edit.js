@@ -81,12 +81,12 @@ function majArticlesPortail(portail) {
 	***/
 
 	// Recuperation des url :
-	$('#resultat').append('<p id="recup_urls">Récuperation des URL...</p>');
+	$('#resultat').append('<p id="recup_urls">Recherche des URL...</p>');
 	portail['articles'] = boucler_portail_HTML(portail.nom, 2);
-	$('#recup_urls').html('Recuperation des url terminée. '+portail.articles.nb_a+' url récupérées.');
+	$('#recup_urls').html('Recherche des URL terminée. '+portail.articles.nb_a+' URL trouvées.');
 
 
-	$('#resultat').append('<p id="recup_articles">Récuperation des articles...</p>');
+	$('#resultat').append('<p id="recup_articles">Récupération des articles...</p>');
 	// Recuperation et envoie des articles 50 par 50 :
 	var nb_max = 50; // 500 pour les robots
 	var nb_traite = 0;
@@ -115,7 +115,7 @@ function majArticlesPortail(portail) {
 	}
 
 	// Fini !
-	$('#resultat').append('<p id="recup_finie">Récuperation terminée !</p>');
+	$('#resultat').append('<p id="recup_finie">Récupération terminée !</p>');
 }
 
 function recupererPortails() {
