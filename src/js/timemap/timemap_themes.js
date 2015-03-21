@@ -7,6 +7,13 @@ if (typeof TimeMap != undefined) {
 		 * @type TimeMapTheme
 		 */
 		red: new TimeMapTheme(),
+		defautPetit: new TimeMapTheme(),
+		
+		defautGrand: new TimeMapTheme({
+			icon: GIP + "red-dot.png",
+			eventIconImage: "red-circle.png",
+			iconSize: [64,64]			
+		}),
 
 		blue: new TimeMapTheme({
 			icon: GIP + "blue-dot.png",
@@ -50,20 +57,20 @@ if (typeof TimeMap != undefined) {
 			eventIconImage: "pink-circle.png"
 		}),
 
-		bataille_87: new TimeMapTheme({
-			icon: "img/bataille_87.png",
+		batailleGrand: new TimeMapTheme({
+			icon: "../../image/theme/bataille_grand.png",
 			color: "#000000",
-			eventIconImage: "img/bataille_87.png",
+			eventIconImage: "../../image/theme/bataille_grand.png",
 			iconSize: [87,99]
 		}),
 
-		bataille: new TimeMapTheme({
-			icon: "img/bataille_32.png",
+		bataillePetit: new TimeMapTheme({
+			icon: "../../image/theme/bataille_petit.png",
 			color: "#000000",
-			eventIconImage: "img/bataille_32.png",
+			eventIconImage: "../../image/theme/bataille_petit.png",
 			iconSize: [32,36]
 		})
 	};
 }
 
-var themes = ['red','blue','green','ltblue','purple','orange','yellow','pink','bataille','bataille_87'];
+var themes = ["defautGrand","defautPetit", "bataillePetit","batailleGrand"];//['red','blue','green','ltblue','purple','orange','yellow','pink','bataille_grand','bataille_petit'];
