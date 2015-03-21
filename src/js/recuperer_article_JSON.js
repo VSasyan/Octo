@@ -102,7 +102,7 @@ function getDate(rev) {
 	var rev = rev || [{'*':''}];
 	var txt = /date[^=]*= *(.*)[^.]/.exec(rev[0]['*']);
 	if (txt) {
-		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
+		txt = txt[1].replace(/\[|\]|,|}|{/g, '').replace(/sourcer\|date/g, '');
 		//console.log(txt);
 		if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
 			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
