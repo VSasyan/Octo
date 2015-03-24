@@ -22,7 +22,7 @@ function conversionArticles(articles) {
 	var mediane = getMediane(importances);
 	var eves = [];
 	$.each(temps, function(i, temp) {eves.push(definirStyle(temp, mediane));});
-	console.log(eves);
+	//console.log(eves);
 	// On retourne eve :
 	return eves;
 }
@@ -40,7 +40,7 @@ function definirStyle(temp, mediane) {
 	// Retour :
 	var eve = temp.eve;
 	eve.options.theme = style+taille;
-	console.log(eve.options.theme);
+	//console.log(eve.options.theme);
 	return eve;
 }
 

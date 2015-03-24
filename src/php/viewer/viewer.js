@@ -9,7 +9,6 @@ $(document).ready(function() {
 	// On ajoute les fonctions :
 	$('#animate').click(function () {
 		var duration = parseInt($('#duration').val());
-		console.log(duration);
 		tm.animate(duration);
 	});
 });
@@ -17,6 +16,10 @@ $(document).ready(function() {
 function afficherCarte(eve) {
 	// On passe en mode carte :
 	$('#action').removeClass('loading').addClass('tm');
+
+	// On change la hauteur de la carte pour l'adapter à l'ecran :
+	adapterHauteur();
+	$(window).resize(function () {adapterHauteur();});
 
 	// On lance la time map :
 	tm = TimeMap.init({
@@ -103,4 +106,9 @@ function recupererCartes() {
 		// Ok la liste est affichée :
 		$('#action').removeClass('loading').addClass('liste');
 	});
+}
+
+function adapterHauteur() {
+	var taille = $(window).height() - $('#anim').height() - $('#timelinecontainer').height();
+	$('#mapcontainer').height(taille + 'px');
 }
