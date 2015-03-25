@@ -21,6 +21,20 @@ function afficherCarte(eve) {
 	adapterHauteur();
 	$(window).resize(function () {adapterHauteur();});
 
+	// On met à jour les sources :
+	var HTML = '';
+	HTML += '<p>Les données utilisées proviennes de Wikipédia. ';
+	HTML += 'Elles ne sont pas modifiées par Cicérow et sont réutilisables sous ';
+	HTML += '<a href="http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Citation_et_r%C3%A9utilisation_du_contenu_de_Wikip%C3%A9dia">Licence Creative Attribution (CC BY-SA 3.0)</a>.</p>';
+	HTML += '<p>Voici la liste des articles utilisés ('+eve.length+' articles) :</p>';
+	HTML += '<ul>';
+	$.each(eve, function(i,ev) {
+		HTML += '<li><a href="'+ev.options.url+'">'+ev.title+'</a></li>';
+	});
+	HTML += '';
+	HTML += '</ul>';
+	$('#htmlSource').html(HTML);
+
 	// On lance la time map :
 	tm = TimeMap.init({
 		mapId: "map",			   // Id of map div element (required)
