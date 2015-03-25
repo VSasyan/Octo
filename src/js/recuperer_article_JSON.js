@@ -1,9 +1,10 @@
-function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
+function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug) {
 	/***
 		Entrée :
 			titres = tableau des pages à récupérer
 			distanceOrigine = distance entre le portail/la page d'origne et cette page
 			portail_id : Id du portail/de la page d'origine
+			debug : log des info false par defaut
 		Sortie :
 			sortie = PAS au format JSON (PAS en string)
 				un tableau de type 
@@ -27,6 +28,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 						portail_id
 					}
 	***/
+	var debug = debug || false;
 
 	// 1) Generation de l'url :
 	proxy = dir+'js/proxy.php?url=';
@@ -48,8 +50,9 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id) {
 	$.each(retour.contents.query.pages, function(i, page) {
 		if (!(typeof page['pageid'] === 'undefined')) {
 			var coor = getCoor(page.coordinates);
-			var date = getDate(page.revisions);
 			var infobox = getInfobox(page.revisions);
+			var date = getDate(page.revisions, debug);
+			if (debug === true) {console.log(page.revisions);}
 
 			var pages = {
 				id: page.pageid,
@@ -98,32 +101,49 @@ function getInfobox(rev) {
 	if (infobox) {return infobox[1];} else {return '';}
 }
 
-function getDate(rev) {
+function getDate(rev, debug) {
 	var rev = rev || [{'*':''}];
-	var txt = /date[^=]*= *(.*)[^.]/.exec(rev[0]['*']);
+	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '');
+	if (debug === true) {console.log(txt);}
+	var txt = /date[^=]*= *(.*)[^.]/.exec(txt);
 	if (txt) {
-		txt = txt[1].replace(/\[|\]|,|}|{/g, '').replace(/sourcer\|date/g, '');
+		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
+		if (debug === true) {console.log(txt);}
 		//console.log(txt);
 		if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
 			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+			if (debug === true) {console.log('type date 1');}
 			return date;
 		} else if (/ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
 			var info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 			return date;
+			if (debug === true) {console.log('type date 2');}
 			// 5 septembre|5 - date|12|septembre|1914
-		} else if (/[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
-			var info = /[^0-9]*([0-9]{1,2}) ([A-Za-z]+).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
-			//console.log(info[2]);
+		} else if (/[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\| au [Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.test(txt)) {
+			var info = /[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\| au [Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt);
 			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
 			return date;
-		} else if (/([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
-			var info = /([0-9]{1,2}) ([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
+			if (debug === true) {console.log('type date 2');}
+			// du date|1|juillet| au date|18|novembre|1916 
+		} else if (/[^0-9]*([0-9]{1,2}) ([\wûÛéÉ]*).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.test(txt)) {
+			var info = /[^0-9]*([0-9]{1,2}) ([\wûÛéÉ]*).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt);
+			if (debug === true) {console.log('type date 3');}
+			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+			return date;
+		} else if (/([0-9]{1,2})-([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([0-9]{1,2})-([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt);
+			if (debug === true) {console.log('type date 4');}
+			date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
+			return date;
+			// 24 août|24-27 août 410 
+		} else if (/([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt);
 			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
 			return date;
-		} else if (/([A-Za-z]*) (-?[0-9]{1,4})/.test(txt)) {
-			var info = /([A-Za-z]*) (-?[0-9]{1,4})/.exec(txt);
+		} else if (/([\wûÛéÉ]*) (-?[0-9]{1,4})/.test(txt)) {
+			var info = /([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt);
 			date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
 			return date;
 		} else if (/av\. J\.-C\./.test(txt)) {

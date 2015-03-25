@@ -63,6 +63,7 @@ function articlesEnEvenement(article, m_longueur, m_nb_langue) {
 					//idp : article.id,
 					//trueStart : date.start,
 					//trueEnd : date.end,
+					"url" : article.url,
 					"theme" : article.type_infobox // Pour le moment...
 				}
 			},
