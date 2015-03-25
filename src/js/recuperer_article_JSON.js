@@ -36,14 +36,19 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug) {
 	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=500&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
 
 	// 2) envoie de la requete AJAX :
-	remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+	var continuer = 3; // On se laisse 3 tentatives
+	while (continuer > 0) {
+		remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
 
-	var remote = $.ajax({
-		type: 'GET',
-		url: remote_url,
-		async: false,
-	}).responseText;
-	retour = JSON.parse(remote);
+		var remote = $.ajax({
+			type: 'GET',
+			url: remote_url,
+			async: false,
+		}).responseText;
+		retour = JSON.parse(remote);
+		if (retour.status.http_code == 200) {continuer = 0;}
+		else {continuer--;}
+	}
 
 	// 3) On traite le retour :
 	var data = [];
@@ -103,48 +108,24 @@ function getInfobox(rev) {
 
 function getDate(rev, debug) {
 	var rev = rev || [{'*':''}];
-	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '').replace(/er /g, ' ');
+	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '').replace(/1er /g, '1 ');
 	if (debug === true) {console.log(txt);}
 	var txt = /date[^=]*= *(.*)[^.]/.exec(txt);
 	if (txt) {
+		// Il y a une date dans l'infobox :
 		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
-		if (debug === true) {console.log(txt);}
-		if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
-			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
-			return date;
-		} else if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
-			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
-			return date;
-			// 5 septembre|5 - date|12|septembre|1914
-		} else if (info = /[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\| .*([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
-			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
-			return date;
-			// du date|1|juillet| au date|18|novembre|1916 
-		} else if (info = /[^0-9]*([0-9]{1,2}) ([\wûÛéÉ]*).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
-			date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
-			return date;
-		} else if (info = /([0-9]{1,2})-([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
-			date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
-			return date;
-			// 24 août|24-27 août 410 
-		} else if (info = /([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
-			date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
-			return date;
-		} else if (info = /([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
-			date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
-			return date;
-		} else if (info = /av\. J\.-C\./.exec(txt)) {
-			var info = /([0-9]{1,4})/.exec(txt);
-			if (info) {
-				// /!\ arrive parfois d'avoir que des lettres (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
-				date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
-				return date;
-			}
-		} else if (info = /(-?[0-9]{1,4})/.exec(txt)) {
-			date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
+		var date = parserDateInfobox(txt, debug);
+		if (!(date === false)) {
+			// Il y a une date trouvée dans l'infobox : on la renvoie
 			return date;
 		}
-		console.log(txt);
+	} else {
+		// Pas d'infobox : on recupère le premier chiffre du text :
+		var date = parserDateText(rev[0]['*']);
+		if (!(date === false)) {
+			// Il y a une date trouvée dans le texte : on la renvoie
+			return date;
+		}
 	}
 	date = {debut_annee:10000, debut_mois:0, debut_jour:0, fin_annee:10000, fin_mois:0, fin_jour:0};
 	//console.log(txt, rev[0]['*']); /!\ Loupe les dates dans le corp de text. Il faut réfléchir à comment les récupérer.
@@ -175,6 +156,55 @@ function moisEnChiffre(mois) {
 		var retour = liste_mois[mois] || 0;
 	} else {retour = 0;}
 	return retour;
+}
+
+function parserDateText(txt, debug) {
+	if (info = /([\wûÛéÉ]*) \[\[(-?[0-9]{1,4})\]\]/.exec(txt)) {
+		date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
+		return date;
+	}
+	return false;
+}
+
+function parserDateInfobox(txt, debug) {
+	if (debug === true) {console.log(txt);}
+	if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
+		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+		return date;
+	} else if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
+		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+		return date;
+		// 5 septembre|5 - date|12|septembre|1914
+	} else if (info = /[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\| .*([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+		return date;
+		// du date|1|juillet| au date|18|novembre|1916 
+	} else if (info = /[^0-9]*([0-9]{1,2}) ([\wûÛéÉ]*).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
+		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+		return date;
+	} else if (info = /([0-9]{1,2})-([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
+		return date;
+		// 24 août|24-27 août 410 
+	} else if (info = /([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
+		return date;
+	} else if (info = /([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
+		return date;
+	} else if (info = /av\. J\.-C\./.exec(txt)) {
+		var info = /([0-9]{1,4})/.exec(txt);
+		if (info) {
+			// /!\ arrive parfois d'avoir que des lettres (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
+			date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
+			return date;
+		}
+		//console.log(txt);
+	} else if (info = /(-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
+		return date;
+	}
+	return false;
 }
 
 /*
