@@ -170,16 +170,16 @@ function parserDateText(txt, debug) {
 
 function parserDateInfobox(txt, debug) {
 	if (debug === true) {console.log(txt);}
-	if (info = /ate\|([1-3]?[0-9])\|([^|]+)\|([0-9]+)[^0-9]*([1-3]?[0-9])\|([^|]+)\|([0-9]+)/.exec(txt)) {
+	if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)[^0-9]*([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 		if (debug === true) {console.log(date);}
-		return date;
-	} else if (info = /ate\|([1-3]?[0-9])\|([^|]+)\|([0-9]+).*([1-3]?[0-9])\|([^|]+)\|([0-9]+)/.exec(txt)) {
+		return date; // 
+	} else if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+).*([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 		if (debug === true) {console.log(date);}
 		return date;
 		// 5 septembre|5 - date|12|septembre|1914
-	} else if (info = /[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\| .*([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
+	} else if (info = /[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|? .*([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
 		if (debug === true) {console.log(date);}
 		return date;
