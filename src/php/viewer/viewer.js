@@ -134,12 +134,11 @@ function definirEchelle(eve) {
 	// On test tout :
 	$.each(eve, function (i, ev) {
 		var tps = new Date();
-		Timeline.DateTime.setIso8601Date(debut,ev.start);
+		Timeline.DateTime.setIso8601Date(tps, ev.start);
 		if (debut > tps) {debut = tps;}
 		var tps = new Date();
-		Timeline.DateTime.setIso8601Date(debut,ev.end);
-		if (fin > tps) {fin = tps;}
-		
+		Timeline.DateTime.setIso8601Date(tps, ev.end);
+		if (fin < tps) {fin = tps;}
 	});
 
 	var tps = (fin - debut) / 1000; // duree en secondes
@@ -160,7 +159,7 @@ Timeline.DateTime.MILLENNIUM     = 10;
 
 	if (tps / (86400 * 365.25) > 1000) {
 		// Plus long qu'un millénaire : siècles :
-		bas = 9;
+		bas = 8;
 	} else if (tps / (86400 * 365.25) > 100) {
 		// Plus long qu'un siècle : decade :
 		bas = 8;
