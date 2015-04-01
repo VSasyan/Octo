@@ -13,8 +13,10 @@
 		var dir = '../';
 		$(document).ready(function() {
 			$('#tester').click(function() {
-				// On recueprer la page :
-				var data = recuperer_article_JSON(JSON.parse($('#page').val()),1,1,true);
+				// On recupere la page :
+				var str = $('#page').val();
+				if (!/\[/.test(str)) {str = '["' + str + '"]';}
+				var data = recuperer_article_JSON(JSON.parse(str),1,1,true);
 				// On affiche le retour en JSON :
 				console.log(data);
 				var HTML = '';
