@@ -108,16 +108,18 @@ function getInfobox(rev) {
 
 function getDate(rev, debug) {
 	var rev = rev || [{'*':''}];
-	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '').replace(/1er /g, '1 ');
+	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '').replace(/lier\|date/g, '').replace(/1er/g, '1');
 	if (debug === true) {console.log(txt);}
 	var txt = /\|[\s]*date[^=]*= *(.*)[^.]/.exec(txt);
 	if (txt) {
 		// Il y a une date dans l'infobox :
-		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
-		var date = parserDateInfobox(txt, debug);
-		if (!(date === false)) {
-			// Il y a une date trouvée dans l'infobox : on la renvoie
-			return date;
+		txt = txt[1].replace(/\[|\]|,|}|{|/g, '').replace(/ ?\| ?/g, '|');
+		if (!(/Wikidata/.test(txt))) { // On ne peut pas gérer les Wikidata
+			var date = parserDateInfobox(txt, debug);
+			if (!(date === false)) {
+				// Il y a une date trouvée dans l'infobox : on la renvoie
+				return date;
+			}
 		}
 	} else {
 		// Pas d'infobox : on recupère le premier chiffre du text :
@@ -168,11 +170,11 @@ function parserDateText(txt, debug) {
 
 function parserDateInfobox(txt, debug) {
 	if (debug === true) {console.log(txt);}
-	if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
+	if (info = /ate\|([1-3]?[0-9])\|([^|]+)\|([0-9]+)[^0-9]*([1-3]?[0-9])\|([^|]+)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 		if (debug === true) {console.log(date);}
 		return date;
-	} else if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
+	} else if (info = /ate\|([1-3]?[0-9])\|([^|]+)\|([0-9]+).*([1-3]?[0-9])\|([^|]+)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 		if (debug === true) {console.log(date);}
 		return date;
@@ -182,26 +184,36 @@ function parserDateInfobox(txt, debug) {
 		if (debug === true) {console.log(date);}
 		return date;
 		// du date|1|juillet| au date|18|novembre|1916 
-	} else if (info = /[^0-9]*([0-9]{1,2}) ([\wûÛéÉ]*).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
+	} else if (info = /([1-3]?[0-9]) ([\wûÛéÉ]*) [auet-]{1,2} ([1-3]?[0-9]) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
 		if (debug === true) {console.log(date);}
 		return date;
-	} else if (info = /([0-9]{1,2}) [auet]{2} ([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+		// 22 janvier - 1 mai 1759
+	} else if (info = /[^0-9]*([1-3]?[0-9]) ([\wûÛéÉ]*).*ate\|([1-3]?[0-9])\|([^|]+)\|([0-9]+)/.exec(txt)) {
+		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+		if (debug === true) {console.log(date);}
+		return date;
+	} else if (info = /([1-3]?[0-9])-([1-3]?[0-9]) [Dd]ate\|\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
+		if (debug === true) {console.log(date);}
+		return date;
+		// 1-9 date||juillet|1755
+	} else if (info = /([1-3]?[0-9]) [auet-]{1,2} ([1-3]?[0-9]) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
 		if (debug === true) {console.log(date);}
 		return date;
 		// 3 au 8 octobre 1951
-	} else if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
+	} else if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*) \|(-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
 		if (debug === true) {console.log(date);}
 		return date;
 		// Date|19|janvier|1974
-	} else if (info = /([0-9]{1,2})-([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+	} else if (info = /([1-3]?[0-9])-([1-3]?[0-9]) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
 		if (debug === true) {console.log(date);}
 		return date;
 		// 24 août|24-27 août 410 
-	} else if (info = /([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+	} else if (info = /([1-3]?[0-9]) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
 		if (debug === true) {console.log(date);}
 		return date;
@@ -218,6 +230,10 @@ function parserDateInfobox(txt, debug) {
 			return date;
 		}
 		//console.log(txt);
+	} else if (info = /([0-9]{1,4})-([0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[2], fin_mois:0, fin_jour:0};
+		if (debug === true) {console.log(date);}
+		return date;
 	} else if (info = /(-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
 		if (debug === true) {console.log(date);}
