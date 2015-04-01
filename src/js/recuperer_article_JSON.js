@@ -170,38 +170,52 @@ function parserDateInfobox(txt, debug) {
 	if (debug === true) {console.log(txt);}
 	if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)[^0-9]*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+		if (debug === true) {console.log(date);}
 		return date;
 	} else if (info = /ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+).*([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
+		if (debug === true) {console.log(date);}
 		return date;
 		// 5 septembre|5 - date|12|septembre|1914
 	} else if (info = /[Dd]ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\| .*([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+		if (debug === true) {console.log(date);}
 		return date;
 		// du date|1|juillet| au date|18|novembre|1916 
 	} else if (info = /[^0-9]*([0-9]{1,2}) ([\wûÛéÉ]*).*ate\|([0-9]{1,2})\|([^|]+)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
+		if (debug === true) {console.log(date);}
 		return date;
+	} else if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
+		if (debug === true) {console.log(date);}
+		return date;
+		// Date|19|janvier|1974
 	} else if (info = /([0-9]{1,2})-([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
+		if (debug === true) {console.log(date);}
 		return date;
 		// 24 août|24-27 août 410 
 	} else if (info = /([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
+		if (debug === true) {console.log(date);}
 		return date;
 	} else if (info = /([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
+		if (debug === true) {console.log(date);}
 		return date;
 	} else if (info = /av\. J\.-C\./.exec(txt)) {
 		var info = /([0-9]{1,4})/.exec(txt);
 		if (info) {
 			// /!\ arrive parfois d'avoir que des lettres (ex : fin du VI siècle apres/avant JC, cas à ajouter !)
 			date = {debut_annee:-1*info[1], debut_mois:0, debut_jour:0, fin_annee:-1*info[1], fin_mois:0, fin_jour:0};
+			if (debug === true) {console.log(date);}
 			return date;
 		}
 		//console.log(txt);
 	} else if (info = /(-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
+		if (debug === true) {console.log(date);}
 		return date;
 	}
 	return false;
