@@ -2,7 +2,7 @@
 
 class Database {
     
-    private $mysqli = null;
+    public $mysqli = null;
     
     public function __construct($user=null, $pwd=null, $host=null, $bdd=null) {
         $ctp = func_num_args();
@@ -38,7 +38,30 @@ class Database {
     }
     
     public function multipleQuery($sql){
+//        print_r($sql);
+        $this->mysqli->autocommit(false);
+        $this->mysqli->begin_transaction();
+
         $this->mysqli->multi_query($sql);
+        
+        do { 
+           $this->mysqli->use_result(); 
+//           print_r("Okay\n"); 
+        } while ($this->mysqli->more_results() && $this->mysqli->next_result()); 
+        
+        $r = $this->mysqli->errno;
+        if ($this->mysqli->errno) {
+//           print_r($this->mysqli->error."\n"); 
+           $this->mysqli->rollback ();
+        }else{
+            $this->mysqli->commit();
+        }
+        
+        
+        
+        $this->mysqli->autocommit(true);
+
+        return $r;
     }
     
     public function close(){

@@ -38,9 +38,9 @@ class Portail {
     
     public function getRequeteListPages(){
         return "SELECT lien.titre, lien.url, page.id, page.lon, page.lat, page.type_infobox, page.nb_langue, page.nb_visite, "
-        . "page.longueur, page.debut_annee, page.debut_mois, page.debut_jour, page.fin_annee, page.fin_mois, "
-                . "page.fin_jour, page.distance_portail FROM status, lien, page WHERE status.idPortail=".$this->id." AND "
-                . "status.accepte=1 AND status.idLien=lien.id AND lien.idPage=page.id";
+            . "page.longueur, page.debut_annee, page.debut_mois, page.debut_jour, page.fin_annee, page.fin_mois, "
+            . "page.fin_jour, page.distance_portail FROM status, lien, page WHERE status.idPortail=".$this->id." AND "
+            . "status.accepte=1 AND status.idLien=lien.id AND lien.idPage=page.id";
     }
     
     public function setTabArticles($articles){

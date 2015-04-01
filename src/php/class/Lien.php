@@ -27,10 +27,21 @@ class Lien {
         $this->idPortail = $idPortail;
     }
     
-    public function getQueryAdd(){
+    public function getInsertQuery(){
         $sql1 = "INSERT INTO lien(url, titre, idPage) VALUES ('".$this->url."', '".$this->titre."',".$this->idPage." );\n";
         $sql2 = "INSERT INTO status(idPortail, idLien, accepte, contraint) VALUES (".$this->idPortail.", (SELECT MAX(id) FROM lien),".$this->accepte.", ".$this->force." );\n";
         return $sql1.$sql2;
     }
     
+    public function getUpdateQuery(){
+        $sql = "UPDATE lien SET "
+                . "url = '".$this->url."',"
+                . "titre = '".$this->titre."' "
+                . "WHERE idPage = ".$this->getId().";\n";
+        return $sql;
+    }
+    
+    public function getId(){
+        return $this->idPage;
+    }
 }
