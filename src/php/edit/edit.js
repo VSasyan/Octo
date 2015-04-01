@@ -122,14 +122,14 @@ function majArticlesPortail(portail) {
 
 	// Bouclage :
 	//portail['articles'] = boucler_portail_HTML(portail.nom, 2);
-	$('#recup_urls').html('Recherche des URL terminée. ' + portail.articles.nb_a + '/' + nb_articles + ' URL récupérées.');
+	var tps_urls = Math.trunc(((new Date().getTime()) - startTime)/1000);
+	$('#recup_urls').html('Recherche des URL terminée. ' + portail.articles.nb_a + '/' + nb_articles + ' URL récupérées. (effectué en ' + tps_urls + ' s)');
 	$('#nb_articles').remove();
 
 	// Recuperation et envoie des articles 50 par 50 :
 	$('#resultat').append('<p id="recup_articles">Récupération des articles... <span id="articles">0</span>/' + portail.articles.nb_a + ' articles récupérés.</p>');
 	var nb_max = 50; // 500 pour les robots
 	var nb_traite = 0;
-	console.log(portail.articles);
 	for (i=0; i<portail.articles.nb_a; i+=nb_max) {
 		var titres = [];
 		for (var j=0; (j<nb_max) & (j+i < portail.articles.nb_a); j++) {
@@ -145,16 +145,25 @@ function majArticlesPortail(portail) {
 			type: 'POST',
 			url: url,
 			data: data,
-			success: function (data) {
-				nb_traite += j;
-				$('#articles').html(nb_traite);
+			success: function (retour) {
+				var retour = JSON.parse(retour);
+				if (retour.valide === true) {
+					nb_traite += j;
+					$('#articles').html(nb_traite);
+				} else {
+					// Erreur !
+					console.log("Erreur avec les articles suivants : " + info_article);
+				}
 			},
 			async:false
 		});
 	}
 
+	var tps = Math.trunc(((new Date().getTime()) - startTime)/1000);
+	$('#recup_articles').append(' (effectué en ' +(tps - tps_urls) + ' s)');
+
 	// Fini !
-	$('#resultat').append('<p id="recup_finie">Récupération terminée !</p>');
+	$('#resultat').append('<p id="recup_finie">Récupération terminée ! (effectué en ' + tps + ' s)</p>');
 }
 
 function recupererPortails() {
