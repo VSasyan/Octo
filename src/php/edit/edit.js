@@ -81,13 +81,52 @@ function majArticlesPortail(portail) {
 	***/
 
 	// Recuperation des url :
-	$('#resultat').append('<p id="recup_urls">Recherche des URL...</p>');
-	portail['articles'] = boucler_portail_HTML(portail.nom, 2);
-	$('#recup_urls').html('Recherche des URL terminée. '+portail.articles.nb_a+' URL trouvées.');
+	$('#resultat').html('<p id="recup_urls">Recherche des URL...</p>');
+ 	var nomPortail = portail.nom.replace(/ /g, '_');
+	// Nombre de liens :
+	nb_articles = recuperer_nb_liens_portail_HTML(nomPortail);
+	$('#recup_urls').append(' <span id="recup">0</span>/' + nb_articles + ' URL vers des articles récupérés...');
 
+	// On est parti pour boucler : Initialisation
+	var initialisation = recuperer_portail_HTML(nomPortail);
+	var articles = initialisation.a;
+	var errors = initialisation.e;
+	$('#recup').html(articles.length);
 
-	$('#resultat').append('<p id="recup_articles">Récupération des articles...</p>');
+	// On relance sur les précédents !
+	var prec = initialisation.prec;
+	while (prec != '') {
+		var tps = recuperer_portail_HTML(nomPortail, prec);
+		var articles = $.merge(articles, tps.a);
+		var errors = $.merge(errors, tps.e);
+		$('#recup').html(articles.length);
+		prec = tps.prec;
+	}
+
+	// On relance sur les suivants !
+	var suiv = initialisation.suiv;
+	while (suiv != '') {
+		var tps = recuperer_portail_HTML(nomPortail, suiv);
+		var articles = $.merge(articles, tps.a);
+		var errors = $.merge(errors, tps.e);
+		$('#recup').html(articles.length);
+		suiv = tps.suiv;
+	}
+
+	portail['articles'] = {
+		a : articles,
+		nb_a : articles.length,
+		nb_t : nb_articles,
+		e : errors
+	};
+
+	// Bouclage :
+	//portail['articles'] = boucler_portail_HTML(portail.nom, 2);
+	$('#recup_urls').html('Recherche des URL terminée. ' + portail.articles.nb_a + '/' + nb_articles + ' URL récupérées.');
+	$('#nb_articles').remove();
+
 	// Recuperation et envoie des articles 50 par 50 :
+	$('#resultat').append('<p id="recup_articles">Récupération des articles... <span id="articles">0</span>/' + portail.articles.nb_a + ' articles récupérés.</p>');
 	var nb_max = 50; // 500 pour les robots
 	var nb_traite = 0;
 	console.log(portail.articles);
@@ -108,7 +147,7 @@ function majArticlesPortail(portail) {
 			data: data,
 			success: function (data) {
 				nb_traite += j;
-				$('#recup_articles').html(nb_traite+' articles récupérés sur '+portail.articles.nb_a);
+				$('#articles').html(nb_traite);
 			},
 			async:false
 		});
