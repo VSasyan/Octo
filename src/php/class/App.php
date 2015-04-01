@@ -109,6 +109,10 @@ class App {
         $json = json_encode($p->getJSON($opt));
         print_r($json);
     }
+    
+    public function getUses(){
+        return $this->getConnect()->getUses();
+    }
 
     public function close() {
         if (isset($this->connect))

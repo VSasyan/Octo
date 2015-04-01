@@ -1,0 +1,48 @@
+body, html{
+    width: 100%;
+    height: 100%;
+}
+
+#content{
+    width: 800px;
+    height: 600px;
+    margin: auto;
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#recap table td{
+    width: 25%;
+    padding: 5px;
+    text-align: center;
+}
+
+#recap table td:first-child{
+    text-align: left;
+}
+
+#content>div>p{
+    padding: 5px 15px;
+    margin: 0;
+}
+
+.o{
+    background-color: #93FF74;
+    color: #28B200;
+}
+
+.w{
+    background-color: #FFEF74;
+    color: #B29E00;
+}
+
+.e{
+    background-color: #FFA3A1;
+    color: #B20400;
+}
+
+
+

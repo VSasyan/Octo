@@ -13,12 +13,10 @@
     $dir = $path.'class';
     $classes = scandir($dir);
     
-    
     foreach ($classes as $class) {
         if(!is_dir($path.$class)){
             require_once $dir.'/'.$class;
         }
     }
     
-    
-
+    include 'util.php';
