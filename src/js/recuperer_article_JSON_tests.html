@@ -17,6 +17,15 @@
 				var data = recuperer_article_JSON(JSON.parse($('#page').val()),1,1,true);
 				// On affiche le retour en JSON :
 				console.log(data);
+				var HTML = '';
+				$.each(data, function (i, ev) {
+					HTML += '<li>';
+					HTML += ev.titre + ' : ';
+					HTML += ev.debut_jour + '/' + ev.debut_mois + '/' + ev.debut_annee + ' - ';
+					HTML += ev.fin_jour + '/' + ev.fin_mois + '/' + ev.fin_annee;
+					HTML += '</li>';
+				});
+				$('#resultatfm').html('<ul>'+HTML+'</ul>');
 				$('#resultat').html(JSON.stringify(data));
 			});
 		});
@@ -29,6 +38,7 @@
 		<h3>Tester la page :</h3>
 		<input type="text" value="" id="page" style="width:400px;"/>
 		<button id="tester">Tester</button>
+		<div id="resultatfm"></div>
 		<div id="resultat"></div>
 	</div>
 

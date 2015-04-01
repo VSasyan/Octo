@@ -110,7 +110,7 @@ function getDate(rev, debug) {
 	var rev = rev || [{'*':''}];
 	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '').replace(/1er /g, '1 ');
 	if (debug === true) {console.log(txt);}
-	var txt = /date[^=]*= *(.*)[^.]/.exec(txt);
+	var txt = /\|[\s]*date[^=]*= *(.*)[^.]/.exec(txt);
 	if (txt) {
 		// Il y a une date dans l'infobox :
 		txt = txt[1].replace(/\[|\]|,|}|{/g, '');
@@ -186,6 +186,11 @@ function parserDateInfobox(txt, debug) {
 		date = {debut_annee:info[5], debut_mois:info[2], debut_jour:info[1], fin_annee:info[5], fin_mois:info[4], fin_jour:info[3]};
 		if (debug === true) {console.log(date);}
 		return date;
+	} else if (info = /([0-9]{1,2}) [auet]{2} ([0-9]{1,2}) ([\wûÛéÉ]*) (-?[0-9]{1,4})/.exec(txt)) {
+		date = {debut_annee:info[4], debut_mois:info[3], debut_jour:info[1], fin_annee:info[4], fin_mois:info[3], fin_jour:info[2]};
+		if (debug === true) {console.log(date);}
+		return date;
+		// 3 au 8 octobre 1951
 	} else if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|(-?[0-9]{1,4})/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[3], fin_mois:info[2], fin_jour:info[1]};
 		if (debug === true) {console.log(date);}
