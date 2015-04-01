@@ -73,7 +73,7 @@ class App {
             else
                 $sql = $sql . $p->getInsertQuery();
         }
-        print_r($sql);
+//        print_r($sql);
 
         $err = $this->getConnect()->multipleQuery($sql);
 //        print_r($err);
