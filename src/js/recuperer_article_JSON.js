@@ -113,7 +113,7 @@ function getDate(rev, debug) {
 	var txt = /\|[\s]*date[^=]*= *(.*)[^.]/.exec(txt);
 	if (txt) {
 		// Il y a une date dans l'infobox :
-		txt = txt[1].replace(/\[|\]|,|}|{|/g, '').replace(/ ?\| ?/g, '|');
+		txt = txt[1].replace(/\[|\]|,|}|{|/g, '').replace(/ ?\| ?/g, '|').replace(/\(.*\)/, '').replace(/s[0-9]+/, '');
 		if (!(/Wikidata/.test(txt))) { // On ne peut pas gérer les Wikidata
 			var date = parserDateInfobox(txt, debug);
 			if (!(date === false)) {
