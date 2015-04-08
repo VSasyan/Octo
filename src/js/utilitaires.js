@@ -18,3 +18,28 @@ function rand(min, max) {
 function RandR(min, max) {
 	return Math.random() * (max - min) + min;
 }
+
+function recupererSession() {
+	// On demande à getSession.php les paramètres de session
+	var session = {
+		idU : 42
+	};
+	return session;
+}
+
+// parser JSON fiable :
+JSON.p = function (str, def) {
+	try {
+		var jsonObject = JSON.parse(str);
+	} catch(e) {
+		var jsonObject = def;
+	}
+	return jsonObject;
+}
+
+// Fonctions $.OO :
+$.url = function(name, def){
+	var def = def || null;
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results) {return results[1];} else {return def;}
+}
