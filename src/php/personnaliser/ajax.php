@@ -37,8 +37,8 @@
 		<p>
 		<p>
 			<span>Emprise historique :</span>
-			de <input id="annee_debut"  type="number" placeholder="Année de début" value="-9999" />
-			à <input id="annee_fin"  type="number" placeholder="Année de fin" value="9999" />
+			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
+			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
 		<p>
 		<p>
 			<span>Durée de l'animation :</span>
