@@ -35,5 +35,28 @@
         }
     }
     
+    
+    if(isset($_GET['c']) &&  $_GET['c']=='add'){
+        if( isset($_POST["json"]) ){
+            $app->createCarte($_POST["json"]);
+        }else{
+            throw new Exception;
+        }
+    }
+    
+    if(isset($_GET['u']) && $_GET['login']){
+        if( isset($_POST["json"]) ){
+            $tab = array(
+                ["login"]    => "ernest",
+                ["role"]     => 2,
+                ["roleType"] => "Editeur"
+            );
+            echo json_encode($tab);
+        }else{
+            throw new Exception;
+        }
+    }
+    
+    
     $app->close();
    
