@@ -71,6 +71,8 @@ Timeline.DateTime.parseGregorianDateTime = function(o) {
     }
 };
 
+// Fonction corigée pour gérer les dates négatives
+
 Timeline.DateTime._iso8601DateRegExp = "^(-?)([0-9]{4})(" + [
         "(-?([0-9]{2})(-?([0-9]{2}))?)", // -month-dayOfMonth
         "(-?([0-9]{3}))",                // -dayOfYear
