@@ -151,6 +151,16 @@ END//
 DELIMITER ;
 
 
+-- Export de la structure de table octo. role
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(11) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- L'exportation de données n'était pas sélectionnée.
+
+
 -- Export de la structure de table octo. status
 DROP TABLE IF EXISTS `status`;
 CREATE TABLE IF NOT EXISTS `status` (
@@ -171,6 +181,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(50) NOT NULL DEFAULT '0',
   `mdp` varchar(255) NOT NULL DEFAULT '0',
+  `role` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
