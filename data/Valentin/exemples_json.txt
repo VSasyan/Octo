@@ -1,0 +1,3 @@
+
+Créer portail - POST : json=
+{"idU":42,"idP":"1","titre":"Ma belle carte","description":"Elle est trop belle t'as vu !","annee_debut":"1942","annee_fin":"2014","duree":"120"}
