@@ -2,11 +2,15 @@
 	session_start();
 	if (isset($_GET['json'])) {
 		$_SESSION = array(); 
-		$data = json_decode($_GET['json']);
-		$_SESSION['user']["login"]) = $data['login'];
-		$_SESSION['user']["idU"]) = $data['idU'];
-		$_SESSION['user']["role"]) = $data['role'];
-		$_SESSION['user']["roleType"]) = $data['roleType'];
+		$tps = json_decode($_GET['json'], true);
+		$user = array(
+			"login" => $tps['login'],
+			"idU" => $tps['idU'],
+			"role" => $tps['role'],
+			"roleType" => $tps['roleType']
+		);
+		
+		$_SESSION['user'] = $user;
 		echo '{"valide":true}';
 	} else {
 		echo '{"valide":false}';
