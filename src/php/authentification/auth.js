@@ -32,11 +32,11 @@ var valider = function(event){
 			console.log( data );
 			// On a recup les données, on les envoie à setSession :
 			$.ajax({
-				url : 'setSession.php?json=' + encodeURIComponent(data);
+				url : 'setSession.php?json=' + encodeURIComponent(data)
 			}).done(function(data) {
 				var reponse = JSON.parse(data);
 				if (reponse.valide === true) {
-					// Connexion et ini session reussi
+					// Connexion et initialisation de la session réussis
 				} else {
 					// Erreur
 				}
