@@ -34,17 +34,6 @@ CREATE TABLE IF NOT EXISTS `carte` (
 -- L'exportation de données n'était pas sélectionnée.
 
 
--- Export de la structure de vue octo. checkcount
-DROP VIEW IF EXISTS `checkcount`;
--- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
-CREATE TABLE `checkcount` (
-	`nom` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
-	`NB_LIEN` BIGINT(21) NOT NULL,
-	`NB_PAGE` BIGINT(21) NOT NULL,
-	`NB_STATUS` BIGINT(21) NOT NULL
-) ENGINE=MyISAM;
-
-
 -- Export de la structure de table octo. evenement
 DROP TABLE IF EXISTS `evenement`;
 CREATE TABLE IF NOT EXISTS `evenement` (
@@ -53,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `evenement` (
   `end` varchar(12) NOT NULL DEFAULT '0',
   `titre` varchar(255) NOT NULL DEFAULT '0',
   `theme` varchar(12) NOT NULL DEFAULT '0',
+  `idCarte` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -97,6 +87,68 @@ CREATE TABLE IF NOT EXISTS `page` (
 -- L'exportation de données n'était pas sélectionnée.
 
 
+-- Export de la structure de table octo. portail
+DROP TABLE IF EXISTS `portail`;
+CREATE TABLE IF NOT EXISTS `portail` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  `date_MAJ` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `lien` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- L'exportation de données n'était pas sélectionnée.
+
+
+-- Export de la structure de table octo. role
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- L'exportation de données n'était pas sélectionnée.
+
+
+-- Export de la structure de table octo. status
+DROP TABLE IF EXISTS `status`;
+CREATE TABLE IF NOT EXISTS `status` (
+  `idPortail` int(11) NOT NULL,
+  `idLien` int(11) NOT NULL,
+  `accepte` tinyint(1) DEFAULT NULL,
+  `contraint` tinyint(1) NOT NULL,
+  `date_MAJ` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idPortail`,`idLien`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- L'exportation de données n'était pas sélectionnée.
+
+
+-- Export de la structure de table octo. utilisateur
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `login` varchar(50) NOT NULL DEFAULT '0',
+  `mdp` varchar(255) NOT NULL DEFAULT '0',
+  `role` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- L'exportation de données n'était pas sélectionnée.
+
+
+-- Export de la structure de vue octo. checkcount
+DROP VIEW IF EXISTS `checkcount`;
+-- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
+CREATE TABLE `checkcount` (
+	`nom` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
+	`NB_LIEN` BIGINT(21) NOT NULL,
+	`NB_PAGE` BIGINT(21) NOT NULL,
+	`NB_STATUS` BIGINT(21) NOT NULL
+) ENGINE=MyISAM;
+
+
 -- Export de la structure de vue octo. pagescompletes
 DROP VIEW IF EXISTS `pagescompletes`;
 -- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
@@ -123,17 +175,14 @@ CREATE TABLE `pagescompletes` (
 ) ENGINE=MyISAM;
 
 
--- Export de la structure de table octo. portail
-DROP TABLE IF EXISTS `portail`;
-CREATE TABLE IF NOT EXISTS `portail` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) NOT NULL,
-  `date_MAJ` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `lien` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- L'exportation de données n'était pas sélectionnée.
+-- Export de la structure de vue octo. usersrole
+DROP VIEW IF EXISTS `usersrole`;
+-- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
+CREATE TABLE `usersrole` (
+	`id` INT(11) NOT NULL,
+	`login` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`type` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci'
+) ENGINE=MyISAM;
 
 
 -- Export de la structure de procédure octo. RAZ_ARTICLE
@@ -149,43 +198,6 @@ BEGIN
 	
 END//
 DELIMITER ;
-
-
--- Export de la structure de table octo. role
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE IF NOT EXISTS `role` (
-  `id` int(11) DEFAULT NULL,
-  `type` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- L'exportation de données n'était pas sélectionnée.
-
-
--- Export de la structure de table octo. status
-DROP TABLE IF EXISTS `status`;
-CREATE TABLE IF NOT EXISTS `status` (
-  `idPortail` int(11) NOT NULL,
-  `idLien` int(11) NOT NULL,
-  `accepte` tinyint(1) DEFAULT NULL,
-  `contraint` tinyint(1) NOT NULL,
-  `date_MAJ` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idPortail`,`idLien`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- L'exportation de données n'était pas sélectionnée.
-
-
--- Export de la structure de table octo. utilisateur
-DROP TABLE IF EXISTS `utilisateur`;
-CREATE TABLE IF NOT EXISTS `utilisateur` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) NOT NULL DEFAULT '0',
-  `mdp` varchar(255) NOT NULL DEFAULT '0',
-  `role` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- L'exportation de données n'était pas sélectionnée.
 
 
 -- Export de la structure de vue octo. checkcount
@@ -212,6 +224,13 @@ FROM lien, page, status, portail
 WHERE lien.idPage = page.id AND 
 lien.id = status.idLien AND
 status.idPortail = portail.id ;
+
+
+-- Export de la structure de vue octo. usersrole
+DROP VIEW IF EXISTS `usersrole`;
+-- Suppression de la table temporaire et création finale de la structure d'une vue
+DROP TABLE IF EXISTS `usersrole`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `usersrole` AS SELECT utilisateur.id, utilisateur.login, role.type FROM utilisateur, role WHERE utilisateur.role=role.id ;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

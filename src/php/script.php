@@ -29,7 +29,7 @@
     
     if(isset($_GET['a']) && $_GET['a']=='list'){
         if( isset($_POST["idPortail"]) ){
-            $app->listPagesPortail($_POST["idPortail"]);
+            echo $app->jsonPagesPortail($_POST["idPortail"]);
         }else{
             throw new Exception;
         }
@@ -44,13 +44,13 @@
         }
     }
     
-    if(isset($_GET['u']) && $_GET['login']){
+    if(isset($_GET['u']) && $_GET['u']=='login'){
         if( isset($_POST["json"]) ){
             $tab = array(
-                ["idU"]      => 34,
-                ["login"]    => "ernest",
-                ["role"]     => 2,
-                ["roleType"] => "Editeur"
+                "idU"      => 34,
+                "login"    => "ernest",
+                "role"     => 2,
+                "roleType" => "Editeur"
             );
             echo json_encode($tab);
         }else{
