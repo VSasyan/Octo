@@ -37,6 +37,7 @@ var valider = function(event){
 				var reponse = JSON.parse(data);
 				if (reponse.valide === true) {
 					// Connexion et initialisation de la session réussis
+					$(location).attr('pathname', 'PHP/Octo/src/php/authentification/moncompte.php');
 				} else {
 					// Erreur
 				}

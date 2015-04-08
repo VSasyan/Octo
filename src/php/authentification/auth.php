@@ -10,6 +10,7 @@ include('entete.php');
 	<body> 
 <div id="wrap"> 
 
+
 <?php
 	// En cas de déconnexion, on détruit la session
 	if (isset($_GET['deconnect'])) {
