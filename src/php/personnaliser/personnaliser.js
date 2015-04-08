@@ -94,9 +94,14 @@ function ajouterCarte(portail) {
 		// Creation des données à envoyer :
 		var json = {
 			idU: session.idU,
-			titre: $('#titre').val(),
-			idP : portail.id
+			idP : portail.id,
+			titre : $('#titre').val(),
+			description : $('#description').val(),
+			annee_debut : $('#annee_debut').val(),
+			annee_fin : $('#annee_fin').val(),
+			duree : $('#duree').val()
 		}
+		console.log(JSON.stringify(json));
 		// Initialisation de la requete :
 		$('#ajax').html(html_chargement);
 		var lien = "../script.php?c=add";
@@ -127,7 +132,7 @@ function persoEvenements() {
 
 function chargerCartes() {
 	// On recupere les cartes existants :
-	$('#ajax').html('Chargement de vos Cartes...' + html_chargement);enc
+	$('#ajax').html('Chargement de vos Cartes...' + html_chargement);
 	tps = [];
 	$.ajax({
 		url: '../script.php?c=list'

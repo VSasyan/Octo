@@ -31,6 +31,19 @@
 			<span>Titre de la carte :</span>
 			<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
 		<p>
+		<p>
+			<span>Description :</span>
+			<textarea id="description"  type="text" placeholder="Description de la Carte créée..."></textarea>
+		<p>
+		<p>
+			<span>Emprise historique :</span>
+			de <input id="annee_debut"  type="number" placeholder="Année de début" value="-9999" />
+			à <input id="annee_fin"  type="number" placeholder="Année de fin" value="9999" />
+		<p>
+		<p>
+			<span>Durée de l'animation :</span>
+			<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
+		<p>
 		</p>
 			<button id="verifierPortail">Valider</button>
 		</p>
