@@ -1,6 +1,7 @@
 <?php
 	session_start();
 	if (isset($_GET['json'])) {
+		$_SESSION = array(); 
 		$data = json_decode($_GET['json']);
 		$_SESSION['user']["login"]) = $data['login'];
 		$_SESSION['user']["idU"]) = $data['idU'];
