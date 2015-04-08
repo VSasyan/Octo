@@ -21,13 +21,15 @@ DROP TABLE IF EXISTS `carte`;
 CREATE TABLE IF NOT EXISTS `carte` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date_MAJ` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `description` text NOT NULL,
-  `echelle_temps_haut` tinyint(4) NOT NULL,
-  `echelle_temps_bas` tinyint(4) NOT NULL,
-  `duree` int(11) NOT NULL,
-  `debut_annee` int(11) NOT NULL,
-  `fin_annee` int(11) NOT NULL,
-  `idU` int(11) NOT NULL,
+  `titre` varchar(255) NOT NULL,
+  `idPortail` int(11) NOT NULL,
+  `description` text,
+  `echelle_temps_haut` tinyint(4) DEFAULT NULL,
+  `echelle_temps_bas` tinyint(4) DEFAULT NULL,
+  `duree` int(11) DEFAULT NULL,
+  `debut_annee` int(11) DEFAULT NULL,
+  `fin_annee` int(11) DEFAULT NULL,
+  `idUtilisateur` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -43,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `evenement` (
   `titre` varchar(255) NOT NULL DEFAULT '0',
   `theme` varchar(12) NOT NULL DEFAULT '0',
   `idCarte` int(11) NOT NULL,
+  `idPage` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -138,6 +141,15 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 -- L'exportation de données n'était pas sélectionnée.
 
 
+-- Export de la structure de vue octo. carteevenement
+DROP VIEW IF EXISTS `carteevenement`;
+-- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
+CREATE TABLE `carteevenement` (
+	`login` VARCHAR(50) NOT NULL COLLATE 'latin1_swedish_ci',
+	`titre` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci'
+) ENGINE=MyISAM;
+
+
 -- Export de la structure de vue octo. checkcount
 DROP VIEW IF EXISTS `checkcount`;
 -- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
@@ -198,6 +210,26 @@ BEGIN
 	
 END//
 DELIMITER ;
+
+
+-- Export de la structure de procédure octo. RAZ_CARTE
+DROP PROCEDURE IF EXISTS `RAZ_CARTE`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `RAZ_CARTE`()
+BEGIN
+	TRUNCATE TABLE carte;
+	TRUNCATE TABLE evenement;
+END//
+DELIMITER ;
+
+
+-- Export de la structure de vue octo. carteevenement
+DROP VIEW IF EXISTS `carteevenement`;
+-- Suppression de la table temporaire et création finale de la structure d'une vue
+DROP TABLE IF EXISTS `carteevenement`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `carteevenement` AS SELECT utilisateur.login, carte.titre
+FROM utilisateur, carte
+WHERE utilisateur.id=carte.idUtilisateur ;
 
 
 -- Export de la structure de vue octo. checkcount
