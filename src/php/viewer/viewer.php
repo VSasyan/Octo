@@ -1,55 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title>Viewer</title>
-	<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyCpMXa7ZJn2L7WebriShk4v8NSU4n3N-s8"
-	  type="text/javascript"></script>
-	<script type="text/javascript" src="../../js/jquery.js"></script>
-	<script type="text/javascript" src="../../js/utilitaires.js"></script>
-	<script type="text/javascript" src="viewer.js"></script>
-	<script type="text/javascript" src="../../js/lib/mxn/mxn.js?(google)"></script>
-	<script type="text/javascript" src="../../js/lib/timeline-1.2.js"></script>
-	<script type="text/javascript" src="../../js/lib/time_line_date-time.js"></script>
-	<script type="text/javascript" src="../../js/timemap/timemap.js"></script>
-	<script type="text/javascript" src="../../js/timemap/timemap_themes.js"></script>
-	<script type="text/javascript" src="../../js/timemap/param.js"></script>
-	<script type="text/javascript" src="../../js/timemap/loaders/xml.js"></script>
-	<script type="text/javascript" src="../../js/timemap/loaders/kml.js"></script>
-	<script type="text/javascript" src="../../js/conversionArticles.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="viewer.css" />
-
-</head>
-
-<body>
-	<article id="action" class="loading">
-		<div id="liste"></div>
-		<div id="timemap">
-			<div id="top">
-				<div id="licence"><a href="#viewSource">Source</a></div>
-				<div id="anim" class="center">
-					<input type="number" id="duration" value="30000"/>
-					<button id="animate">Animation !!!</button>
-				</div>
-			</div>
-			<div id="timelinecontainer">
-				<div id="timeline"></div>
-			</div>
-			<div id="mapcontainer">
-				<div id="map"></div>
+<article id="action" class="loading">
+	<div id="liste"></div>
+	<div id="timemap">
+		<div id="top">
+			<div id="licence"><a href="#viewSource">Source</a></div>
+			<div id="anim" class="center">
+				<input type="number" id="duration" value="30000"/>
+				<button id="animate">Animation !!!</button>
 			</div>
 		</div>
-		<div id="loading" class="center">
-			<img src="../../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
+		<div id="timelinecontainer">
+			<div id="timeline"></div>
 		</div>
-	</article>
-
-	<div id="viewSource">
-		<a href="#" id="fermer">&times;</a>
-		<div id="htmlSource"></div>
+		<div id="mapcontainer">
+			<div id="map"></div>
+		</div>
 	</div>
-	<div id="cover"></div>
-</body>
-</html>
+	<div id="loading" class="center">
+		<img src="../../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
+	</div>
+</article>
+
+<div id="viewSource">
+	<a href="#" id="fermer">&times;</a>
+	<div id="htmlSource"></div>
+</div>
+<div id="cover"></div>

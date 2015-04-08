@@ -144,22 +144,22 @@ function definirEchelle(eve) {
 	var tps = (fin - debut) / 1000; // duree en secondes
 
 	/*
-Timeline.DateTime.MILLISECOND    = 0;
-Timeline.DateTime.SECOND         = 1;
-Timeline.DateTime.MINUTE         = 2;
-Timeline.DateTime.HOUR           = 3;
-Timeline.DateTime.DAY            = 4;
-Timeline.DateTime.WEEK           = 5;
-Timeline.DateTime.MONTH          = 6;
-Timeline.DateTime.YEAR           = 7;
-Timeline.DateTime.DECADE         = 8;
-Timeline.DateTime.CENTURY        = 9;
-Timeline.DateTime.MILLENNIUM     = 10;
+		Timeline.DateTime.MILLISECOND    = 0;
+		Timeline.DateTime.SECOND         = 1;
+		Timeline.DateTime.MINUTE         = 2;
+		Timeline.DateTime.HOUR           = 3;
+		Timeline.DateTime.DAY            = 4;
+		Timeline.DateTime.WEEK           = 5;
+		Timeline.DateTime.MONTH          = 6;
+		Timeline.DateTime.YEAR           = 7;
+		Timeline.DateTime.DECADE         = 8;
+		Timeline.DateTime.CENTURY        = 9;
+		Timeline.DateTime.MILLENNIUM     = 10;
 	*/
 
 	if (tps / (86400 * 365.25) > 1000) {
 		// Plus long qu'un millénaire : siècles :
-		bas = 8;
+		bas = 8; // normalement 9, mais bug alors en attendant...
 	} else if (tps / (86400 * 365.25) > 100) {
 		// Plus long qu'un siècle : decade :
 		bas = 8;
