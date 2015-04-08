@@ -47,6 +47,7 @@
     if(isset($_GET['u']) && $_GET['login']){
         if( isset($_POST["json"]) ){
             $tab = array(
+                ["idU"]      => 34,
                 ["login"]    => "ernest",
                 ["role"]     => 2,
                 ["roleType"] => "Editeur"
