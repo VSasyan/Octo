@@ -97,8 +97,8 @@ function ajouterCarte(portail) {
 			idP : portail.id,
 			titre : $('#titre').val(),
 			description : $('#description').val(),
-			annee_debut : $('#annee_debut').val(),
-			annee_fin : $('#annee_fin').val(),
+			debut_annee : $('#debut_annee').val(),
+			fin_annee : $('#fin_annee').val(),
 			duree : $('#duree').val()
 		}
 		console.log(JSON.stringify(json));
