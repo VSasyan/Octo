@@ -14,7 +14,7 @@ function verifierPortail() {
 	// On vérifie que le portail est dans la liste :
 	var portail = false;
 	var nom = $('#portail').val();
-	$.each(portails, function(i,elm) {if (elm.nom == nom) {portail = elm;}});
+	$.each(portails, function(i,elm) {if (elm.nom.toLowerCase() == nom.toLowerCase()) {portail = elm;}});
 	if (portail === false) {
 		// On charge la création d'un nouveau portail :
 		$('#ajax').html(html_chargement);
@@ -55,13 +55,22 @@ function ajouterPortail() {
 	}).done(function (data) {
 		if (data.status.http_code == 200) {
 			// La page existe : on ajoute :
-			$('#resultat').html('<p>Le portail existe. Ajout du portail...</p>' + html_chargement);
-			var data = 'nom='+encodeURIComponent(nom)+'&url='+encodeURIComponent(url);
-			// Requete :
-			$.post(lien, data, function(data) {
-				$('#resultat').html('Portail ajouté avec succès !');
-				recupererPortails();
-			});
+			var titre = /<title>(.*) — Wikipédia<\/title>/.exec(data.contents);
+			if (titre) {
+				// On recuperer le titre officiel
+				var nom = titre[1];
+				var url = 'http://fr.wikipedia.org/wiki/' + encodeURIComponent(nom.replace(/ /g, '_'));
+				// On ajoute le portail :
+				$('#resultat').html('<p>Le portail existe. Ajout du portail...</p>' + html_chargement);
+				var data = 'nom='+encodeURIComponent(nom)+'&url='+encodeURIComponent(url);
+				// Requete :
+				$.post(lien, data, function(data) {
+					$('#resultat').html('Portail ajouté avec succès !');
+					recupererPortails();
+				});
+			} else {
+				$('#resultat').html('erreur lors de l\'ajout du portail...');
+			}
 		} else {
 			// Page non trouvée : on ajoute pas !
 			$('#resultat').html('portail non trouvé !');
