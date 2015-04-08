@@ -24,7 +24,6 @@ ul.ui-autocomplete li {
 }
 ul.ui-autocomplete li.ui-state-focus {
 	background-color: #FAA;
-	font-weight: bold;
 }
 ul.ui-autocomplete li:last-child {
 	border-bottom: 1px solid #000;
