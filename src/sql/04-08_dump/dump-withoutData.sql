@@ -165,9 +165,9 @@ CREATE TABLE IF NOT EXISTS `status` (
 -- L'exportation de données n'était pas sélectionnée.
 
 
--- Export de la structure de table octo. utilisateurs
-DROP TABLE IF EXISTS `utilisateurs`;
-CREATE TABLE IF NOT EXISTS `utilisateurs` (
+-- Export de la structure de table octo. utilisateur
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login` varchar(50) NOT NULL DEFAULT '0',
   `mdp` varchar(255) NOT NULL DEFAULT '0',
