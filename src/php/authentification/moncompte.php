@@ -3,7 +3,6 @@
   session_start();
 
 include('doctype.php');
-include('connect.php');
 include('entete.php');
 ?>
 </head>
