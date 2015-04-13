@@ -1,4 +1,4 @@
-function recuperer_portail_HTML(portail, page) {
+function recuperer_portail_HTML(portail, page, test_unitaire) {
 	/***
 		Entrée :
 			portail : titre du portail dont il faut récuperer les Articles Liés
@@ -12,11 +12,16 @@ function recuperer_portail_HTML(portail, page) {
 				prec : 'page' pour la page de la liste précédente si existante
 			}
 	***/
-	page = page || '';
+	var page = page || '';
+	var test_unitaire = test_unitaire || false;
 
 	proxy = dir+'js/proxy.php?url=';
 	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail.replace(/ /g, '_') + '/Articles_liés' + page;
-	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
+	if (test_unitaire === false) {
+		remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
+	} else {
+		remote_url = 'codes_tests_unitaires/index.php?page=' + test_unitaire;
+	}
 	
 	// Envoie de la requete AJAX :
 	var remote = $.ajax({

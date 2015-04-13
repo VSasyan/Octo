@@ -1,10 +1,11 @@
-function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug) {
+function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test_unitaire) {
 	/***
 		Entrée :
 			titres = tableau des pages à récupérer
 			distanceOrigine = distance entre le portail/la page d'origne et cette page
 			portail_id : Id du portail/de la page d'origine
-			debug : log des info false par defaut
+			debug : log des info (false par defaut)
+			test_unitaire : lancer l'operation en mode test unitaire (false par défaut)
 		Sortie :
 			sortie = PAS au format JSON (PAS en string)
 				un tableau de type 
@@ -29,16 +30,22 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug) {
 					}
 	***/
 	var debug = debug || false;
+	var test_unitaire = test_unitaire || false;
 
 	// 1) Generation de l'url :
 	proxy = dir+'js/proxy.php?url=';
 	pages = titres.join('|');
 	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=500&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
 
+
 	// 2) envoie de la requete AJAX :
 	var continuer = 3; // On se laisse 3 tentatives
 	while (continuer > 0) {
-		remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+		if (test_unitaire === false) {
+			remote_url = proxy + encodeURIComponent(wiki.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+		} else {
+			remote_url = 'codes_tests_unitaires/index.php?page=' + test_unitaire;
+		}
 
 		var remote = $.ajax({
 			type: 'GET',
@@ -228,34 +235,3 @@ function parserDateInfobox(txt, debug) {
 	}
 	return date;
 }
-
-/*
-
-Tests :
-il y a différents formats de date sur Wikipedia
-donc différentes manières de récupérer la date
-Voici les dates types trouvéées pour tester.
-
-pages = [
-	["Bataille_de_la_Porte_Colline", "av JC, mois", " |guerre=[[Deuxième Guerre civile Marius-Sylla]] |date= Novembre, [[-82|82 {{av JC}}]] |lieu=[[Rome]] ([[Italie]])"],
-	["Bataille de Verdun (1916)", "ap JC, mois, jour, deux dates", "| guerre=[[Première Guerre mondiale]] | date={{Date|21|février|1916}}  – {{Date|19|décembre|1916}} (9 mois, 3 semaines et 6 jours) | lieu=[[Verdun (Meuse)|Verdun]]"],
-	["Bataille_de_Dyrrachium_(48_av._J.-C.)", "av JC, mois, jour", "| guerre=[[Guerre civile de César]]| date=[[10 juillet]] [[-48|48 {{av JC}}]]| lieu=[[Durrës|Dyrrachium]] (de nos jours [[Durrës]], [[Albanie]])"],
-	["Siège_d'Alésia", "av JC", "| légende      = ''[[Vercingétorix]] jette ses armes aux pieds de [[Jules César|César]]'' (tableau de [[Lionel Royer]], [[1899]]) | date         = [[52 av. J.-C.]] | lieu         = [[Historiographie du débat sur la localisation d'Alésia|Alésia]]"],
-	["Bataille_de_Ctésiphon_(363)", "ap JC", "|guerre=[[Guerres perso-romaines]]|date=[[363|363 ap. J.-C.]]|lieu=[[Ctesiphon]], [[Mesopotamie]]"],
-	["Bataille_d%27Aricie", "siècle en chiffre romain", "| l\u00e9gende      = \n | date         = fin du {{VIe si\u00e8cle av. J.-C.}}\n | lieu         = [[Ariccia|Aricie]] ([[Latium]]), pr\u00e8s de Rome\n "],
-	["Bataille_d%27Hulluch", "du X au Y mois année", "| guerre = [[Première Guerre mondiale]] date = du [[27 avril|27]] au {{date|29|avril|1916}} | lieu = [[Hulluch]], [[France]]"],
-	["Bataille_de_Messines_(1914)", "X mois1 - Y mois2 année", "|guerre = [[Première Guerre mondiale]] |date = [[12 octobre]] - {{date|2|novembre|1914}} |lieu = [[Messines]] ([[Belgique]]) "],
-
-
-
-];
-
-// Code à ajouter au window.onload :
-	$.each(pages, function (i, elm) {
-		tps = [{'*':''}];
-		tps[0]['*'] = elm[2];
-		elm.push(getDate(tps));
-		console.log(elm[3]);
-	});
-
-*/
