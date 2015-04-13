@@ -2,7 +2,7 @@
 var nb_traite;
 var portails;
 var errors;
-var dir = '../../';
+var dir = '../';
 
 $(document).ready(function() {
 	var type = $.url('type', 'creer');
@@ -35,7 +35,7 @@ function recupererPortails() {
 	$('#ajax').html('Chargement des Portails...' + html_chargement);
 	tps = [];
 	$.ajax({
-		url: '../script.php?p=list'
+		url: 'script.php?p=list'
 	}).done(function(data) {
 		var o = JSON.parse(data);
 		$.each(o, function(i, elm) {
@@ -47,7 +47,7 @@ function recupererPortails() {
 		portails = tps;
 		// On affiche le formulaire pour le portail :
 		$.ajax({
-			url : 'ajax.php?fct=formulaire_portail'
+			url : 'personnaliser/ajax.php?fct=formulaire_portail'
 		}).done(function (data) {
 			// Ajout du formulaire :
 			$('#ajax').html(data);
@@ -72,7 +72,7 @@ function verifierPortail() {
 		// On charge le message d'erreur :
 		$('#ajax').html(html_chargement);
 		$.ajax({
-			url: 'ajax.php?fct=erreur_portail&portail='+encodeURIComponent(nom)
+			url: 'personnaliser/ajax.php?fct=erreur_portail&portail='+encodeURIComponent(nom)
 		}).done(function(data) {
 			$('#ajax').html(data);
 			$('#nom').val(nom);
@@ -104,7 +104,7 @@ function ajouterCarte(portail) {
 		console.log(JSON.stringify(json));
 		// Initialisation de la requete :
 		$('#ajax').html(html_chargement);
-		var lien = "../script.php?c=add";
+		var lien = "script.php?c=add";
 		var data = 'json=' + encodeURIComponent(JSON.stringify(json));
 		// Requete :
 		$.post(lien, data, function(data) {
@@ -135,7 +135,7 @@ function chargerCartes() {
 	$('#ajax').html('Chargement de vos Cartes...' + html_chargement);
 	tps = [];
 	$.ajax({
-		url: '../script.php?c=list'
+		url: 'script.php?c=list'
 	}).done(function(data) {
 		var o = JSON.p(data, []);
 		var HTML = '<ul id="cartes">';
