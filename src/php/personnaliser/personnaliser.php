@@ -1,4 +1,12 @@
 
+	<nav>
+		<ul>
+			<li><a href="index.php?type=creer">Créer une carte</a></li>
+			<li><a href="index.php?type=editer">Editer une carte</a></li>
+			<li><a href="index.php?type=perso">Personnaliser une carte</a></li>
+		</ul>
+	</nav>
+	
 	<article id="action">
 		<?php
 

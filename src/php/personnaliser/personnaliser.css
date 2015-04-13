@@ -1,3 +1,26 @@
+nav {
+	margin: auto;
+	width:600px;
+}
+
+nav ul li {
+	list-style: none;
+	display: inline-block;
+	padding: 5px 20px;
+	background-color: #999;
+	color: #FFF;
+	border: 1px solid #000;
+}
+
+nav ul li:hover {
+	background-color: #FFF;
+	color: #000;
+}
+
+nav ul li a {
+	color: inherit;
+}
+
 h1 {text-align: center;}
 
 form#type {text-align: center;}
