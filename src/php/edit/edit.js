@@ -1,7 +1,7 @@
 var nb_traite;
 var portails;
 var errors;
-var dir = '../../';
+var dir = '../';
 
 $(document).ready(function() {
 	// On recupère la liste des portails :
@@ -19,7 +19,7 @@ function verifierPortail() {
 		// On charge la création d'un nouveau portail :
 		$('#ajax').html(html_chargement);
 		$.ajax({
-			url: 'ajax.php?fct=ajouter_portail'
+			url: 'edit/ajax.php?fct=ajouter_portail'
 		}).done(function(data) {
 			$('#ajax').html(data);
 			$('#nom').val(nom);
@@ -29,7 +29,7 @@ function verifierPortail() {
 		// On charge l'edition de portail :
 		$('#ajax').html(html_chargement);
 		$.ajax({
-			url: 'ajax.php?fct=editer_portail'
+			url: 'edit/ajax.php?fct=editer_portail'
 		}).done(function(data) {
 			$('#ajax').html(data);
 			$('#nom').html(portail.nom);
@@ -42,12 +42,12 @@ function verifierPortail() {
 
 function ajouterPortail() {
 	$('#resultat').html('<p>Vérification du portail...</p>' + html_chargement);
-	var lien = "../script.php?p=add";
+	var lien = "script.php?p=add";
 	var nom = $('#nom').val();
 	var url = $('#url').val();
 	// Si adresse non précisée on récupère le tire :
 	if (url == '') {url = 'http://fr.wikipedia.org/wiki/' + encodeURIComponent(nom.replace(/ /g, '_'));}
-	var url_verif = '../../js/proxy.php?url=' + encodeURIComponent(url.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
+	var url_verif = dir + 'js/proxy.php?url=' + encodeURIComponent(url.replace(/ /g, '_')) + '&full_headers=0&full_status=0';
 	// On vérifie que le portail est correct :
 	$.ajax({
 		url : url_verif,
@@ -148,7 +148,7 @@ function majArticlesPortail(portail) {
 		// On recupère les info :
 		var info_article = recuperer_article_JSON(titres, 1, portail.id);
 		// On envoie au serveur :
-		var url = '../script.php?a=add';
+		var url = 'script.php?a=add';
 		var data = "json=" + JSON.stringify(info_article);
 		$.ajax({
 			type: 'POST',
@@ -180,7 +180,7 @@ function recupererPortails() {
 	$('#loading').html('Chargement de la liste des portails...'+html_chargement);
 	tps = [];
 	$.ajax({
-		url: '../script.php?p=list'
+		url: 'script.php?p=list'
 	}).done(function(data) {
 		var o = JSON.parse(data);
 		$.each(o, function(i, elm) {
