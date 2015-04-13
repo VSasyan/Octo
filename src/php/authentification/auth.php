@@ -18,7 +18,7 @@ include('entete.php');
 		$_SESSION = array(); 
 	}
 ?>
-<h3>Cartographie informatique et chronologie d'événements reliés obtenus via Wikipédia</h3>
+
 			<!-- Formulaire d'identification --> 
             <div id="authentification">
 				<fieldset> <legend>Identification</legend>
@@ -26,11 +26,14 @@ include('entete.php');
                    <div><label>Mot de passe : <input type="password" id="mdp" value="" /></label></div>
                    <div><button id="submit">Se connecter</button>     </div> 
 				</fieldset> 
+				<p> Pas encore inscrit ? <a href='register.json.php'> Inscrivez-vous !</a></p>
+
 			</div>
-<?php 
-				   echo "<p> Pas encore inscrit ? <a href='register.json.php'> Inscrivez-vous !</a></p>";
-          
-?>     
+		   
+  <div id='contenu'><p> Créer des cartes thématiques et personnalisez-les !  </p>
+  <p> <a href='a.php'>Créer une carte en tant qu'anonyme</a></p>
+  <img src="viewer.png" alt="exemple" /></div>     
+   
 	<script type="text/javascript" src="../../js/jquery.js"></script>
 	<script type="text/javascript" src="../../js/lib/jquery-ui.js"></script>
 	<script type="text/javascript" src="../../js/lib/sha1.js"></script>
