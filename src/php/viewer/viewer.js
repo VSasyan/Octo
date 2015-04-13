@@ -1,5 +1,5 @@
 var cartes;
-var dir = '../../';
+var dir = '../';
 var tm;
 
 $(document).ready(function() {
@@ -40,7 +40,7 @@ function afficherCarte(eve, echelle) {
 		mapId: "map",			   // Id of map div element (required)
 		timelineId: "timeline",	 // Id of timeline div element (required) 
 		options: {
-			eventIconPath: "../../js/images/"
+			eventIconPath: "../js/images/"
 		},
 		datasets: [
 			{
@@ -77,7 +77,7 @@ function recupererCartes() {
 	$('#loading').html('Chargement de la liste des cartes...'+html_chargement);
 	tps = [];
 	$.ajax({
-		url: '../script.php?p=list' // Pour le moment les portails...
+		url: 'script.php?p=list' // Pour le moment les portails...
 	}).done(function(data) {
 		var o = JSON.parse(data);
 		$.each(o, function(i, elm) {tps.push({id:elm.id, nom:elm.nom, auteur:'system'});});
@@ -99,7 +99,7 @@ function recupererCartes() {
 					$('#action').removeClass('liste').addClass('loading');
 					// La carte est une carte auto, on doit recuperer les articles et les transformer :
 					var eve = false;
-					var url = '../script.php?a=list';
+					var url = 'script.php?a=list';
 					var data = 'idPortail=' + carte.id;
 					$.post(url, data, function(data) {
 						var info = JSON.parse(data);
