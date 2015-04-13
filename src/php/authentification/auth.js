@@ -25,14 +25,14 @@ var valider = function(event){
 		console.log("test");
 		var json = {login: login, mdp: mdp};
 		
-		var lien = "../script.php?u=login";
+		var lien = "script.php?u=login";
 		var donnees_post = "json=" + encodeURIComponent(JSON.stringify(json));
 		console.log(json,donnees_post);
 		$.post(lien, donnees_post, function( data ) {
 			console.log( data );
 			// On a recup les données, on les envoie à setSession :
 			$.ajax({
-				url : 'setSession.php?json=' + encodeURIComponent(data)
+				url : 'authentification/setSession.php?json=' + encodeURIComponent(data)
 			}).done(function(data) {
 				var reponse = JSON.parse(data);
 				if (reponse.valide === true) {
@@ -46,5 +46,6 @@ var valider = function(event){
 	}
 }
 
-$('#authentification #submit').click(function () {valider();});
-
+$(document).ready(function () {
+	$('#authentification #submit').click(function () {valider();});
+});

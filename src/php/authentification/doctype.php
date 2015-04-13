@@ -15,7 +15,7 @@
 		<link rel="stylesheet" type="text/css" href="../js/lib/jquery-ui.css" />
 		<script type="text/javascript" src="../js/utilitaires.js"></script>
 
-<?php	if ($page == '') { ?>
+<?php	if ($page == 'auth') { ?>
 	    	<script type="text/javascript" src="authentification/auth.js"></script>
 <?php	} elseif ($page == 'personnaliser') { ?>
 			<script type="text/javascript" src="personnaliser/personnaliser.js"></script>

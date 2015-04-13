@@ -31,6 +31,7 @@
 
 <?php
 	include('authentification/entete.php');
+	include('authentification/menu.php');
 ?>
 
 	<div id="wrap">
