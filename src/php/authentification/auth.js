@@ -37,7 +37,7 @@ var valider = function(event){
 				var reponse = JSON.parse(data);
 				if (reponse.valide === true) {
 					// Connexion et initialisation de la session réussis
-					window.location.assign('moncompte.php');
+					window.location.assign('index.php?page=moncompte');
 				} else {
 					// Erreur
 				}
