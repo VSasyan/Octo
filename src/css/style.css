@@ -1,5 +1,104 @@
+/***
+/* Style general
+/***/
+h1, h2, h3 {text-align: center;}
+
 html, body {width: 100%; margin: 0; padding: 0;}
 .center {margin: auto; text-align: center;}
+
+div#wrap, div#menu {
+	margin: auto;
+	width: 600px;
+}
+/* fin style general */
+
+
+/***
+/* Style pour le menu
+/***/
+div#menu {
+	margin: auto;
+	width: 1000px;
+	text-align: center;
+}
+
+div#menu ul {
+	margin: 0;
+	padding: 0;
+}
+
+div#menu ul li {
+	list-style: none;
+	display: inline-block;
+	padding: 5px 5px;
+	background-color: #999;
+	color: #FFF;
+	border: 1px solid #000;
+}
+
+div#menu ul li:hover {
+	background-color: #FFF;
+	color: #000;
+}
+
+div#menu ul li a {
+	color: inherit;
+}
+/* fin style le menu */
+
+
+
+
+/***
+/* Style pour edit et perso
+/***/
+
+form#type {text-align: center;}
+
+article#action {
+	margin: auto;
+	width: 600px;
+}
+
+article#action #loading {display: none;}
+article#action.loading>* {display: none;}
+article#action.loading div#loading {display: block !important;}
+
+#ajoutPortail #nom, #ajoutPortail #url {
+	width:350px;
+}
+
+.center {margin: auto; text-align: center;}
+
+ul.ui-autocomplete li {
+	border: 1px solid #000;
+	border-bottom: 0px;
+	background-color: #FEE;
+}
+ul.ui-autocomplete li.ui-state-focus {
+	background-color: #FAA;
+}
+ul.ui-autocomplete li:last-child {
+	border-bottom: 1px solid #000;
+}
+
+#recap {
+	margin-bottom: 15px;
+}
+#recap p#title {
+	font-weight: bold;
+	margin: 0;
+}
+#recap #nom, #recap #url {
+	margin: 0;
+	margin-left: 20px;
+}
+
+/* fin style pour edit et perso */
+
+/***
+/* Style pour le viewer
+/***/
 
 div, p {
 	font-family: Verdana, Arial, sans-serif;
@@ -138,3 +237,5 @@ div.custominfostyle {
 }
 
 #viewSource:target, #viewSource:target + #cover{ display:block; opacity:2; }
+
+/* fin style pour le viewer */
