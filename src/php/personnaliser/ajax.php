@@ -51,6 +51,26 @@
 
 <?php
 
+	} elseif ($fct == 'formulaire_portail_unregistered') {
+
+?>
+
+		<p>
+			<span>Choisissez un portail :</span>
+			<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
+		</p>
+		<p>
+			<span>Emprise historique :</span>
+			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
+			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
+		<p>
+		</p>
+			<button id="verifierPortail">Valider</button>
+		</p>
+		<div id="resultat"></div>
+
+<?php
+
 	}
 
 ?>

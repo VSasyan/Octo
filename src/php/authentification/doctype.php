@@ -21,6 +21,8 @@
 	    	<script type="text/javascript" src="authentification/auth.js"></script>
 <?php	} elseif ($page == 'personnaliser') { ?>
 			<script type="text/javascript" src="personnaliser/personnaliser.js"></script>
+<?php	} elseif ($page == 'unregistered') { ?>
+			<script type="text/javascript" src="personnaliser/unregistered.js"></script>
 <?php	} elseif ($page == 'edit') { ?>
 			<script type="text/javascript" src="edit/edit.js"></script>
 			<script type="text/javascript" src="../js/recuperer_article_JSON.js"></script>
