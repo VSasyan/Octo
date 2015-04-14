@@ -15,19 +15,18 @@
 		<link rel="stylesheet" type="text/css" href="../js/lib/jquery-ui.css" />
 		<script type="text/javascript" src="../js/utilitaires.js"></script>
 
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+
 <?php	if ($page == 'auth') { ?>
 	    	<script type="text/javascript" src="authentification/auth.js"></script>
 <?php	} elseif ($page == 'personnaliser') { ?>
 			<script type="text/javascript" src="personnaliser/personnaliser.js"></script>
-			<link rel="stylesheet" type="text/css" href="personnaliser/personnaliser.css" />
 <?php	} elseif ($page == 'edit') { ?>
 			<script type="text/javascript" src="edit/edit.js"></script>
-			<link rel="stylesheet" type="text/css" href="edit/edit.css" />
 			<script type="text/javascript" src="../js/recuperer_article_JSON.js"></script>
 			<script type="text/javascript" src="../js/recuperer_portail_HTML.js"></script>
 <?php	} elseif ($page == 'viewer') { ?>
 		<script type="text/javascript" src="viewer/viewer.js"></script>
-			<link rel="stylesheet" type="text/css" href="viewer/viewer.css" />
 			<script type="text/javascript" src="../js/lib/mxn/mxn.js?(google)"></script>
 			<script type="text/javascript" src="../js/lib/timeline-1.2.js"></script>
 			<script type="text/javascript" src="../js/lib/time_line_date-time.js"></script>
