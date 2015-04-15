@@ -14,7 +14,8 @@
 		"unregistered" => array("personnaliser/unregistered.php", "Créer une carte - Cicérow", false),
 		"edit" => array("edit/edit.php", "Gestion des portails - Cicérow", false),
 		"viewer" => array("viewer/viewer.php", "Viewer - Cicérow", false),
-		"auth" => array("authentification/auth2.php", "Athentification - Cicérow", false),
+		"auth" => array("authentification/auth2.php", "Authentification - Cicérow", false),
+		"signin" => array("inscription/inscription.php", "Inscription - Cicérow", false),
 	);
 
 	// Gestion de la page demandée :
@@ -38,7 +39,7 @@
 	include('authentification/doctype.php');
 ?>
 
-<body>
+<body id='<?php echo $page; ?>'>
 
 <?php
 	include('authentification/entete.php');
