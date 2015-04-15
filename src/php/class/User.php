@@ -14,7 +14,12 @@ class User {
     }
     
     function getCreateQuery(){
-        return "INSERT INTO utilisateur(login, mdp, role) VALUES(\"".$this->login."\", \"".$this->pass."\", 1);";
+        return "INSERT INTO utilisateur(login, mdp, role) VALUES(\""
+            . $this->login."\", \"".$this->pass."\", 1);";
+    }
+    
+    function getLoginUniqueQuery(){
+        return "SELECT utilisateur.id FROM utilisateur WHERE login LIKE \"". $this->login ."\"";
     }
     
 }
