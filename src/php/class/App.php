@@ -83,7 +83,6 @@ class App {
         } else {
             $json["valide"] = TRUE;
         }
-
         echo json_encode($json);
     }
 
@@ -136,7 +135,7 @@ class App {
     
     public function authenticate($json){
         $vals = json_decode($json);
-        print_r($vals);
+        //print_r($vals);
     }
     
     public function insertUser($json){
