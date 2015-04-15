@@ -16,7 +16,7 @@
 		</div>
 	</div>
 	<div id="loading" class="center">
-		<img src="../../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
+		<img src="../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
 	</div>
 </article>
 
