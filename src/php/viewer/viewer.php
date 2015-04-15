@@ -1,4 +1,4 @@
-<article id="action" class="loading">
+<article id="action" class="loading viewer">
 	<div id="liste"></div>
 	<div id="timemap">
 		<div id="top">

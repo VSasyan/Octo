@@ -8,7 +8,7 @@
 				$HTML .= '<li><a href="index.php?page=personnaliser&type=creer">Créer une carte</a></li>';
 				$HTML .= '<li><a href="index.php?page=personnaliser&type=editer">Editer une carte</a></li>';
 				$HTML .= '<li><a href="index.php?page=personnaliser&type=perso">Personnaliser une carte</a></li>';
-				if (isset($_SESSION['user']["role"]) && $_SESSION['user']["role"] > 1) {
+				if ($_SESSION['user']["role"] > 1) {
 					// L'utilisateur est un editeur :
 					$HTML .= '<li><a href="index.php?page=edit">Gérer les portails</a></li>';
 				}
