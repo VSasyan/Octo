@@ -25,25 +25,17 @@ var valider = function(event){
 		console.log("test");
 		var json = {login: login, mdp: mdp};
 		
-		var lien = "script.php?u=login";
+		var lien = "script.php?u=add";
 		var donnees_post = "json=" + encodeURIComponent(JSON.stringify(json));
+		console.log(json,donnees_post);
 		$.post(lien, donnees_post, function( data ) {
-			// On a recup les donn√©es, on les envoie √† setSession :
-			$.ajax({
-				url : 'authentification/setSession.php?json=' + encodeURIComponent(data)
-			}).done(function(data) {
-				var reponse = JSON.parse(data);
-				if (reponse.valide === true) {
-					// Connexion et initialisation de la session r√©ussis
-					window.location.assign('index.php?page=moncompte');
-				} else {
-					// Erreur
-				}
-			});
+			console.log( data );
+			// On a recup les donnÈes, on les envoie ‡ setSession :
+
 		});
 	}
 }
 
 $(document).ready(function () {
-	$('#authentification #submit').click(function () {valider();});
+	$('#inscription #submit').click(function () {valider();});
 });

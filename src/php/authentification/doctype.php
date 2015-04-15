@@ -21,7 +21,7 @@
 	    	<script type="text/javascript" src="authentification/auth.js"></script>
 <?php	} elseif ($page == 'personnaliser') { ?>
 			<script type="text/javascript" src="personnaliser/personnaliser.js"></script>
-<?php	} elseif ($page == 'inscription') { ?>
+<?php	} elseif ($page == 'signin') { ?>
 			<script type="text/javascript" src="inscription/inscription.js"></script>
 <?php	} elseif ($page == 'unregistered') { ?>
 			<script type="text/javascript" src="personnaliser/unregistered.js"></script>
