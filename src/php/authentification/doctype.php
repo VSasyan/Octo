@@ -25,6 +25,7 @@
 			<script type="text/javascript" src="inscription/inscription.js"></script>
 <?php	} elseif ($page == 'unregistered') { ?>
 			<script type="text/javascript" src="personnaliser/unregistered.js"></script>
+			<script type="text/javascript" src="personnaliser/conversionArticles.js"></script>
 <?php	} elseif ($page == 'edit') { ?>
 			<script type="text/javascript" src="edit/edit.js"></script>
 			<script type="text/javascript" src="../js/recuperer_article_JSON.js"></script>
