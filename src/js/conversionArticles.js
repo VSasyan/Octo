@@ -28,11 +28,11 @@ function conversionArticles(articles) {
 }
 
 function definirStyle(temp, mediane) {
-	// Definition du style d'après l'info box :
+	// Definition du style d'après l'infobox :
 	var style = 'defaut';
-	var taille = 'Petit';
-	if (temp.eve.options.theme == 'Conflit militaire' || temp.eve.options.theme == 'conflit militaire') {
-		style = 'bataille';
+	var taille = '';
+	if (!(typeof(themes.infobox[temp.eve.options.theme]) === 'undefined')) {
+		style = themes.infobox[temp.eve.options.theme];
 	}
 	// Taille de la balise :
 	if (temp.importance > mediane) {taille = 'Grand';}
@@ -40,7 +40,6 @@ function definirStyle(temp, mediane) {
 	// Retour :
 	var eve = temp.eve;
 	eve.options.theme = style+taille;
-	//console.log(eve.options.theme);
 	return eve;
 }
 
@@ -60,7 +59,7 @@ function articlesEnEvenement(article, m_longueur, m_nb_langue) {
 				},
 				"title" : article.titre,
 				"options" : {
-					//idp : article.id,
+					idp : article.id,
 					//trueStart : date.start,
 					//trueEnd : date.end,
 					"url" : article.url,
