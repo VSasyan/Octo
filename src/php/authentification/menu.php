@@ -1,28 +1,26 @@
-
-<div id="menu">                      
+<div id="menu">
 	<ul>
 		<?php
-			if (isset($_SESSION['user']["role"])){
-				echo '<li><a href="index.php?page=viewer&type=mescartes">Mes cartes</a></li><!--';
+			$HTML = '';
+			if (isset($_SESSION['user']["role"])) {
+				// L'utilisateur est connecté :
+				$HTML .= '<li><a href="index.php?page=viewer&type=mescartes">Mes cartes</a></li>';
+				$HTML .= '<li><a href="index.php?page=personnaliser&type=creer">Créer une carte</a></li>';
+				$HTML .= '<li><a href="index.php?page=personnaliser&type=editer">Editer une carte</a></li>';
+				$HTML .= '<li><a href="index.php?page=personnaliser&type=perso">Personnaliser une carte</a></li>';
+				if (isset($_SESSION['user']["role"]) && $_SESSION['user']["role"] > 1) {
+					// L'utilisateur est un editeur :
+					$HTML .= '<li><a href="index.php?page=edit">Gérer les portails</a></li>';
+				}
+				$HTML .= '<li><a href="index.php?deconnect">Déconnexion</a></li>';
 			} else {
-				echo '<li><a href="index.php?page=viewer">Les cartes</a></li><!--';	
+				// Utilisateur non connecté :
+				$HTML .= '<li><a href="index.php?page=viewer">Les cartes</a></li>';
+				$HTML .= '<li><a href="index.php?page=unregistered">Créer une carte</a></li>';
+				$HTML .= '<li><a href="index.php?page=auth">Se connecter</a></li>';
+				$HTML .= '<li><a href="index.php?page=signin">S\'inscrire</a></li>';
 			}
+			echo $HTML;
 		?>
-		<?php
-			if (isset($_SESSION['user']["role"])){
-				echo '--><li><a href="index.php?page=personnaliser&type=creer">Créer une carte</a></li><!--';
-			} else {
-				echo '--><li><a href="index.php?page=unregistered">Créer une carte</a></li><!--';
-			}
-		?>
-		
-		--><li><a href="index.php?page=personnaliser&type=editer">Editer une carte</a></li><!--
-		--><li><a href="index.php?page=personnaliser&type=perso">Personnaliser une carte</a></li><!--
-		<?php
-			if (isset($_SESSION['user']["role"]) && $_SESSION['user']["role"] > 1){
-				echo '--><li><a href="index.php?page=edit">Gérer les portails</a></li><!--';
-			}
-		?>
-		--><li><a href="index.php?deconnect">Déconnexion</a></li>
-		</ul>        
+		</ul>
 </div>
