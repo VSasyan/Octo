@@ -1,0 +1,5 @@
+A faire :
+
+- distance portail
+- +1 nb langues
+- enlever nb_lecture ?
