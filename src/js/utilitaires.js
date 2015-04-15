@@ -62,6 +62,64 @@ function recupererThemes(fct) {
 	fct();
 }
 
+function definirEchelle(eve) {
+	// On recupere les dates :
+	var debut = new Date();
+	Timeline.DateTime.setIso8601Date(debut,'9999-01-01');
+	// On recupere les dates :
+	var fin = new Date();
+	Timeline.DateTime.setIso8601Date(debut,'-9999-01-01');
+	// On test tout :
+	$.each(eve, function (i, ev) {
+		var tps = new Date();
+		Timeline.DateTime.setIso8601Date(tps, ev.start);
+		if (debut > tps) {debut = tps;}
+		var tps = new Date();
+		Timeline.DateTime.setIso8601Date(tps, ev.end);
+		if (fin < tps) {fin = tps;}
+	});
+
+	var tps = (fin - debut) / 1000; // duree en secondes
+
+	/*
+		Timeline.DateTime.MILLISECOND    = 0;
+		Timeline.DateTime.SECOND         = 1;
+		Timeline.DateTime.MINUTE         = 2;
+		Timeline.DateTime.HOUR           = 3;
+		Timeline.DateTime.DAY            = 4;
+		Timeline.DateTime.WEEK           = 5;
+		Timeline.DateTime.MONTH          = 6;
+		Timeline.DateTime.YEAR           = 7;
+		Timeline.DateTime.DECADE         = 8;
+		Timeline.DateTime.CENTURY        = 9;
+		Timeline.DateTime.MILLENNIUM     = 10;
+	*/
+
+	if (tps / (86400 * 365.25) > 1000) {
+		// Plus long qu'un millénaire : siècles :
+		bas = 8; // normalement 9, mais bug alors en attendant...
+	} else if (tps / (86400 * 365.25) > 100) {
+		// Plus long qu'un siècle : decade :
+		bas = 8;
+	} else if (tps / (86400 * 365.25) > 10) {
+		// Plus long que 10 ans : année :
+		bas = 7;
+	} else if (tps / (86400 * 365.25) > 1) {
+		// Plus long que 1 an : mois :
+		bas = 6;
+	} else {
+		// Plus long que 1 mois : semaines :
+		bas = 5;
+	}
+
+	var echelle = {
+		haut : bas-1,
+		bas : bas
+	}
+
+	return echelle;
+}
+
 function afficherCarte(eve, echelle) {
 	// On passe en mode carte :
 	$('#action').removeClass('loading').addClass('tm');
@@ -83,6 +141,9 @@ function afficherCarte(eve, echelle) {
 	HTML += '';
 	HTML += '</ul>';
 	$('#htmlSource').html(HTML);
+
+	// On charge les themes :
+	chargerThemes(themes.themes);
 
 	// On lance la time map :
 	tm = TimeMap.init({
@@ -118,6 +179,16 @@ function afficherCarte(eve, echelle) {
 			}
 		]
 	});
+	
+	// On scroll jusqu'à la timeline :
+	$('html, body').animate({
+				scrollTop: $('#timeline').offset().top
+	}, 'fast');
+}
+
+function adapterHauteur() {
+	var taille = $(window).height() - $('#anim').height() - $('#timelinecontainer').height();
+	$('#mapcontainer').height(taille + 'px');
 }
 
 // parser JSON fiable :

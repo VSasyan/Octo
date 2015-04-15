@@ -19,7 +19,6 @@ function recupererPortails() {
 		var o = JSON.parse(data);
 		$.each(o, function(i, elm) {
 			tps.push({id:elm.id, nom:elm.nom, value:elm.nom, lien:elm.lien});
-			// La l'utilisateur peut ajouter valider son portail :
 			$('#form').html(data);
 		});
 		// Ok c'est fini, on les passe dans la variable globales :
@@ -202,10 +201,8 @@ function voirCarte() {
 	$.ajax({
 		url : 'personnaliser/ajax.php?fct=viewer_unregistered'
 	}).done(function (data) {
-		// Ajout du formulaire :
+		// Ajout du viewer  :
 		$('#wrap').html(data);
-		// On charge les themes :
-		chargerThemes(themes.themes);
 		// On agrandit la page :
 		$('div#wrap').css({width: "100%"});
 		$('article#action').css({width: "100%"});
@@ -218,10 +215,6 @@ function voirCarte() {
 			var duration = parseInt($('#duration').val());
 			tm.animate(duration);
 		});
-		// On scroll jusqu'à la timeline :
-		$('html, body').animate({
-					scrollTop: $('#timeline').offset().top
-		}, 'fast');
 	});
 	
 }

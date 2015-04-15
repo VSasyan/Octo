@@ -23,11 +23,12 @@
 			<script type="text/javascript" src="personnaliser/personnaliser.js"></script>
 <?php	} elseif ($page == 'signin') { ?>
 			<script type="text/javascript" src="inscription/inscription.js"></script>
-<?php	} elseif ($page == 'unregistered') { ?>
-			<script type="text/javascript" src="personnaliser/unregistered.js"></script>
-			<script type="text/javascript" src="../js/conversionArticles.js"></script>
+<?php	} elseif ($page == 'edit') { ?>
+			<script type="text/javascript" src="edit/edit.js"></script>
+			<script type="text/javascript" src="../js/recuperer_article_JSON.js"></script>
+			<script type="text/javascript" src="../js/recuperer_portail_HTML.js"></script>
+<?php	} elseif ($page == 'unregistered' || $page == 'viewer') { ?>
 			<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyCpMXa7ZJn2L7WebriShk4v8NSU4n3N-s8" type="text/javascript"></script>
-			<script type="text/javascript" src="viewer/viewer.js"></script>
 			<script type="text/javascript" src="../js/lib/mxn/mxn.js?(google)"></script>
 			<script type="text/javascript" src="../js/lib/timeline-1.2.js"></script>
 			<script type="text/javascript" src="../js/lib/time_line_date-time.js"></script>
@@ -37,21 +38,10 @@
 			<script type="text/javascript" src="../js/timemap/loaders/xml.js"></script>
 			<script type="text/javascript" src="../js/timemap/loaders/kml.js"></script>
 			<script type="text/javascript" src="../js/conversionArticles.js"></script>
-<?php	} elseif ($page == 'edit') { ?>
-			<script type="text/javascript" src="edit/edit.js"></script>
-			<script type="text/javascript" src="../js/recuperer_article_JSON.js"></script>
-			<script type="text/javascript" src="../js/recuperer_portail_HTML.js"></script>
-<?php	} elseif ($page == 'viewer') { ?>
-			<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyCpMXa7ZJn2L7WebriShk4v8NSU4n3N-s8" type="text/javascript"></script>
-			<script type="text/javascript" src="viewer/viewer.js"></script>
-			<script type="text/javascript" src="../js/lib/mxn/mxn.js?(google)"></script>
-			<script type="text/javascript" src="../js/lib/timeline-1.2.js"></script>
-			<script type="text/javascript" src="../js/lib/time_line_date-time.js"></script>
-			<script type="text/javascript" src="../js/timemap/timemap.js"></script>
-			<script type="text/javascript" src="../js/timemap/timemap_themes.js"></script>
-			<script type="text/javascript" src="../js/timemap/param.js"></script>
-			<script type="text/javascript" src="../js/timemap/loaders/xml.js"></script>
-			<script type="text/javascript" src="../js/timemap/loaders/kml.js"></script>
-			<script type="text/javascript" src="../js/conversionArticles.js"></script>
-<?php	} ?>
+			<?php	if ($page == 'unregistered') { ?>
+						<script type="text/javascript" src="personnaliser/unregistered.js"></script>
+			<?php	} elseif ($page == 'viewer') { ?>
+						<script type="text/javascript" src="viewer/viewer.js"></script>
+			<?php	} ?>
+	<?php	} ?>
 	</head>
