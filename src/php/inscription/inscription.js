@@ -30,8 +30,8 @@ var valider = function(event){
 		console.log(json,donnees_post);
 		$.post(lien, donnees_post, function( data ) {
 			console.log( data );
-			// On a recup les données, on les envoie à setSession :
-
+			var user = $("#user").val(); 
+			
 		});
 	}
 }

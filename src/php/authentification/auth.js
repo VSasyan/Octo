@@ -32,8 +32,11 @@ var valider = function(event){
 			$.ajax({
 				url : 'authentification/setSession.php?json=' + encodeURIComponent(data)
 			}).done(function(data) {
+				console.log("#"+data);
 				var reponse = JSON.parse(data);
+				console.log(reponse);
 				if (reponse.valide === true) {
+				
 					// Connexion et initialisation de la session réussis
 					window.location.assign('index.php?page=moncompte');
 				} else {
