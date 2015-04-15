@@ -22,4 +22,11 @@ class User {
         return "SELECT utilisateur.id FROM utilisateur WHERE login LIKE \"". $this->login ."\"";
     }
     
+    function authQuery(){
+        return "SELECT utilisateur.id AS idU, utilisateur.login, utilisateur.role, role.type as roleType "
+            . "FROM role, utilisateur "
+            . "WHERE utilisateur.role = role.id AND "
+            . "utilisateur.login LIKE \"".$this->login."\" AND "
+            . "utilisateur.mdp LIKE \"".$this->pass."\"";
+    }
 }

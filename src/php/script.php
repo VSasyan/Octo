@@ -46,13 +46,13 @@
     
     if(isset($_GET['u']) && $_GET['u']=='login'){
         if( isset($_POST["json"]) ){
-            $app->authenticate($_POST["json"]);
-            $tab = array(
-                "idU"      => 34,
-                "login"    => "ernest",
-                "role"     => 2,
-                "roleType" => "Editeur"
-            );
+            $tab = $app->authenticate($_POST["json"]);
+//            $tab = array(
+//                "idU"      => 34,
+//                "login"    => "ernest",
+//                "role"     => 2,
+//                "roleType" => "Editeur"
+//            );
             echo json_encode($tab);
         }else{
             throw new Exception;

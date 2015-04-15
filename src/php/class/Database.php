@@ -44,7 +44,19 @@ class Database {
         while ($obj = $result->fetch_array()) {
             $r[] = $obj;
         }
-        return $r;
+        
+        $new_r = [];
+        foreach ($r as $rr) {
+            $tmp = [];
+            foreach ($rr as $key => $value) {
+                if (!is_int($key)) {
+                    $tmp[$key] = $value;
+                }
+            }
+            $new_r[] = $tmp;
+        }
+        
+        return $new_r;
     }
 
     public function addQuery($sql) {

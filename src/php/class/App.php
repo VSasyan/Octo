@@ -92,17 +92,17 @@ class App {
         $portail = $portail[0];
         $p = new Portail($portail["nom"], $portail["lien"], $portail["id"]);
         $pages = $this->getConnect()->query($p->getRequeteListPages());
-        $new_pages = [];
-        foreach ($pages as $page) {
-            $tmp = [];
-            foreach ($page as $key => $value) {
-                if (!is_int($key)) {
-                    $tmp[$key] = $value;
-                }
-            }
-            $new_pages[] = $tmp;
-        }
-        $p->setTabArticles($new_pages);
+//        $new_pages = [];
+//        foreach ($pages as $page) {
+//            $tmp = [];
+//            foreach ($page as $key => $value) {
+//                if (!is_int($key)) {
+//                    $tmp[$key] = $value;
+//                }
+//            }
+//            $new_pages[] = $tmp;
+//        }
+        $p->setTabArticles($pages);
         return $p;
     }
 
@@ -135,14 +135,22 @@ class App {
     
     public function authenticate($json){
         $vals = json_decode($json);
-        //print_r($vals);
+        $user = new User($vals->login, $vals->mdp);
+        $sql = $user->authQuery();
+        $toto = $this->getConnect()->query($sql);
+        if(count($toto)==1){ // Auth réussie
+            $toto[0]["valide"] = true;
+            return $toto[0];
+        } else {
+            return array( "valide" => false );
+        }
     }
     
     public function insertUser($json){
         $vals = json_decode($json);
         $user = new User($vals->login, $vals->mdp);
         $r = $this->getConnect()->query($user->getLoginUniqueQuery());
-        if(count($r)!==0){
+        if(count($r)==0){
             $id = $this->getConnect()->addQuery($user->getCreateQuery());
             $tab = array(
                 "idU"      => $id,
@@ -156,6 +164,7 @@ class App {
                 "valide"   => false
             );
         }
+        return $tab;
     }
 
     public function close() {
