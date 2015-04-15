@@ -141,7 +141,21 @@ class App {
     public function insertUser($json){
         $vals = json_decode($json);
         $user = new User($vals->login, $vals->mdp);
-        $this->getConnect()->addQuery($user->getCreateQuery());
+        $r = $this->getConnect()->query($user->getLoginUniqueQuery());
+        if(count($r)!==0){
+            $id = $this->getConnect()->addQuery($user->getCreateQuery());
+            $tab = array(
+                "idU"      => $id,
+                "login"    => $vals->login,
+                "role"     => 1,
+                "roleType" => "Simple",
+                "valide"   => true
+            );
+        } else {
+            $tab = array(
+                "valide"   => false
+            );
+        }
     }
 
     public function close() {
