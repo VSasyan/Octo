@@ -19,8 +19,13 @@
                 <h2>Configuration</h2>
                 <?php include '/include/setUpBase.php'; ?>
             </div>
-
+            
             <div id="part2">
+                <h2>Test serie 1</h2>
+                <?php include '/include/serie1.php'; ?>
+            </div>
+
+            <div id="lafin">
                 <h2>Tests</h2>
                 <?php if($fin)
                     echo ""; ?>
