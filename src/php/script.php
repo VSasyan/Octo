@@ -46,6 +46,7 @@
     
     if(isset($_GET['u']) && $_GET['u']=='login'){
         if( isset($_POST["json"]) ){
+            $app->authenticate($_POST["json"]);
             $tab = array(
                 "idU"      => 34,
                 "login"    => "ernest",
@@ -53,6 +54,14 @@
                 "roleType" => "Editeur"
             );
             echo json_encode($tab);
+        }else{
+            throw new Exception;
+        }
+    }
+    
+    if(isset($_GET['u']) && $_GET['u']=='add'){
+        if( isset($_POST["json"]) ){
+            $app->insertUser($_POST["json"]);
         }else{
             throw new Exception;
         }

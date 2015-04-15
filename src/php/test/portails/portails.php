@@ -10,13 +10,13 @@
 
         <script>
             var ajax = new XMLHttpRequest();
-            ajax.open('POST', '../php/script.php?p=add', true);
+            ajax.open('POST', '../../../php/script.php?p=add', true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.addEventListener('readystatechange', function (e) {
                 if (ajax.readyState === 4 && ajax.status === 200) {
 
                     var ajax2 = new XMLHttpRequest();
-                    ajax2.open('GET', '../php/script.php?p=list', true);
+                    ajax2.open('GET', '../../../php/script.php?p=list', true);
                     ajax2.setRequestHeader('Content-type', 'application/json');
                     ajax2.addEventListener('readystatechange', function (e) {
                         if (ajax2.readyState === 4 && ajax2.status === 200) {

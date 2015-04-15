@@ -47,4 +47,24 @@ class Portail {
         $this->tabArticles = $articles;
     }
     
+    public function getTabArticles(){
+        return $this->tabArticles;
+    }
+    
+    public function getMaxLengthQuery(){
+        return "SELECT max(pagescompletes.longueur) "
+            . "FROM pagescompletes "
+            . "WHERE pagescompletes.idPortail=idPor AND "
+            . "pagescompletes.lon<>0 AND "
+            . "pagescompletes.lat<>0";
+    }
+    
+    public function getMaxLangueQuery(){
+        return "SELECT max(pagescompletes.nb_langue) "
+            . "FROM pagescompletes "
+            . "WHERE pagescompletes.idPortail=idPor AND "
+            . "pagescompletes.lon<>0 AND "
+            . "pagescompletes.lat<>0";
+    }
+    
 }

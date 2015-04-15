@@ -44,17 +44,17 @@ class App {
 
     public function savePages($json) {
         $pages = json_decode($json);
-        
+
         $tabPage = [];
         $sql = "SELECT id FROM page WHERE";
-        
+
         foreach ($pages as $key => $page) {
             //print_r($page);
             $p = new Page($page);
-            $sql .= " id=".$page->id." OR";
+            $sql .= " id=" . $page->id . " OR";
             $tabPage[] = $p;
         }
-        $sql = substr($sql, 0, count($sql)-4);
+        $sql = substr($sql, 0, count($sql) - 4);
         $r = $this->getConnect()->query($sql);
         //print_r($sql);
         $tabId = [];
@@ -62,14 +62,14 @@ class App {
             $tabId[] = $id["id"];
         //print_r($r);
         //print_r($tabId);
-        
+
         $sql = "";
-        
+
         foreach ($pages as $key => $page) {
             $p = new Page($page);
             //print_r($p->getId()." ".  in_array($p->getId(), $tabId)."\n");
-            if(in_array($p->getId(), $tabId))
-                $sql = $sql . $p->getUpdateQuery ();
+            if (in_array($p->getId(), $tabId))
+                $sql = $sql . $p->getUpdateQuery();
             else
                 $sql = $sql . $p->getInsertQuery();
         }
@@ -78,14 +78,13 @@ class App {
         $err = $this->getConnect()->multipleQuery($sql);
 //        print_r($err);
         $json = [];
-        if($err){
+        if ($err) {
             $json["valide"] = FALSE;
         } else {
             $json["valide"] = TRUE;
         }
-        
+
         echo json_encode($json);
-        
     }
 
     public function listPagesPortail($idPortail) {
@@ -105,13 +104,45 @@ class App {
             $new_pages[] = $tmp;
         }
         $p->setTabArticles($new_pages);
+        return $p;
+    }
+
+    public function jsonPagesPortail($idPortail) {
+        $p = $this->listPagesPortail($idPortail);
         $opt = ['id', 'nom', 'lien', 'tabArticles'];
         $json = json_encode($p->getJSON($opt));
-        print_r($json);
+        return $json;
+    }
+
+    public function createCarte($json) {
+        $vals = json_decode($json);
+        //print_r($vals);
+        $carte = new Carte($vals->titre, $vals->idU, $vals->idP, $vals->description, $vals->debut_annee, 
+                $vals->fin_annee, $vals->duree);
+        $p = $this->listPagesPortail($vals->idP);
+        
+        print_r($p);
+        
+//        foreach ($p->getTabArticles() as $article){
+//            $article->
+//        }
+        
+        //$this->getConnect()->addQuery($carte->getCreateQuery());
+    }
+
+    public function getUses() {
+        return $this->getConnect()->getUses();
     }
     
-    public function getUses(){
-        return $this->getConnect()->getUses();
+    public function authenticate($json){
+        $vals = json_decode($json);
+        print_r($vals);
+    }
+    
+    public function insertUser($json){
+        $vals = json_decode($json);
+        $user = new User($vals->login, $vals->mdp);
+        $this->getConnect()->addQuery($user->getCreateQuery());
     }
 
     public function close() {

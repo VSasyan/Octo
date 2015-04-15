@@ -7,7 +7,7 @@
         
         <script>
             var ajax = new XMLHttpRequest();
-            ajax.open('POST', '../script.php?a=list', true);
+            ajax.open('POST', '../../script.php?c=add', true);
             ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajax.addEventListener('readystatechange', function (e) {
                 if (ajax.readyState === 4 && ajax.status === 200) {
@@ -15,7 +15,8 @@
                 }
             });
             
-            var data = "idPortail=1";
+            var json =  {"idU":1,"idP":"1","titre":"Ma belle carte","description":"Elle est trop belle t'as vu !","debut_annee":"1942","fin_annee":"2014","duree":"120"};
+            var data = "json=" + JSON.stringify(json);
             ajax.send(data);
         </script>
         
