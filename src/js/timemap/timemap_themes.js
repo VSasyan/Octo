@@ -7,6 +7,7 @@ if (typeof TimeMap != undefined) {
 		 * @type TimeMapTheme
 		 */
 		red: new TimeMapTheme(),
+		defaut: new TimeMapTheme(),
 		defautPetit: new TimeMapTheme(),
 		
 		defautGrand: new TimeMapTheme({

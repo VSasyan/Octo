@@ -60,6 +60,10 @@
 			<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
 		</p>
 		<p>
+			<span>Titre de la carte :</span>
+			<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
+		<p>
+		<p>
 			<span>Emprise historique :</span>
 			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
 			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />

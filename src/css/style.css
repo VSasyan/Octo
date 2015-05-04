@@ -63,6 +63,12 @@ div#menu ul li a {
 /* Style pour unregistered
 /***/
 
+.clickable:hover {
+	cursor: pointer;
+	color: blue;
+	text-decoration: underline;
+}
+
 /* fin style unregistered */
 
 

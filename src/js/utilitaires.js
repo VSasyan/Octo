@@ -48,6 +48,18 @@ function chargerThemes(themes) {
 	});
 }
 
+function dateToStr(article) {
+	if (article.debut_jour != article.fin_jour || article.debut_mois != article.fin_mois || article.debut_annee != article.fin_annee) {
+		return printNonNul(article.debut_jour) + printNonNul(article.debut_mois) + article.debut_annee + '&nbsp;-&nbsp;' + printNonNul(article.fin_jour) + printNonNul(article.fin_mois) + article.fin_annee;
+	} else {
+		return printNonNul(article.debut_jour) + printNonNul(article.debut_mois) + article.debut_annee;
+	}
+}
+
+function printNonNul(n) {
+	if (n != 0) {return n+'/';} else {return '';}
+}
+
 function recupererThemes(fct) {
 	var fct = fct || function() {};
 	// On recupere les themes disponibles :
@@ -190,6 +202,42 @@ function adapterHauteur() {
 	var taille = $(window).height() - $('#anim').height() - $('#timelinecontainer').height();
 	$('#mapcontainer').height(taille + 'px');
 }
+
+function StrToNumber(tab) {
+	$.each(tab, function (i, t) {
+		t['debut_annee'] = parseInt(t['debut_annee']);
+		t['debut_mois'] = parseInt(t['debut_mois']);
+		t['debut_jour'] = parseInt(t['debut_jour']);
+		t['fin_annee'] = parseInt(t['fin_annee']);
+		t['fin_mois'] = parseInt(t['fin_mois']);
+		t['fin_jour'] = parseInt(t['fin_jour']);
+
+		t['longueur'] = parseInt(t['longueur']);
+		t['nb_langue'] = parseInt(t['nb_langue']);
+		t['nb_visite'] = parseInt(t['nb_visite']);
+
+		t['lon'] = parseFloat(t['lon']);
+		t['lat'] = parseFloat(t['lat']);
+	});
+	return tab;
+}
+
+var sort_by = function(field, reverse, primer){
+
+   var key = primer ? 
+       function(x) {return primer(x[field])} : 
+       function(x) {return x[field]};
+
+   reverse = !reverse ? 1 : -1;
+
+   return function (a, b) {
+       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+     } 
+}
+// Sort by price high to low
+//homes.sort(sort_by('price', true, parseInt));
+// Sort by city, case-insensitive, A-Z
+//homes.sort(sort_by('city', false, function(a){return a.toUpperCase()}));
 
 // parser JSON fiable :
 JSON.p = function (str, def) {

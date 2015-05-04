@@ -38,6 +38,7 @@
 			<script type="text/javascript" src="../js/timemap/loaders/xml.js"></script>
 			<script type="text/javascript" src="../js/timemap/loaders/kml.js"></script>
 			<script type="text/javascript" src="../js/conversionArticles.js"></script>
+			<script type="text/javascript" src="../js/class/carte.js"></script>
 			<?php	if ($page == 'unregistered') { ?>
 						<script type="text/javascript" src="personnaliser/unregistered.js"></script>
 			<?php	} elseif ($page == 'viewer') { ?>
