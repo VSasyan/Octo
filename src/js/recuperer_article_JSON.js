@@ -180,7 +180,7 @@ function parserDateInfobox(txt, debug) {
 	if (debug === true) {console.log(txt);}
 	// On test si c'est avant JC :
 	if (info = /av\. J\.-C\./.test(txt)) {var coeff = -1;} else {var coeff = 1;}
-console.log(coeff);
+
 	if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)[^0-9]*([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)/.exec(txt)) {
 		date = {debut_annee:info[3], debut_mois:info[2], debut_jour:info[1], fin_annee:info[6], fin_mois:info[5], fin_jour:info[4]};
 		if (debug === true) {console.log(date);}
@@ -228,7 +228,7 @@ console.log(coeff);
 		date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
 		if (debug === true) {console.log(date);}
 	}
-	if (!(date === false) && (coeff == -1)) {
+	if (!(date === false)) {
 		date.debut_annee = Math.abs(date.debut_annee) * coeff;
 		date.fin_annee = Math.abs(date.fin_annee) * coeff;
 	}
