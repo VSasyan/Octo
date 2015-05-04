@@ -40,6 +40,40 @@ function getNewBase($name) {
 
     $lines = file($path);
 
+    $newTab = [];
+
+    $haystack = "";
+    $delim = ";";
+    
+    foreach ($lines as $lineContent) {
+        $newLine = str_replace("octo", $name, $lineContent);
+        //$newLine = str_replace("`", "'", $newLine);
+        //print_r($newLine." @@@@: ".strpos($newLine, ";")." ".strlen($newLine)." ".(strlen($newLine)-strpos($newLine, ";"))."\n");
+        //$haystack .= rtrim($newLine);
+        if(strcmp(substr($newLine, 0,2), "--")!=0 && strcmp(substr($newLine, 0,2), "/*")!=0)
+            $haystack .= trim($newLine)." ";
+        if(strpos($newLine, "ELIMITER ")==1)
+            $delim = substr($newLine, 10, -1);
+        
+        $diff = (strlen($newLine)-strpos($newLine, $delim));
+        if(($diff==4 || $diff==3)&&strpos($newLine, $delim)>0){
+            $newTab[] = $haystack;
+            $haystack = "";
+        }
+    }
+
+    return $newTab;
+}
+
+function getNewBase2($name) {
+    $dir = "./../../sql";
+
+    $classes = scandir($dir, SCANDIR_SORT_DESCENDING);
+
+    $path = $dir . "/" . $classes[0] . "/dump-withoutData.sql";
+
+    $lines = file($path);
+
     $sql = "";
 
     $nProc = 0;
@@ -49,8 +83,7 @@ function getNewBase($name) {
 
     foreach ($lines as $lineContent) {
         $newLine = str_replace("octo", $name, $lineContent) . "\n";
-
-        if (strpos($newLine, "structure de procédure") || $procFlag) {
+        if (strpos($newLine, "ELIMITER $$") || $procFlag) {
             if (!isset($tabProc[$nProc]))
                 $tabProc[$nProc] = "";
             $tabProc[$nProc] .= $newLine."\n";
@@ -65,4 +98,13 @@ function getNewBase($name) {
     }
 
     return [$sql, $tabProc];
+}
+
+function traiteProcedures($sql){
+    $sql = substr($sql, 0, -3).";";
+    $sql = str_replace("`", "", $sql);
+//    $e = explode("(", $sql);
+//    $e[0] = str_replace("`", "", $e[0]);
+//    var_dump($e);
+    return $sql;
 }

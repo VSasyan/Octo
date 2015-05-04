@@ -22,24 +22,31 @@ if ($mysqli->connect_error) {
 
 $r = $mysqli->select_db($database[$uses]["database"]);
 
-if ($r)
+if ($r){
     echo "<p class='o'>Connection réussie à la base " . $database[$uses]["database"] . "</p>";
-else {
+
+    
+} else {
 
     echo "<p class='w'>Connection ratée: la base " . $database[$uses]["database"] . " n'existe pas.</p>";
     echo "<p class='w'>Création de la base " . $database[$uses]["database"] . "</p>";
     $base = getNewBase($database[$uses]["database"]);
-
-    $sql = $base[0];
-
-    $mysqli->multi_query($sql);
-
+    
     $i = 0;
-    do {
+    
+    foreach ($base as $sql) {
+        if(strpos($sql, "ELIMITER")==1)
+                continue;
+        if(strpos($sql, "FUNCTION")>0 || strpos($sql, "PROCEDURE"))
+                $sql = traiteProcedures ($sql);
+        if(strlen($sql)>1)
+            if(!$mysqli->query($sql)){
+                var_dump($sql);
+                break;
+            }
         $i++;
-        $mysqli->use_result();
-    } while ($mysqli->more_results() && $mysqli->next_result());
-
+    }
+    
     if ($mysqli->errno) {
         echo "<p class=e>Problème lors de la création de la base: " . $mysqli->error . "</p>";
         $fin = false;
