@@ -23,6 +23,9 @@
             <div id="part2">
                 <h2>Test serie 1</h2>
                 <?php include '/include/serie1.php'; ?>
+            
+                <h2>Test serie 2</h2>
+                <?php include '/include/serie2.php'; ?>
             </div>
 
             <div id="lafin">

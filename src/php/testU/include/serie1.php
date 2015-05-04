@@ -18,7 +18,6 @@
   }
   
 
-  
   function testAjoutPage($tab1, $tab2){
   
       //Enregistrer pages
@@ -53,7 +52,7 @@
       foreach ($r as $n => $p) {
         foreach ($p as $m =>$q) {
                 
-                if (!is_int($m) && !$q==$tab2[$n][$m]){
+                if (!is_int($m) && $q!=$tab2[$n][$m]){
                     return false;
                 }
         }
@@ -62,8 +61,139 @@
      
   }
     
-          
   
+  function testListePortail(){
+  
+      //Liste des portails
+      $app = new App();
+      
+      $json = $app->getPortailsJSON(['id', 'nom', 'lien']); 
+      
+      $app->close();
+      
+      $jsonCompare = "[{\"id\":\"1\",\"nom\":\"Portail\",\"lien\":\"lien\"},{\"id\":\"2\",\"nom\":\"Portail\",\"lien\":\"lien\"}]";
+      
+      return $json==$jsonCompare;
+     
+  }
+  
+          
+  function testAjoutPortail($tab){
+      
+      //Ajout d'un portail
+      $app = new App();
+      
+      $app->addPortail("Portail", "lien");
+      
+      $app->close();
+      
+      
+       //Recuperer id, nom et lien du portail enregistre
+      require "../conf/database.php";
+      
+      $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
+      
+      $sql = "SELECT id, nom, lien
+       FROM Portail";
+ 
+      $resultat = $mysqli->query($sql);
+      $r = [];
+      while ($obj = $resultat->fetch_array()) {
+            $r[] = $obj;
+      }
+      $mysqli->close();   
+      
+      
+      
+      //Comparaison $r et $tab
+      foreach ($r as $n => $p) {
+        foreach ($p as $m =>$q) {
+                if (!is_int($m) && $q!=$tab[$n][$m]){
+                    return false;
+                }
+        }
+      }
+      return true;
+  }
+  
+  
+  
+  function videTables(){
+
+    //Suppression des entrees de toutes les tables
+    require "../conf/database.php";
+      
+    $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
+      
+    $sql = "TRUNCATE carte "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE carteevenement "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE checkcount "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE evenement "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE lien "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE page "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE pageimportance "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE pagecompletes "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE portail "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE portailmax "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE role "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE status "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE test "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE usersrole "; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "TRUNCATE utilisateur "; 
+    $resultat = $mysqli->query($sql);
+    
+    $mysqli->close(); 
+}
+
+  function ajoutRoles(){
+    
+    //Initialise la table role
+    require "../conf/database.php";
+      
+    $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
+      
+    $sql = "INSERT INTO role(id,type) VALUES(1,\"Simple\")"; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "INSERT INTO role(id,type) VALUES(2,\"Editeur\")"; 
+    $resultat = $mysqli->query($sql);
+    
+    $sql = "INSERT INTO role(id,type) VALUES(3,\"Administrateur\")"; 
+    $resultat = $mysqli->query($sql);
+    
+    $mysqli->close();
+  }
+  
+  
+
   $tab = array(
   
     0 => array(
@@ -386,8 +516,31 @@ $tab2 = array(
   
   );
 
+$tabPortail = array(
+  
+    0 => array(
+      "id" => 1,
+      "nom" => "Portail",
+      "lien" => "lien")
+    );
+
+$tabPortail2 = array(
+    
+    0 => array(
+      "id" => 1,
+      "nom" => "Portail",
+      "lien" => "lien"),
+  
+    1 => array(
+      "id" => 2,
+      "nom" => "Portail",
+      "lien" => "lien")
+    );
     
     
+
+ videTables();
+ ajoutRoles();
   
  if(testAjoutPage($tab, $tab))
     echo "<p class='o'>Ajout de 6 pages</p>";
@@ -404,23 +557,26 @@ $tab2 = array(
   else
     echo "<p class='e'>Erreur lors de la modification d'une page</p>";
     
-  
-  
-  require "../conf/database.php";
-      
-  $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
-  
-  $sql = "INSERT INTO Portail(nom, date_MAJ, lien) VALUES ( 'Portail', NOW(), 'lien' )";
-  $resultat = $mysqli->query($sql);    
-  
-  $mysqli->close();   
-      
-    
-  
-    
-   
+ if(testAjoutPortail($tabPortail))
+    echo "<p class='o'>Ajout d'un portail</p>";
+  else
+    echo "<p class='e'>Erreur lors de l'ajout d'un portail</p>";
+ 
+ if(testAjoutPortail($tabPortail2))
+    echo "<p class='o'>Ajout d'un second portail</p>";
+  else
+    echo "<p class='e'>Erreur lors de l'ajout du second portail</p>";
+     
  if(testListePage())
     echo "<p class='o'>Recuperation des pages du portail d'identifiant 1 avec succès</p>";
   else
-    echo "<p class='e'>Erreur lors de la recuperation des pages du portail d'identifiant 1< /p>";
+    echo "<p class='e'>Erreur lors de la recuperation des pages du portail d'identifiant 1</p>";
+  
+  if(testListePortail())
+    echo "<p class='o'>Recuperation des portails avec succès</p>";
+  else
+    echo "<p class='e'>Erreur lors de la recuperation des portails</p>";
+  
+  
+ //videTables();
    
