@@ -9,12 +9,12 @@
 
 	// Page possibles :
 	$pages = array(
-		"moncompte" => array("authentification/moncompte2.php", "Mon compte - Cicérow", false),
+		"moncompte" => array("authentification/moncompte.php", "Mon compte - Cicérow", false),
 		"personnaliser" => array("personnaliser/personnaliser.php", "Créer une carte - Cicérow", array('creer' => 'Créer une carte', 'editer' => 'Editer une carte','perso' => 'Personnaliser une carte')),
 		"unregistered" => array("personnaliser/unregistered.php", "Créer une carte - Cicérow", false),
 		"edit" => array("edit/edit.php", "Gestion des portails - Cicérow", false),
 		"viewer" => array("viewer/viewer.php", "Viewer - Cicérow", false),
-		"auth" => array("authentification/auth2.php", "Authentification - Cicérow", false),
+		"auth" => array("authentification/auth.php", "Authentification - Cicérow", false),
 		"signin" => array("inscription/inscription.php", "Inscription - Cicérow", false),
 	);
 
