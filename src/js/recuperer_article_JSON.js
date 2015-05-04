@@ -71,8 +71,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 				titre: page.title,
 				lon: coor.lon,
 				lat: coor.lat,
-				nb_langue: getLength(page.langlinks),
-				nb_visite: 0,
+				nb_langue: getLength(page.langlinks)+1,
 				longueur: page['length'],
 				lien: page.fullurl,
 				date_maj: page.touched.replace('T', ' ').replace('Z', ''),
@@ -83,7 +82,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 				fin_mois: moisEnChiffre(date.fin_mois),
 				fin_jour: parseInt(date.fin_jour),
 				type_infobox: infobox,
-				distance_Portail: distanceOrigine+1,
+				distance_Portail: distanceOrigine,
 				portail_id : portail_id
 			};
 
@@ -230,8 +229,8 @@ function parserDateInfobox(txt, debug) {
 		if (debug === true) {console.log(date);}
 	}
 	if (!(date === false)) {
-		date.debut_annee *= coeff;
-		date.fin_annee *= coeff;
+		date.debut_annee = Math.abs(date.debut_annee) * coeff;
+		date.fin_annee = Math.abs(date.fin_annee) * coeff;
 	}
 	return date;
 }
