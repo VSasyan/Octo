@@ -30,7 +30,7 @@ class Carte {
     function getCreateQuery(){
         return "INSERT INTO carte(titre, idUtilisateur, idPortail, description, "
         . "debut_annee, fin_annee, duree) VALUES(\"".$this->titre."\", ".$this->idUser.", "
-        .$this->idPortail.", ".$this->description.", ".$this->debut_annee.", ".$this->fin_annee.", "
+        .$this->idPortail.", \"".$this->description."\", ".$this->debut_annee.", ".$this->fin_annee.", "
         .$this->duree.");";
     }
     
