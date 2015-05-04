@@ -60,6 +60,19 @@ div#menu ul li a {
 
 
 /***
+/* Style pour le formulaire
+/***/
+
+input.erreur {
+	border: 1px solid red;
+}
+
+/* fin style pour le formulaire */
+
+
+
+
+/***
 /* Style pour unregistered
 /***/
 

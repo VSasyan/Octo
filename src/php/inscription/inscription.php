@@ -1,9 +1,10 @@
 	<!-- Formulaire d'inscription --> 
-	<div id="inscription">
+	<form id="inscription">
 		<fieldset> <legend>Inscription</legend>
-			<div><label>Login : <input type="text" id="login" value="" autofocus="autofocus" /></label></div>
-			<div><label>Mot de passe : <input type="password" id="mdp" value="" /></label></div>
-			<div><button id="submit">S'inscrire</button></div> 
-		</fieldset> 
-		
-	</div>
+			<p><label>Login : <input type="text" id="loginCice" value="" autofocus="autofocus" placeholder="Login" /></label></p>
+			<p><label>Mot de passe : <input type="password" id="mdp" value="" placeholder="Mot de passe" /></label></p>
+			<p><label>Confirmer le mot de passe : <input type="password" id="mdp2" value="" placeholder="Confirmer le mot de passe" /></label></p>
+			<p><button id="submit">S'inscrire</button></p>
+			<div id="statut"></div>
+		</fieldset>
+	</form>

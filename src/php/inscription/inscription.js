@@ -1,41 +1,63 @@
 var valider = function(event){ 
-	var login = $("#login").val(); 
-	var mdp = ''+CryptoJS.SHA1($("#mdp").val());
-	var form_OK = true; 
-	console.log( login );
+	var login = $("#loginCice").val(); 
+	var mdp = $("#mdp").val();
+	var form_OK = true;
+
 	if (login == ""){
 		form_OK = false; 
-		$("#login").addClass("erreur");
-	}
-	else{ 
-		$("#login").removeClass("erreur");
+		$("#loginCice").addClass("erreur");
+	} else { 
+		$("#loginCice").removeClass("erreur");
 	} 
 
-	if(mdp == ""){
+	if (mdp == ""){
 		form_OK = false; 
 		$("#mdp").addClass("erreur");
-	}
-	else{ 
+	} else { 
 		$("#mdp").removeClass("erreur");
-	}  
+	}
 
-	console.log( form_OK );
+	if (mdp != $('#mdp2').val()) {
+		form_OK = false; 
+		$("#mdp2").addClass("erreur");
+		$('#statut').html("<p>Les mots de passe ne correspondent pas !</p>");
+	} else { 
+		$("#mdp2").removeClass("erreur");
+	} 
+
 	// Au final, on empeche l'envoi du formulaire si form_OK est faux 
 	if(form_OK){
-		console.log("test");
+		$('#statut').html("<p>Chargement en cours...</p>"+html_chargement);
+		var mdp = ''+CryptoJS.SHA1(mdp);
 		var json = {login: login, mdp: mdp};
 		
 		var lien = "script.php?u=add";
 		var donnees_post = "json=" + encodeURIComponent(JSON.stringify(json));
-		console.log(json,donnees_post);
+
 		$.post(lien, donnees_post, function( data ) {
 			console.log( data );
-			var user = $("#user").val(); 
-			
+			var retour = JSON.parse(data);
+			if (retour.valide == true) {
+				$('#statut').html("<p>Inscription réussie !</p>");
+				setTimeout(window.location.assign('index.php?page=auth'), 500);
+			} else {
+				$('#statut').html("<p>Erreur lors de l'inscription !</p>");
+			}
 		});
 	}
 }
 
 $(document).ready(function () {
-	$('#inscription #submit').click(function () {valider();});
+	$('#inscription').on('submit', function (e) {
+		e.preventDefault();
+		valider();
+	});
+
+	$('#mdp, #mdp2').keyup(function() {
+		if ($('#mdp').val() != $('#mdp2').val()) {
+			$("#mdp2").addClass("erreur");
+		} else { 
+			$("#mdp2").removeClass("erreur");
+		} 
+	});
 });
