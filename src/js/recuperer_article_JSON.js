@@ -228,7 +228,7 @@ function parserDateInfobox(txt, debug) {
 		date = {debut_annee:info[1], debut_mois:0, debut_jour:0, fin_annee:info[1], fin_mois:0, fin_jour:0};
 		if (debug === true) {console.log(date);}
 	}
-	if (!(date === false)) {
+	if (!(date === false) && (coeff == -1)) {
 		date.debut_annee = Math.abs(date.debut_annee) * coeff;
 		date.fin_annee = Math.abs(date.fin_annee) * coeff;
 	}
