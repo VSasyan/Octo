@@ -1,30 +1,37 @@
 var portails;
 var dir = '../';
+var carte;
+var session;
+var themes;
 
 $(document).ready(function() {
-	var type = $.url('type', 'creer');
-	if (type == 'perso' || type == 'editer') {
-		// On tente de recuperer l'idC :
-		var idC = $.url('idC');
-		if (idC) {
-			if (type == 'editer') {
-				// On charge les evenements pour que l'utilisateur les edite :
-				chargerEvenements();
-				editerEvenements();
-			} else if (type == 'perso') {
-				// On charge les eveneemtns pour que l'utilisateur les personnalise :
-				chargerEvenements();
-				persoEvenements();
+	// On recupère les thèmes puis :
+	recupererThemes(function() {
+		session = recupererSession();
+		var type = $.url('type', 'creer');
+		if (type == 'perso') {
+			// On tente de recuperer l'idC :
+			var idC = $.url('idC');
+			if (idC) {
+				$('#ajax').html('Chargement de la Carte...' + html_chargement);
+				carte = new Carte();
+				if (carte.ouvrirCarteServeur(idC)) {
+					// On charge les evenements pour que l'utilisateur personnalise la carte :
+					carte.afficherEvenements();
+				} else {
+					$('#ajax').html('Erreur lors du chargement !');
+				}
+			} else {
+				// On est en mode listeCartes : on recupere la liste des cartes et on l'affiche :
+				chargerCartes(type);
 			}
-		} else {
-			// On est en mode listeCartes : on recupere la liste des cartes et on l'affiche :
-			chargerCartes();
-			// ajax...
+		} else { // type == 'creer'
+			// On recupère la liste des portails :
+			recupererPortails();
 		}
-	} else { // type == 'creer'
-		// On recupère la liste des portails :
-		recupererPortails();
-	}
+	});
+
+	// ajout de fonctions à la page :
 });
 
 function recupererPortails() {
@@ -75,72 +82,47 @@ function verifierPortail() {
 			$('#nom').val(nom);
 		});
 	} else {
-		// On ajoute la carte :
-		ajouterCarte(portail);
-	}
-}
-
-function ajouterCarte(portail) {
-	$('#resultat').html('<p>Ajout du portail...</p>');
-	var session = recupererSession();
-	console.log(session);
-	console.log(session.idU);
-	console.log(!(typeof(session.idU) === 'undefined'));
-	// verification de la session utilisateur :
-	if (!(typeof(session.idU) === 'undefined')) {
-		// Creation des données à envoyer :
-		var json = {
-			idU: session.idU,
-			idP : portail.id,
-			titre : $('#titre').val(),
-			description : $('#description').val(),
+		// On crée la carte :
+		carte = new Carte(
+			portail,
+			$('#debut_annee').val(),
+			$('#fin_annee').val(),
+			$('#titre').val(),
+			$('#description').val(),
+			$('#duree').val(),
+			true
+		);
+		carte = new Carte();
+		var dataCarte = {
 			debut_annee : $('#debut_annee').val(),
 			fin_annee : $('#fin_annee').val(),
-			duree : $('#duree').val()
+			titre : $('#titre').val(),
+			description : $('#description').val(),
+			duree : $('#duree').val(),
+			echelle_temps_bas : $('#echelle_temps_bas').val(),
+			echelle_temps_haut : $('#echelle_temps_haut').val(),
+		};
+		console.log(dataCarte);
+		carte.initialiserCarte(dataCarte);
+		if (carte.ajouterCarteServeur(portail)) {
+
 		}
-		console.log(JSON.stringify(json));
-		// Initialisation de la requete :
-		$('#ajax').html(html_chargement);
-		var lien = "script.php?c=add";
-		var data = 'json=' + encodeURIComponent(JSON.stringify(json));
-		// Requete :
-		$.post(lien, data, function(data) {
-			var retour = JSON.parse(data);
-			if (retour.valide) {
-				$('#resultat').html('<p>Carte n°' + retour.idC + ' créée avec succès !</p>');
-			}
-		});
-	} else {
-		$('#resultat').html('<p>Utilisateur invalide !</p>');
 	}
 }
 
-function chargerEvenements() {
-	
-}
-
-function editerEvenements() {
-	
-}
-
-function persoEvenements() {
-	
-}
-
-function chargerCartes() {
+function chargerCartes(type) {
 	// On recupere les cartes existants :
 	$('#ajax').html('Chargement de vos Cartes...' + html_chargement);
-	tps = [];
-	$.ajax({
-		url: 'script.php?c=list'
-	}).done(function(data) {
-		var o = JSON.p(data, []);
+	var url = 'script.php?c=list';
+	var myData = {idUser: session.idU};
+	$.post(url, myData, function(data) {
+		var reponse = JSON.p(data, []);
 		var HTML = '<ul id="cartes">';
-		$.each(o, function(i, elm) {
-			HTML += '<li></li>'; // A modifier quand defini
+		$.each(reponse, function(i, elm) {
+			HTML += '<li><a href="index.php?page=personnaliser&type='+type+'&idC='+elm.id+'">'+elm.titre+'</li>'; // A modifier quand defini
 		});
 		HTML += '<li id="new"><a href="index.php?type=creer">Nouvelle carte...</a></li>';
 		HTML += '</ul>';
-		$('#ajax').html(HTML);
+		$('#ajax').html(HTML);console.log(HTML);
 	});
 }

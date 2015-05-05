@@ -55,8 +55,15 @@ function verifierPortail() {
 		});
 	} else {
 		// On crée la carte :
-		carte = new Carte(portail, $('#debut_annee').val(), $('#fin_annee').val(), $('#titre').val());
-		carte.recupererArticles();
+		carte = new Carte();
+		var paraCarte = {
+			titre : $('#titre').val(),
+			debut_annee : $('#debut_annee').val(),
+			fin_annee : $('#fin_annee').val(),
+			duree : $('#duree').val()
+		};
+		carte.initialiserCarte(paraCarte);
+		carte.recupererArticles(portail);
 		carte.filtrerArticles();
 		carte.filtrerArticlesDate();
 		// On affiche la carte :

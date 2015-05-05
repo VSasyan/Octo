@@ -21,6 +21,7 @@
 	    	<script type="text/javascript" src="authentification/auth.js"></script>
 <?php	} elseif ($page == 'personnaliser') { ?>
 			<script type="text/javascript" src="personnaliser/personnaliser.js"></script>
+			<script type="text/javascript" src="../js/class/carte.js"></script>
 <?php	} elseif ($page == 'signin') { ?>
 			<script type="text/javascript" src="inscription/inscription.js"></script>
 <?php	} elseif ($page == 'edit') { ?>

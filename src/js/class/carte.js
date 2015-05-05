@@ -1,67 +1,100 @@
-function Carte(portail, debut, fin, titre, description, duree, onServer) {
-	var titre = titre || '';
-	var description = description || '';
-	var duree = duree || duree;
-	var onServer = onServer || false;
-
-	this.titre = titre;
-	this.portail = portail;
-	this.para = {
-		debut_annee : parseInt(debut),
-		fin_annee : parseInt(fin)
-	};
+function Carte() {
 	this.trierSelon = '';
 	this.tabArticles = [];
 	this.tabEvenements = [];
-	this.description = description;
-	this.duree = parseInt(duree);
-	this.onServer = onServer;
-	this.envoyee = false;
+
+	this.titre = '';
+	this.description = '';
+	this.debut_annee = -9999;
+	this.fin_annee = 9999;
+	this.duree = 30;
+	this.idC = -1;
 }
 
-Carte.prototype.ajouterCarte = function() {
+Carte.prototype.initialiserCarte = function(data) {
+	aCopier = ['titre', 'description', 'debut_annee', 'fin_annee', 'duree', 'echelle_temps_bas', 'echelle_temps_haut', 'tabEvenements', 'tabArticles'];
+	var that = this;
+	$.each(aCopier, function(i, name) {
+		if (data.hasOwnProperty(name)) {that[name] = data[name];}
+	});
+}
+
+Carte.prototype.ajouterCarteServeur = function(portail) {
 	$('#resultat').html('<p>Ajout du portail...</p>');
-	var session = recupererSession();
 	// verification de la session utilisateur :
 	if (!(typeof(session.idU) === 'undefined')) {
 		// Creation des données à envoyer :
 		var json = {
-			idU: session.idU,
-			idP : this.portail.id,
+			idU : session.idU,
+			idP : portail.id,
 			titre : this.titre,
 			description : this.description,
 			debut_annee : this.debut_annee,
+			echelle_temps_haut : this.echelle_temps_haut,
+			echelle_temps_bas : this.echelle_temps_bas,
 			fin_annee : this.fin_annee,
 			duree : this.duree
-		}
+		};
 		// Initialisation de la requete :
-		$('#ajax').html(html_chargement);
+		$('#ajax').html("<p>Création de la Carte...</p>" + html_chargement);
 		var lien = "script.php?c=add";
-		var data = 'json=' + encodeURIComponent(JSON.stringify(json));
+		var myData = 'json=' + encodeURIComponent(JSON.stringify(json));
+		var retour = {valide:false, message:'<p>Retour invalide !</p>'};
 		// Requete :
-		$.post(lien, data, function(data) {
-			var retour = JSON.p(data, {valide:false, message:'<p>Retour invalide !</p>'});
-			if (retour.valide) {
-				$('#resultat').html('<p>Carte n°' + retour.idC + ' créée avec succès !</p>');
-			} else {
-				$('#resultat').html(retour.message);
+		$.ajax({
+			type : 'POST',
+			async : false,
+			url : lien,
+			data : myData,
+			success : function(data) {
+				retour = JSON.p(data, retour);
 			}
 		});
+		if (retour.valide) {
+			this.envoyee = true;
+			$('#ajax').html('<p>Carte n°' + retour.id + ' créée avec succès !</p>');
+			$('#ajax').append('<p><a href="index.php?page=personnaliser&type=perso&idC='+retour.id+'">Personnaliser la carte</a></p>');
+			return true;
+		} else {
+			$('#ajax').html(retour.message);
+			return false;
+		}
 	} else {
-		$('#resultat').html('<p>Utilisateur invalide !</p>');
+		$('#ajax').html('<p>Utilisateur invalide !</p>');
+		return false;
 	}
 }
 
-Carte.prototype.recupererArticles = function() {
+Carte.prototype.ouvrirCarteServeur = function(idC) {
+	var that = this;
+	// On recupere les cartes existants :
+	$('#ajax').html('Chargement de la Carte n°'+idC+'...' + html_chargement);
+	var lien = 'script.php?c=get';
+	var myData = {idCarte: idC};
+	var reponse = [];
+	$.ajax({
+		type : 'POST',
+		async : false,
+		url : lien,
+		data : myData,
+		success : function(data) {
+			reponse = JSON.p(data, reponse);
+		}
+	});
+	that.initialiserCarte(reponse);
+	return true;
+}
+
+Carte.prototype.recupererArticles = function(portail) {
 	var eve = false;
-	var url = 'script.php?a=list';
-	var data = 'idPortail=' + this.portail.id;
+	var lien = 'script.php?a=list';
+	var myData = 'idPortail=' + portail.id;
 	var tab;
 	$.ajax({
         type: "POST",
         async: false,
-        url,
-        data,
+        url : lien,
+        data : myData,
         success : function(data) {
 			var info = JSON.parse(data);
 			// On passe toutes les dates en integer :
@@ -87,7 +120,7 @@ Carte.prototype.filtrerArticlesDate = function() {
 	var that = this;
 	var tab = [];
 	$.each(this.tabArticles, function(i, article) {
-		if (article.debut_annee >= that.para.debut_annee && article.fin_annee <= that.para.fin_annee) {
+		if (article.debut_annee >= that.debut_annee && article.fin_annee <= that.fin_annee) {
 			// l'article doit parler d'un evenement entre les deux dates
 			tab.push(article);
 		}
