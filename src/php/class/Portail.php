@@ -76,7 +76,7 @@ class Portail {
             $e = new Evenement($articles["debut_annee"], $articles["debut_mois"], $articles["debut_jour"],
                     $articles["fin_annee"], $articles["fin_mois"], $articles["fin_jour"],
                     $articles["titre"], "defaut", $idCarte, $articles["id"]);
-            $sql .= $e->getCreateQuery()."\r";
+            $sql .= $e->getCreateQuery()."\n";
         }
         return $sql;
     }

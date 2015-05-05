@@ -124,7 +124,7 @@
     require "../conf/database.php";
       
     $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
-      
+    
     $sql = "TRUNCATE carte "; 
     $resultat = $mysqli->query($sql);
     
@@ -561,6 +561,4 @@ $tabPortail2 = array(
   else
     echo "<p class='e'>Erreur lors de la recuperation des portails</p>";
   
-  
- //videTables();
    

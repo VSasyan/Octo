@@ -1,12 +1,12 @@
 <?php
 
 
-function testAjoutUtilisateur($tab,$tabRetour){
+function testAjoutUtilisateur($jsonUser, $tab, $tabRetour){
     
     //Enregistrer Utilisateur
     $app = new App();
      
-    $retour = $app->insertUser("{\"login\":\"login1\",\"mdp\":\"password1\"}");   
+    $retour = $app->insertUser($jsonUser);   
       
     $app->close();
     
@@ -73,6 +73,8 @@ function testAuthentification($tabRetour){
       return true;
 }
 
+
+
 $tabUsers = array(
   
     0 => array(
@@ -91,8 +93,16 @@ $tabRetour = array(
     "valide"   => true
     );
 
+$tabRetourFalse = array(
+    "valide"   => false
+    );
 
- if(testAjoutUtilisateur($tabUsers,$tabRetour))
+$json1 = "{\"login\":\"login1\",\"mdp\":\"password1\"}";
+$json2 = "{\"login\":\"login1\",\"mdp\":\"password2\"}";
+
+
+
+ if(testAjoutUtilisateur($json1,$tabUsers,$tabRetour))
     echo "<p class='o'>Ajout d'un utilisateur</p>";
   else
     echo "<p class='e'>Erreur lors de l'ajout d'un utilisateur</p>";
@@ -101,3 +111,9 @@ $tabRetour = array(
     echo "<p class='o'>Authentification de l'utilisateur</p>";
   else
     echo "<p class='e'>Erreur lors de l'authentification de l'utilisateur</p>";
+  
+  if(testAjoutUtilisateur($json2,$tabUsers,$tabRetourFalse))
+    echo "<p class='o'>Un utilisateur n'est pas ajouté car le login est déjà attribué</p>";
+  else
+    echo "<p class='e'>Erreur lors de l'ajout d'un utilisateur avec un login déjà attribué</p>";
+  
