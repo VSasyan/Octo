@@ -1,6 +1,7 @@
 var themes;
 var dir = '../';
 var carte;
+var session = false;
 
 $(document).ready(function() {
 	// On recupère la liste des themes puis des portails :

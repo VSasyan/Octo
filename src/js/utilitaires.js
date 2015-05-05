@@ -26,7 +26,7 @@ function recupererSession() {
 		async : false
 	}).responseText;
 
-	var session = JSON.p(data, {});
+	var session = JSON.p(data, false);
 	return session;
 }
 

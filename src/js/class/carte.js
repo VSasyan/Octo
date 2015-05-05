@@ -7,6 +7,8 @@ function Carte() {
 	this.description = '';
 	this.debut_annee = -9999;
 	this.fin_annee = 9999;
+	this.echelle_temps_haut = 3;
+	this.echelle_temps_bas = 3;
 	this.duree = 30;
 	this.idC = -1;
 }
@@ -79,6 +81,7 @@ Carte.prototype.ouvrirCarteServeur = function(idC) {
 		data : myData,
 		success : function(data) {
 			reponse = JSON.p(data, reponse);
+			that.idC = idC;
 		}
 	});
 	that.initialiserCarte(reponse);
@@ -91,11 +94,11 @@ Carte.prototype.recupererArticles = function(portail) {
 	var myData = 'idPortail=' + portail.id;
 	var tab;
 	$.ajax({
-        type: "POST",
-        async: false,
-        url : lien,
-        data : myData,
-        success : function(data) {
+		type: "POST",
+		async: false,
+		url : lien,
+		data : myData,
+		success : function(data) {
 			var info = JSON.parse(data);
 			// On passe toutes les dates en integer :
 			tab = StrToNumber(info.tabArticles);
@@ -128,10 +131,10 @@ Carte.prototype.filtrerArticlesDate = function() {
 	this.tabArticles = tab;
 };
 
-Carte.prototype.filtrerArticlesNonCoches = function() {
+Carte.prototype.filtrerArticlesNonCoches = function(id) {
 	var tab = [];
 	$.each(this.tabArticles, function (i, article) {
-		if ($('#_' + article.id).prop('checked')) {
+		if ($('#'+id + ' #_' + article.id).prop('checked')) {
 			tab.push(article);
 		}
 	});
@@ -193,7 +196,7 @@ Carte.prototype.fonctionsArticles = function (id) {
 
 	// On ajoute les fonctions de validation :
 	$('#'+id + ' #validerChangements').click(function() {
-		that.filtrerArticlesNonCoches();
+		that.filtrerArticlesNonCoches(id);
 		that.afficherArticles(id);
 	});
 	$('#'+id + ' #choixStyles').click(function() {
@@ -233,7 +236,7 @@ Carte.prototype.afficherEvenements = function(id) {
 	HTML += '</div>';
 	$.each(this.tabEvenements, function(i,eve) {
 		HTML += '<div class="row" id="_' + eve.options.idp + '">';
-			HTML += '<div class="keep"><input type="checkbox" checked="checked" class="checkbox"/></div>';
+			HTML += '<div class="keep"><input type="checkbox" checked="checked" class="checkbox" /></div>';
 			HTML += '<div class="titre"><a href="' + eve.options.url + '" title="' + eve.title + '">' + truncString(eve.title, 40) + '</a></div>';
 			//HTML += '<div class="dates">' + dateToInput(eve) + '</div>';
 			HTML += '<div class="position">(' + Math.round(eve.point.lat) + ',&nbsp;' + Math.round(eve.point.lon) + ')</div>';
@@ -273,9 +276,51 @@ Carte.prototype.fonctionsEvenements = function(id) {
 
 	// On ajoute les fonctions de validation :
 	$('#'+id + ' #retourArticles').click(function() {that.afficherArticles(id);});
-	$('#'+id + ' #validerStyles').click(function() {that.validerStyles(id);});
+	$('#'+id + ' #validerStyles').click(function() {
+		aSuppr = that.validerStylesFiltrerEvenementsNonCoches(id);
+		console.log(that);
+		if (that.idC != -1) {
+			// La carte est enregistrée, il faut donc la mettre à jour sur le serveur :
+			that.sauverSurServeur();
+		}
+		that.afficherEvenements(id);
+	});
 	$('#'+id + ' #razStyles').click(function() {that.razStyles(id);});
 	$('#'+id + ' #voirCarte').click(function() {that.voirCarte(id);});
+}
+
+Carte.prototype.sauverSurServeur = function() {
+	var lien = "script.php?c=maj";
+	var myData = {
+		carte : {
+			titre : this.titre,
+			description : this.description,
+			debut_annee : this.debut_annee,
+			echelle_temps_haut : this.echelle_temps_haut,
+			echelle_temps_bas : this.echelle_temps_bas,
+			fin_annee : this.fin_annee,
+			duree : this.duree
+		},
+		majEve : {
+			tabEvenements : this.tabEvenements,
+			aSuppr : aSuppr
+		}
+	};
+	var retour = {valide: false, message: 'Retour invalide...'}
+	$.ajax({
+		type: "POST",
+		async: false,
+		url : lien,
+		data : myData,
+		success : function(data) {
+			retour = JSON.p(data, retour);
+		}
+	});
+	if (retour.valide === true) {
+		alert("Votre carte est bien sauvegardée sur le serveur !");
+	} else {
+		alert(retour.message);
+	}
 }
 
 Carte.prototype.razStyles = function(id) {
@@ -285,11 +330,19 @@ Carte.prototype.razStyles = function(id) {
 	});
 }
 
-Carte.prototype.validerStyles = function(id) {
+Carte.prototype.validerStylesFiltrerEvenementsNonCoches = function(id) {
 	// On met à jour les thèmes :
+	var tab = [];
+	var aSuppr = [];
 	$.each(this.tabEvenements, function (i, eve) {
-		eve.options.theme = $('#'+id+' #_' + eve.options.idp + ' select option:selected').val();
+		var tps = $('#'+id + ' #_' + eve.options.idp);
+		if (tps.find('input.checkbox').prop('checked')) {
+			eve.options.theme = tps.find('select option:selected').val();
+			tab.push(eve);
+		} else {aSuppr.push(eve.options.ide);}
 	});
+	this.tabEvenements = tab;
+	return aSuppr;
 }
 
 Carte.prototype.voirCarte = function(id) {

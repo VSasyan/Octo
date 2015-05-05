@@ -7,7 +7,7 @@ var themes;
 $(document).ready(function() {
 	// On recupère les thèmes puis :
 	recupererThemes(function() {
-		session = recupererSession();
+		session = recupererSession();console.log(session);
 		var type = $.url('type', 'creer');
 		if (type == 'perso') {
 			// On tente de recuperer l'idC :
@@ -17,7 +17,7 @@ $(document).ready(function() {
 				carte = new Carte();
 				if (carte.ouvrirCarteServeur(idC)) {
 					// On charge les evenements pour que l'utilisateur personnalise la carte :
-					carte.afficherEvenements();
+					carte.afficherEvenements('ajax');
 				} else {
 					$('#ajax').html('Erreur lors du chargement !');
 				}
