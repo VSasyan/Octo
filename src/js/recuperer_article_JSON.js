@@ -2,10 +2,10 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 	/***
 		Entrée :
 			titres = tableau des pages à récupérer
-			distanceOrigine = distance entre le portail/la page d'origne et cette page
+			distanceOrigine = distance entre le portail/la page d'origine et cette page
 			portail_id : Id du portail/de la page d'origine
 			debug : log des info (false par defaut)
-			test_unitaire : lancer l'operation en mode test unitaire (false par défaut)
+			test_unitaire : lancer l'opération en mode test unitaire (false par défaut)
 		Sortie :
 			sortie = PAS au format JSON (PAS en string)
 				un tableau de type 
@@ -13,7 +13,6 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 						id,
 						titre,
 						nb_langue,
-						nb_visite,
 						longueur,
 						lien,
 						debut_annee,
@@ -32,13 +31,13 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 	var debug = debug || false;
 	var test_unitaire = test_unitaire || false;
 
-	// 1) Generation de l'url :
+	// 1) Génération de l'url :
 	proxy = dir+'js/proxy.php?url=';
 	pages = titres.join('|');
 	wiki = 'http://fr.wikipedia.org/w/api.php?action=query&titles='+pages+'&lllimit=500&format=json&prop=categories|coordinates|info|langlinks|links|revisions&inprop=url&rvprop=content&rvsection=0&continue=';
 
 
-	// 2) envoie de la requete AJAX :
+	// 2) Envoi de la requête AJAX :
 	var continuer = 3; // On se laisse 3 tentatives
 	while (continuer > 0) {
 		if (test_unitaire === false) {
@@ -129,7 +128,7 @@ function getDate(rev, debug) {
 			}
 		}
 	} else {
-		// Pas d'infobox : on recupère le premier chiffre du text :
+		// Pas d'infobox : on récupère le premier chiffre du texte :
 		var date = parserDateText(rev[0]['*']);
 		if (!(date === false)) {
 			// Il y a une date trouvée dans le texte : on la renvoie
@@ -137,7 +136,7 @@ function getDate(rev, debug) {
 		}
 	}
 	date = {debut_annee:10000, debut_mois:0, debut_jour:0, fin_annee:10000, fin_mois:0, fin_jour:0};
-	//console.log(txt, rev[0]['*']); /!\ Loupe les dates dans le corp de text. Il faut réfléchir à comment les récupérer.
+	//console.log(txt, rev[0]['*']); /!\ Loupe les dates dans le corps de texte. Il faut réfléchir à comment les récupérer.
 	return date;
 }
 
@@ -178,7 +177,7 @@ function parserDateText(txt, debug) {
 function parserDateInfobox(txt, debug) {
 	var date = false;
 	if (debug === true) {console.log(txt);}
-	// On test si c'est avant JC :
+	// On teste si c'est avant JC :
 	if (info = /av\. J\.-C\./.test(txt)) {var coeff = -1;} else {var coeff = 1;}
 
 	if (info = /ate\|([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)[^0-9]*([1-3]?[0-9])\|([\wûÛéÉ]*)\|([0-9]+)/.exec(txt)) {
