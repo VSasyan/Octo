@@ -3,7 +3,7 @@ var dir = '../';
 var tm;
 
 $(document).ready(function() {
-	// On recupère la liste des themes puis des Cartes :
+	// On récupère la liste des thèmes puis des cartes :
 	recupererThemes(function() {recupererCartes();});
 
 	// On ajoute les fonctions :
@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 function recupererCartes() {
 	$('#action').addClass('loading');
-	// On recupere les cartes existantes :
+	// On récupère les cartes existantes :
 	$('#loading').html('Chargement de la liste des cartes...'+html_chargement);
 	tps = [];
 	$.ajax({
@@ -23,7 +23,7 @@ function recupererCartes() {
 	}).done(function(data) {
 		var o = JSON.parse(data);
 		$.each(o, function(i, elm) {tps.push({id:elm.id, nom:elm.nom, auteur:'system'});});
-		// Ok c'est fini, on les passe dans la variable globales :
+		// Ok c'est fini, on les passe dans la variable globale :
 		cartes = tps;
 		// On affiche la liste :
 		$('#liste').html('<h2>Liste des cartes :</h2><ul id="cartes"></ul>');
@@ -32,28 +32,28 @@ function recupererCartes() {
 		});
 		// Ajout de la fonction de click :
 		$('#cartes li').click(function() {
-			// On recuperer l'id du portail :
+			// On récupère l'id du portail :
 			var i = /_([0-9]*)/.exec($(this).attr('id'));
 			if (i) {
 				var carte = cartes[i[1]];
 				if (carte.auteur == 'system') {
 					$('#loading').html('Chargement de la carte...'+html_chargement);
 					$('#action').removeClass('liste').addClass('loading');
-					// La carte est une carte auto, on doit recuperer les articles et les transformer :
+					// La carte est une carte auto, on doit récupérer les articles et les transformer :
 					var eve = false;
 					var url = 'script.php?a=list';
 					var data = 'idPortail=' + carte.id;
 					$.post(url, data, function(data) {
 						var info = JSON.parse(data);
-						// On converti les elements :
+						// On convertit les éléments :
 						var eve = conversionArticles(info.tabArticles);
-						// On defini l'echelle :
+						// On definit l'échelle :
 						var echelle = definirEchelle(eve);
 						// On affiche la carte :
 						afficherCarte(eve, echelle);
 					});
 				} else {
-					// La carte est deja faites, on récupère les evènements :
+					// La carte est déjà faite, on récupère les événements :
 					var eve = false;
 					// On affiche la carte :
 					afficherCarte(eve);

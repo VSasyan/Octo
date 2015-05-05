@@ -1,7 +1,7 @@
 function recuperer_portail_HTML(portail, page, test_unitaire) {
 	/***
 		Entrée :
-			portail : titre du portail dont il faut récuperer les Articles Liés
+			portail : titre du portail dont il faut récupérer les Articles Liés
 			page : page de la liste des articles où il faut commencer (par défaut = '')
 
 		Sortie : PAS au format JSON (PAS en string)
@@ -23,7 +23,7 @@ function recuperer_portail_HTML(portail, page, test_unitaire) {
 		remote_url = 'codes_tests_unitaires/index.php?page=' + test_unitaire;
 	}
 	
-	// Envoie de la requete AJAX :
+	// Envoi de la requete AJAX :
 	var remote = $.ajax({
 		type: 'GET',
 		url: remote_url,
@@ -36,7 +36,7 @@ function recuperer_portail_HTML(portail, page, test_unitaire) {
  	var prec = '';
 
  	if (data.status.http_code == 200) {
- 		// Recuperation des liens Articles :
+ 		// Récupération des liens Articles :
 		var regLiens = new RegExp('href="([^"]*)" title="([^"]*)"', 'g');
 		var html = $(data.contents).find('#mw-pages .mw-category').html();
 		var liens = html.match(regLiens);
@@ -51,11 +51,11 @@ function recuperer_portail_HTML(portail, page, test_unitaire) {
  			}
  		}
 
-		// On recupere le lien vers les precedents :
+		// On récupère le lien vers les précédents :
 		tps = /pageuntil=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
 		if (tps) {prec = '&pageuntil=' + decodeURIComponent(tps[1]).replace(/\+/g, '_');}
 
-		// On recupere le lien vers les suivants :
+		// On récupère le lien vers les suivants :
 		tps = /pagefrom=(.*)#mw-pages/.exec($(data.contents).find('#mw-pages').html());
 		if (tps) {suiv = '&pagefrom=' + decodeURIComponent(tps[1]).replace(/\+/g, '_');}
  	} else {
@@ -74,7 +74,7 @@ function recuperer_nb_liens_portail_HTML(portail) {
 	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés';
 	remote_url = proxy + encodeURIComponent(url) + '&full_headers=0&full_status=0';
 	
-	// Envoie de la requete AJAX :
+	// Envoi de la requête AJAX :
 	var remote = $.ajax({
 		type: 'GET',
 		url: remote_url,
