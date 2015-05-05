@@ -50,8 +50,8 @@ function getNewBase($name) {
         //$newLine = str_replace("`", "'", $newLine);
         //print_r($newLine." @@@@: ".strpos($newLine, ";")." ".strlen($newLine)." ".(strlen($newLine)-strpos($newLine, ";"))."\n");
         //$haystack .= rtrim($newLine);
-        if(strcmp(substr($newLine, 0,2), "--")!=0 && strcmp(substr($newLine, 0,2), "/*")!=0)
-            $haystack .= trim($newLine)." ";
+        if(strcmp(substr($newLine, 0,2), "--")!=0 && strcmp(substr($newLine, 0,2), "/*")!=0 && strlen(trim($newLine," \n"))>1)
+            $haystack .= trim($newLine,"\n")." ";
         if(strpos($newLine, "ELIMITER ")==1)
             $delim = substr($newLine, 10, -1);
         
@@ -67,10 +67,7 @@ function getNewBase($name) {
 
 
 function traiteProcedures($sql){
-    $sql = substr($sql, 0, -3).";";
+    $sql = substr($sql, 0, -4).";";
     $sql = str_replace("`", "", $sql);
-//    $e = explode("(", $sql);
-//    $e[0] = str_replace("`", "", $e[0]);
-//    var_dump($e);
     return $sql;
 }

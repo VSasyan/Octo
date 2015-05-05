@@ -161,17 +161,30 @@ CREATE TABLE `checkcount` (
 ) ENGINE=MyISAM;
 
 
--- Export de la structure de vue octo. pageimportance
-DROP VIEW IF EXISTS `pageimportance`;
--- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
-CREATE TABLE `pageimportance` 
-) ENGINE=MyISAM;
-
-
 -- Export de la structure de vue octo. pagescompletes
 DROP VIEW IF EXISTS `pagescompletes`;
 -- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
-CREATE TABLE `pagescompletes` 
+CREATE TABLE `pagescompletes` (
+	`idPortail` INT(10) UNSIGNED NOT NULL,
+	`nom` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
+	`titre` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
+	`url` VARCHAR(255) NOT NULL COLLATE 'latin1_swedish_ci',
+	`idPage` INT(11) NULL,
+	`lon` DOUBLE NULL,
+	`lat` DOUBLE NULL,
+	`accepte` TINYINT(1) NULL,
+	`contraint` TINYINT(1) NOT NULL,
+	`nb_langue` TINYINT(3) UNSIGNED NULL,
+	`longueur` INT(11) UNSIGNED NULL,
+	`debut_annee` SMALLINT(6) NULL,
+	`debut_mois` TINYINT(3) UNSIGNED NULL,
+	`debut_jour` TINYINT(3) UNSIGNED NULL,
+	`fin_annee` SMALLINT(6) NULL,
+	`fin_mois` TINYINT(3) UNSIGNED NULL,
+	`fin_jour` TINYINT(3) UNSIGNED NULL,
+	`date_MAJ` DATETIME NULL,
+	`distance_portail` INT(11) NULL,
+	`type_infobox` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
 
@@ -228,7 +241,7 @@ BEGIN
 	
 	SELECT portail.id, portail.nom, lien.idPage, lien.titre, 
 	importance(page.longueur, page.nb_langue+1, page.distance_portail, maxLon, maxLan+1) AS importance,
-	page.nb_langue, page.nb_visite, page.longueur,page.distance_portail, page.debut_annee
+	page.nb_langue, page.longueur,page.distance_portail, page.debut_annee
 	FROM page, portail, lien, status
 	WHERE portail.id=status.idPortail AND status.idLien=lien.id AND lien.idPage=page.id AND portail.id=idPo AND page.debut_annee<>10000
 	ORDER BY importance DESC;
@@ -325,18 +338,11 @@ DROP TABLE IF EXISTS `checkcount`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `checkcount` AS select `portail`.`nom` AS `nom`,count(`lien`.`id`) AS `NB_LIEN`,count(`page`.`id`) AS `NB_PAGE`,count(`status`.`date_MAJ`) AS `NB_STATUS` from (((`lien` join `page`) join `status`) join `portail`) where ((`lien`.`idPage` = `page`.`id`) and (`lien`.`id` = `status`.`idLien`) and (`status`.`idPortail` = `portail`.`id`)) group by `portail`.`id` ;
 
 
--- Export de la structure de vue octo. pageimportance
-DROP VIEW IF EXISTS `pageimportance`;
--- Suppression de la table temporaire et création finale de la structure d'une vue
-DROP TABLE IF EXISTS `pageimportance`;
-CREATE DEFINER=`root`@`localhost` VIEW `pageimportance` AS select `portailmax`.`id` AS `id`,`portailmax`.`nom` AS `nom`,`lien`.`idPage` AS `idPage`,`lien`.`titre` AS `titre`,`importance`(`page`.`longueur`,`page`.`nb_langue`,`page`.`distance_portail`,`portailmax`.`longueurMax`,`portailmax`.`languesMax`) AS `importance`,`page`.`nb_langue` AS `nb_langue`,`page`.`nb_visite` AS `nb_visite`,`page`.`longueur` AS `longueur`,`page`.`distance_portail` AS `distance_portail` from ((`page` join `portailmax`) join `lien`) where ((`portailmax`.`id` = `page`.`id_portail`) and (`lien`.`idPage` = `page`.`id`)) order by `importance`(`page`.`longueur`,`page`.`nb_langue`,`page`.`distance_portail`,`portailmax`.`longueurMax`,`portailmax`.`languesMax`) desc ;
-
-
 -- Export de la structure de vue octo. pagescompletes
 DROP VIEW IF EXISTS `pagescompletes`;
 -- Suppression de la table temporaire et création finale de la structure d'une vue
 DROP TABLE IF EXISTS `pagescompletes`;
-CREATE DEFINER=`root`@`localhost` VIEW `pagescompletes` AS select `portail`.`id` AS `idPortail`,`portail`.`nom` AS `nom`,`lien`.`titre` AS `titre`,`lien`.`url` AS `url`,`lien`.`idPage` AS `idPage`,`page`.`lon` AS `lon`,`page`.`lat` AS `lat`,`status`.`accepte` AS `accepte`,`status`.`contraint` AS `contraint`,`page`.`nb_langue` AS `nb_langue`,`page`.`nb_visite` AS `nb_visite`,`page`.`longueur` AS `longueur`,`page`.`debut_annee` AS `debut_annee`,`page`.`debut_mois` AS `debut_mois`,`page`.`debut_jour` AS `debut_jour`,`page`.`fin_annee` AS `fin_annee`,`page`.`fin_mois` AS `fin_mois`,`page`.`fin_jour` AS `fin_jour`,`page`.`date_MAJ` AS `date_MAJ`,`page`.`distance_portail` AS `distance_portail`,`page`.`type_infobox` AS `type_infobox` from (((`lien` join `page`) join `status`) join `portail`) where ((`lien`.`idPage` = `page`.`id`) and (`lien`.`id` = `status`.`idLien`) and (`status`.`idPortail` = `portail`.`id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `pagescompletes` AS select `portail`.`id` AS `idPortail`,`portail`.`nom` AS `nom`,`lien`.`titre` AS `titre`,`lien`.`url` AS `url`,`lien`.`idPage` AS `idPage`,`page`.`lon` AS `lon`,`page`.`lat` AS `lat`,`status`.`accepte` AS `accepte`,`status`.`contraint` AS `contraint`,`page`.`nb_langue` AS `nb_langue`,`page`.`longueur` AS `longueur`,`page`.`debut_annee` AS `debut_annee`,`page`.`debut_mois` AS `debut_mois`,`page`.`debut_jour` AS `debut_jour`,`page`.`fin_annee` AS `fin_annee`,`page`.`fin_mois` AS `fin_mois`,`page`.`fin_jour` AS `fin_jour`,`page`.`date_MAJ` AS `date_MAJ`,`page`.`distance_portail` AS `distance_portail`,`page`.`type_infobox` AS `type_infobox` from (((`lien` join `page`) join `status`) join `portail`) where ((`lien`.`idPage` = `page`.`id`) and (`lien`.`id` = `status`.`idLien`) and (`status`.`idPortail` = `portail`.`id`)) ;
 
 
 -- Export de la structure de vue octo. portailmax

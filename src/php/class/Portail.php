@@ -40,10 +40,9 @@ class Portail {
         $sql = "SELECT lien.titre, lien.url, page.id, page.lon, page.lat, page.type_infobox, page.nb_langue, "
                 . "page.longueur, page.debut_annee, page.debut_mois, page.debut_jour, page.fin_annee, page.fin_mois, "
                 . "page.fin_jour, page.distance_portail FROM status, lien, page WHERE status.idPortail=".$this->id." AND "
-                . "(status.accepte=1 AND status.idLien=lien.id AND lien.idPage=page.id)";
+                . "status.accepte=1 AND status.idLien=lien.id AND lien.idPage=page.id";
         if($filter)
-            $sql .= " AND debut_annee<10000 OR fin_annee<10000 OR lon<>0 OR lat<>0";
-        
+            $sql .= " AND debut_annee<10000 AND fin_annee<10000 AND lon<>0 AND lat<>0";
         return $sql;
     }
     
