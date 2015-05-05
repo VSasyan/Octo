@@ -1,13 +1,55 @@
-function Carte(titre, portail, debut, fin) {
+function Carte(portail, debut, fin, titre, description, duree, onServer) {
+	var titre = titre || '';
+	var description = description || '';
+	var duree = duree || duree;
+	var onServer = onServer || false;
+
 	this.titre = titre;
 	this.portail = portail;
 	this.para = {
-		debut_annee : debut,
-		fin_annee : fin
+		debut_annee : parseInt(debut),
+		fin_annee : parseInt(fin)
 	};
 	this.trierSelon = '';
 	this.tabArticles = [];
 	this.tabEvenements = [];
+	this.description = description;
+	this.duree = parseInt(duree);
+	this.onServer = onServer;
+	this.envoyee = false;
+}
+
+Carte.prototype.ajouterCarte = function() {
+	$('#resultat').html('<p>Ajout du portail...</p>');
+	var session = recupererSession();
+	// verification de la session utilisateur :
+	if (!(typeof(session.idU) === 'undefined')) {
+		// Creation des données à envoyer :
+		var json = {
+			idU: session.idU,
+			idP : this.portail.id,
+			titre : this.titre,
+			description : this.description,
+			debut_annee : this.debut_annee,
+			fin_annee : this.fin_annee,
+			duree : this.duree
+		}
+		// Initialisation de la requete :
+		$('#ajax').html(html_chargement);
+		var lien = "script.php?c=add";
+		var data = 'json=' + encodeURIComponent(JSON.stringify(json));
+		// Requete :
+		$.post(lien, data, function(data) {
+			var retour = JSON.p(data, {valide:false, message:'<p>Retour invalide !</p>'});
+			if (retour.valide) {
+				$('#resultat').html('<p>Carte n°' + retour.idC + ' créée avec succès !</p>');
+			} else {
+				$('#resultat').html(retour.message);
+			}
+		});
+	} else {
+		$('#resultat').html('<p>Utilisateur invalide !</p>');
+	}
 }
 
 Carte.prototype.recupererArticles = function() {
@@ -42,10 +84,10 @@ Carte.prototype.filtrerArticles = function() {
 };
 
 Carte.prototype.filtrerArticlesDate = function() {
+	var that = this;
 	var tab = [];
-	para = this.para;
 	$.each(this.tabArticles, function(i, article) {
-		if (article.debut_annee >= para.debut_annee && article.fin_annee <= para.fin_annee) {
+		if (article.debut_annee >= that.para.debut_annee && article.fin_annee <= that.para.fin_annee) {
 			// l'article doit parler d'un evenement entre les deux dates
 			tab.push(article);
 		}
@@ -70,6 +112,9 @@ Carte.prototype.changerTri = function(trierSelon) {
 }
 
 Carte.prototype.afficherArticles = function(id) {
+	// On agrandit la page :
+	$('div#wrap').css({width: "700px"});
+	$('article#action').css({width: "700px"});
 	// On affiche le formulaire de selection d'evenements :
 	var HTML = '';
 	HTML += '<p>Décocher les événements à supprimer :</p>';
@@ -130,6 +175,10 @@ Carte.prototype.conversionArticles = function() {
 }
 
 Carte.prototype.afficherEvenements = function(id) {
+	// On agrandit la page :
+	$('div#wrap').css({width: "700px"});
+	$('article#action').css({width: "700px"});
+
 	// Choix des themes :
 	var HTML_themes = '';
 	HTML_themes += '<select>';
@@ -159,6 +208,7 @@ Carte.prototype.afficherEvenements = function(id) {
 		HTML += '</div>';
 	});
 	HTML += '</div>';
+	HTML += '<button id="retourArticles" title="Retour au choix des articles">Retour</button>';
 	HTML += '<button id="validerStyles">Valider les changements</button>';
 	HTML += '<button id="razStyles">Annuler les changements</button>';
 	HTML += '<button id="voirCarte">Voir la carte</button>';
@@ -189,9 +239,10 @@ Carte.prototype.fonctionsEvenements = function(id) {
 	}).addClass('clickable');
 
 	// On ajoute les fonctions de validation :
+	$('#'+id + ' #retourArticles').click(function() {that.afficherArticles(id);});
 	$('#'+id + ' #validerStyles').click(function() {that.validerStyles(id);});
 	$('#'+id + ' #razStyles').click(function() {that.razStyles(id);});
-	$('#'+id + ' #voirCarte').click(function() {that.voirCarte();});
+	$('#'+id + ' #voirCarte').click(function() {that.voirCarte(id);});
 }
 
 Carte.prototype.razStyles = function(id) {
@@ -208,7 +259,7 @@ Carte.prototype.validerStyles = function(id) {
 	});
 }
 
-Carte.prototype.voirCarte = function() {
+Carte.prototype.voirCarte = function(id) {
 	var that = this;
 	// On charge la carte :
 	$('#wrap').html('Chargement de la Carte...' + html_chargement);
@@ -229,5 +280,23 @@ Carte.prototype.voirCarte = function() {
 			var duration = parseInt($('#duration').val());
 			tm.animate(duration);
 		});
+		// Et la fonction Retour à l'edition :
+		$('#edition').click(function () {
+			that.retourEdition(id);
+		});
+
+	});
+}
+
+Carte.prototype.retourEdition = function (id) {
+	var that = this;
+	$('#wrap').html('Chargement de \'interface d\'édition...' + html_chargement);
+	$.ajax({
+		url : 'personnaliser/ajax.php?fct=unregistered'
+	}).done(function (data) {
+		// Ajout de l'editeur  :
+		$('#wrap').html(data);
+		// On affiche les evènements :
+		that.afficherEvenements(id);
 	});
 }

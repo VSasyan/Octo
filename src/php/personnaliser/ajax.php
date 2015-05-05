@@ -87,6 +87,7 @@
 					<div id="anim" class="center">
 						<input type="number" id="duration" value="30000"/>
 						<button id="animate">Animation !!!</button>
+						<button id="edition">Retour à l'édition</button>
 					</div>
 				</div>
 				<div id="timelinecontainer">
@@ -108,6 +109,10 @@
 		<div id="cover"></div>
 
 <?php
+
+	} elseif ($fct == 'unregistered') {
+
+		include('unregistered.php');
 
 	}
 

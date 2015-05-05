@@ -1,9 +1,6 @@
-var portails;
-var info;
-var para;
 var themes;
 var dir = '../';
-var cart;
+var carte;
 
 $(document).ready(function() {
 	// On recupère la liste des themes puis des portails :
@@ -58,13 +55,10 @@ function verifierPortail() {
 		});
 	} else {
 		// On crée la carte :
-		carte = new Carte($('#titre').val(), portail, $('#debut_annee').val(), $('#fin_annee').val());
+		carte = new Carte(portail, $('#debut_annee').val(), $('#fin_annee').val(), $('#titre').val());
 		carte.recupererArticles();
 		carte.filtrerArticles();
 		carte.filtrerArticlesDate();
-		// On agrandit la page :
-		$('div#wrap').css({width: "700px"});
-		$('article#action').css({width: "700px"});
 		// On affiche la carte :
 		carte.afficherArticles('ajax');
 	}

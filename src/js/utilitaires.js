@@ -22,7 +22,7 @@ function RandR(min, max) {
 function recupererSession() {
 	// On demande à getSession.php les paramètres de session
 	var data = $.ajax({
-		url : '../authentification/getSession.php',
+		url : 'authentification/getSession.php',
 		async : false
 	}).responseText;
 
