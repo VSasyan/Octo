@@ -73,10 +73,10 @@ Timeline.DateTime.parseGregorianDateTime = function(o) {
 
 // Fonction corigée pour gérer les dates négatives
 
-Timeline.DateTime._iso8601DateRegExp = "^(-?)([0-9]{4})(" + [
-        "(-?([0-9]{2})(-?([0-9]{2}))?)", // -month-dayOfMonth
-        "(-?([0-9]{3}))",                // -dayOfYear
-        "(-?W([0-9]{2})(-?([1-7]))?)"    // -Wweek-dayOfWeek
+Timeline.DateTime._iso8601DateRegExp = "^(-?)([0-9]{1,4})(" + [
+        "(-?([0-9]{1,2})(-?([0-9]{1,2}))?)", // -month-dayOfMonth
+        "(-?([0-9]{1,3}))",                // -dayOfYear
+        "(-?W([0-9]{1,2})(-?([1-7]))?)"    // -Wweek-dayOfWeek
     ].join("|") + ")?$";
 
 Timeline.DateTime.setIso8601Date = function(dateObject, string) {
