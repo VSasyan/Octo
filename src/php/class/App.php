@@ -80,7 +80,7 @@ class App {
         } else {
             $json["valide"] = TRUE;
         }
-        echo json_encode($json);
+        return json_encode($json);
     }
 
     public function listPagesPortail($idPortail, $filter=false) {
@@ -132,7 +132,7 @@ class App {
         $sql2 = "SELECT id, start, end, titre, theme FROM evenement WHERE idCarte=".$idCarte;
         $res2 = $this->getConnect()->query($sql2);
         
-        $carte["evenements"] = $res2;
+        $carte["tabEvenements"] = $res2;
         
         return $carte;
     }
