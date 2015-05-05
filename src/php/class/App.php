@@ -129,10 +129,32 @@ class App {
         }
         $carte = $res1[0];
         
-        $sql2 = "SELECT id, start, end, titre, theme FROM evenement WHERE idCarte=".$idCarte;
+        $sql2 = "SELECT evenement.id AS ide, evenement.start, "
+                . "evenement.end, evenement.titre AS title, "
+                . "evenement.theme, page.id AS idp, page.lat, page.lon, lien.url, page.type_infobox AS infobox "
+                . "FROM evenement, page, lien, status "
+                . "WHERE lien.idPage=page.id AND page.id=evenement.idPage AND idCarte=".$idCarte;
         $res2 = $this->getConnect()->query($sql2);
         
-        $carte["tabEvenements"] = $res2;
+        $carte["tabEvenements"] = [];
+        
+        foreach ($res2 as $event) {
+            $point["lat"]      = $event["lat"];
+            $point["lon"]      = $event["lon"];
+            $option["theme"]   = $event["theme"];
+            $option["idp"]     = $event["idp"];
+            $option["ide"]     = $event["ide"];
+            $option["infobox"] = $event["infobox"];
+            $option["url"]     = $event["url"];
+            $e["start"]        = $event["start"];
+            $e["end"]          = $event["end"];
+            $e["title"]        = $event["title"];
+            $e["point"]        = $point;
+            $e["option"]       = $option;
+            $carte["tabEvenements"][] = $e;
+        }
+        
+        //$carte["tabEvenements"] = $e;
         
         return $carte;
     }

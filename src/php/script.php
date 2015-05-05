@@ -21,7 +21,7 @@
     // Add article
     if(isset($_GET['a']) && $_GET['a']=='add'){
         if( isset($_POST["json"]) ){
-            $app->savePages($_POST["json"]);
+            echo $app->savePages($_POST["json"]);
         }else{
             throw new Exception;
         }
