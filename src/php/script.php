@@ -35,7 +35,6 @@
         }
     }
     
-    
     if(isset($_GET['c']) &&  $_GET['c']=='add'){
         if( isset($_POST["json"]) ){
             echo $app->createCarte($_POST["json"]);
@@ -47,6 +46,14 @@
     if(isset($_GET['c']) &&  $_GET['c']=='list'){
         if( isset($_POST["idUser"]) ){
             echo $app->getCartesFromUser($_POST["idUser"]);
+        }else{
+            throw new Exception;
+        }
+    }
+    
+    if(isset($_GET['c']) &&  $_GET['c']=='get'){
+        if( isset($_POST["idCarte"]) ){
+            echo json_encode($app->getCarte($_POST["idCarte"]));
         }else{
             throw new Exception;
         }
@@ -71,4 +78,3 @@
     
     
     $app->close();
-   
