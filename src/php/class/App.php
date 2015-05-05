@@ -105,7 +105,7 @@ class App {
 
     public function createCarte($json) {
         $vals = json_decode($json);
-        $carte = new Carte($vals->titre, $vals->idU, $vals->idP, $vals->description, $vals->debut_annee, $vals->fin_annee, $vals->duree);
+        $carte = new Carte($vals->titre, $vals->idU, $vals->idP, $vals->description, $vals->debut_annee, $vals->fin_annee, $vals->duree, $vals->echelle_temps_haut, $vals->echelle_temps_bas);
         $idCarte = $this->getConnect()->addQuery($carte->getCreateQuery());
         $p = $this->listPagesPortail($vals->idP, true); // true = je retire les elements non geolocalises et non dates
         $err = $this->getConnect()->multipleQuery($p->getAllEventsQuery($idCarte));
