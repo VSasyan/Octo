@@ -1,6 +1,6 @@
 <?php
 
-    $uses = "test";
+    $uses = "dev";
 
     $database = array(
         "dev" => array(
