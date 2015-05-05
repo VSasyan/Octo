@@ -61,44 +61,10 @@ function getNewBase($name) {
             $haystack = "";
         }
     }
-
+    $newTab[] = "CALL create_roles()";
     return $newTab;
 }
 
-function getNewBase2($name) {
-    $dir = "./../../sql";
-
-    $classes = scandir($dir, SCANDIR_SORT_DESCENDING);
-
-    $path = $dir . "/" . $classes[0] . "/dump-withoutData.sql";
-
-    $lines = file($path);
-
-    $sql = "";
-
-    $nProc = 0;
-    $tabProc = [];
-    $procFlag = false;
-
-
-    foreach ($lines as $lineContent) {
-        $newLine = str_replace("octo", $name, $lineContent) . "\n";
-        if (strpos($newLine, "ELIMITER $$") || $procFlag) {
-            if (!isset($tabProc[$nProc]))
-                $tabProc[$nProc] = "";
-            $tabProc[$nProc] .= $newLine."\n";
-            $procFlag = true;
-            if (strpos($newLine, "ELIMITER ;")){
-                $procFlag = false;
-                $nProc++;
-            }
-        } else {
-            $sql = $sql . $newLine;
-        }
-    }
-
-    return [$sql, $tabProc];
-}
 
 function traiteProcedures($sql){
     $sql = substr($sql, 0, -3).";";

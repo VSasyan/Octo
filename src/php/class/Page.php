@@ -28,10 +28,10 @@ class Page extends Lien{
     
     
     public function getInsertQuery(){
-        $sql = "INSERT INTO page(id, lon, lat, nb_langue, nb_visite, longueur, debut_annee, debut_mois, "
+        $sql = "INSERT INTO page(id, lon, lat, nb_langue, longueur, debut_annee, debut_mois, "
                 . "debut_jour, fin_annee, fin_mois, fin_jour, date_MAJ, type_infobox, distance_portail, id_portail )"
                 . "VALUES (".$this->json->id.", ".$this->json->lon.", ".$this->json->lat.", "
-                . $this->json->nb_langue.", ".$this->json->nb_visite.", ".$this->json->longueur.", "
+                . $this->json->nb_langue.", ".$this->json->longueur.", "
                 . $this->json->debut_annee.", ".$this->json->debut_mois.", ".$this->json->debut_jour.", "
                 . $this->json->fin_annee.", ".$this->json->fin_mois.", ".$this->json->fin_jour.", "
                 . "NOW(), \"".$this->json->type_infobox."\", ".$this->json->distance_Portail.", "
@@ -46,7 +46,6 @@ class Page extends Lien{
             . "SET lon = ".$this->json->lon.", "
             . "lat = ".$this->json->lat.", "
             . "nb_langue = ".$this->json->nb_langue.", "
-            . "nb_visite = ".$this->json->nb_visite.", "
             . "longueur = ".$this->json->longueur.", "
             . "debut_annee = ".$this->json->debut_annee.", "
             . "debut_mois = ".$this->json->debut_mois.", "
