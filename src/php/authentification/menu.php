@@ -6,7 +6,6 @@
 				// L'utilisateur est connecté :
 				$HTML .= '<li><a href="index.php?page=viewer&type=mescartes">Mes cartes</a></li>';
 				$HTML .= '<li><a href="index.php?page=personnaliser&type=creer">Créer une carte</a></li>';
-				$HTML .= '<li><a href="index.php?page=personnaliser&type=editer">Editer une carte</a></li>';
 				$HTML .= '<li><a href="index.php?page=personnaliser&type=perso">Personnaliser une carte</a></li>';
 				if ($_SESSION['user']["role"] > 1) {
 					// L'utilisateur est un editeur :
