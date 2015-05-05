@@ -137,6 +137,12 @@ class App {
         return $carte;
     }
     
+    public function getCartesFromUser($idUser){
+        $sql = "SELECT id, titre, description FROM carte WHERE idUtilisateur=".$idUser;
+        $res = $this->getConnect()->query($sql);
+        return json_encode($res);
+    }
+    
     public function getUses() {
         return $this->getConnect()->getUses();
     }
