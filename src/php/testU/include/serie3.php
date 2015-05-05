@@ -30,7 +30,6 @@ function testCreationCarte($tabCarte, $tabEvent){
         foreach ($p as $m =>$q) {
                 
             if (!is_int($m) && $q!=$tabCarte[$n][$m]){
-                echo "Carte erreur";
                 return false;
             }
         }
@@ -53,9 +52,6 @@ function testCreationCarte($tabCarte, $tabEvent){
       foreach ($p as $m =>$q) {
 
         if (!is_int($m) && $q!=$tabEvent[$n][$m]){
-            echo "<p>".$q;
-            echo $tabEvent[$n][$m]."</p>";
-            echo "Evenement erreur";
             return false;
         }
       }
@@ -85,51 +81,24 @@ function testCreationCarte($tabCarte, $tabEvent){
   
     0 => array(
       "id" => 1,
-      "start" => "-446-1-1",
-      "end" => "-446-1-1",
-      "titre" => "Bataille de Corbione",
-      "theme" => "defaut",
-      "idCarte" => 1,
-      "idPage" => 8449414),
-    
-    1 => array(
-      "id" => 2,
       "start" => "363-1-1",
       "end" => "363-1-1",
       "titre" => "Bataille de CtÃ©siphon (363)",
       "theme" => "defaut",
       "idCarte" => 1,
       "idPage" => 3019915),
-    
-    2 => array(
-      "id" => 3,
-      "start" => "-48-7-10",
-      "end" => "-48-7-10",
-      "titre" => "Bataille de Dyrrachium (48 av. J.-C.)",
-      "theme" => "defaut",
-      "idCarte" => 1,
-      "idPage" => 732581),
      
-    3 => array(
-      "id" => 4,
+    1 => array(
+      "id" => 2,
       "start" => "1916-2-21",
       "end" => "1916-12-19",
       "titre" => "Bataille de Verdun (1916)",
       "theme" => "defaut",
       "idCarte" => 1,
       "idPage" => 49111),
-    
-    4 => array(
-      "id" => 5,
-      "start" => "-82-11-1",
-      "end" => "-82-11-1",
-      "titre" => "Bataille de la Porte Colline",
-      "theme" => "defaut",
-      "idCarte" => 1,
-      "idPage" => 2895689),
      
-    5 => array(
-      "id" => 6,
+    2 => array(
+      "id" => 3,
       "start" => "-52-1-1",
       "end" => "-52-1-1",
       "titre" => "SiÃ¨ge d'AlÃ©sia",
@@ -140,6 +109,6 @@ function testCreationCarte($tabCarte, $tabEvent){
  
 
  if(testCreationCarte($tabCarte,$tabEvent))
-    echo "<p class='o'>Creation d'une carte et des évenements liés</p>";
+    echo "<p class='o'>Creation d'une carte. Seuls les évenements possedant une geolocalisation sont créés.</p>";
   else
     echo "<p class='e'>Erreur lors de la creation d'une carte</p>";
