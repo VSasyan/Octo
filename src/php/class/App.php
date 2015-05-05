@@ -154,7 +154,7 @@ class App {
             $e["end"]          = $event["end"];
             $e["title"]        = $event["title"];
             $e["point"]        = $point;
-            $e["option"]       = $option;
+            $e["options"]       = $option;
             $carte["tabEvenements"][] = $e;
         }
         
