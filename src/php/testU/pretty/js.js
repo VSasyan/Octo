@@ -1,8 +1,5 @@
-console.log("toto");
 
 window.addEventListener("load", function(){
-    
-    console.log("toto");
     
     var divs = document.querySelectorAll("#content>div");
     
@@ -47,5 +44,16 @@ window.addEventListener("load", function(){
     
     var recap = document.getElementById("recap");
     recap.appendChild(table);
+    
+    
+    var ajax = new XMLHttpRequest();
+    ajax.open('GET', './include/changeUses.php', true);
+    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    ajax.addEventListener('readystatechange', function (e) {
+        if (ajax.readyState === 4 && ajax.status === 200) {
+
+        }
+    });
+    ajax.send();
     
 }, false);

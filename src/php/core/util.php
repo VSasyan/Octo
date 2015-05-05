@@ -13,9 +13,20 @@ function getConnection() {
 }
 
 function changeConnection($param) {
-    $lines = file('../conf/database.php');
+    
+    $path = "./";
+    
+    do {
+        $folder = scandir($path);
+        if(in_array("core", $folder))
+            break;
+        else
+            $path = $path."../";
+    } while (true);
+    
+    $lines = file($path.'conf/database.php');
 
-    $monfichier = fopen('../conf/database_new.php', 'a');
+    $monfichier = fopen($path.'conf/database_new.php', 'a');
 
     foreach ($lines as $lineContent) {
 
@@ -27,8 +38,8 @@ function changeConnection($param) {
 
     fclose($monfichier);
 
-    unlink('../conf/database.php');
-    rename('../conf/database_new.php', '../conf/database.php');
+    unlink($path.'conf/database.php');
+    rename($path.'conf/database_new.php', $path.'/conf/database.php');
 }
 
 function getNewBase($name) {

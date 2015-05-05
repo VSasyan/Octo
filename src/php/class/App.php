@@ -120,10 +120,13 @@ class App {
     }
 
     public function getCarte($idCarte){
+        
         $sql1 = "SELECT id, titre, description, echelle_temps_haut, echelle_temps_bas, duree, debut_annee, fin_annee "
                 . "FROM carte "
                 . "WHERE id=".$idCarte;
+        
         $res1 = $this->getConnect()->query($sql1);
+
         if(count($res1) !=1 ){
             throw new Exception;
         }
@@ -132,8 +135,9 @@ class App {
         $sql2 = "SELECT evenement.id AS ide, evenement.start, "
                 . "evenement.end, evenement.titre AS title, "
                 . "evenement.theme, page.id AS idp, page.lat, page.lon, lien.url, page.type_infobox AS infobox "
-                . "FROM evenement, page, lien, status "
-                . "WHERE lien.idPage=page.id AND page.id=evenement.idPage AND idCarte=".$idCarte;
+                . "FROM evenement, page, lien "
+                . "WHERE evenement.idPage=page.id AND page.id=lien.idPage AND evenement.idCarte=".$idCarte;
+
         $res2 = $this->getConnect()->query($sql2);
         
         $carte["tabEvenements"] = [];

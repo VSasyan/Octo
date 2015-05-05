@@ -15,7 +15,7 @@
                 }
             });
             
-            var json =  {"idU":1,"idP":"1","titre":"Ma belle carte","description":"Elle est trop belle t'as vu !","debut_annee":"1942","fin_annee":"2014","duree":"120"};
+            var json =  {"idU":1,"idP":"1","titre":"Ma belle carte","description":"Elle est trop belle t'as vu !","debut_annee":"1942","fin_annee":"2014","duree":"120","echelle_temps_haut":1, "echelle_temps_bas":2};
             var data = "json=" + JSON.stringify(json);
             ajax.send(data);
         </script>

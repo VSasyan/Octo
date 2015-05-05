@@ -21,20 +21,19 @@
             </div>
             
             <div id="part2">
-                <h2>Test serie 1</h2>
+                <h2> Tests BDD </h2>
+                <h3>Test serie 1</h3>
                 <?php include '/include/serie1.php'; ?>
-            
-                <h2>Test serie 2</h2>
+
+                <h3>Test serie 2</h3>
                 <?php include '/include/serie2.php'; ?>
                 
-                <h2>Test serie 3</h2>
+                <h3>Test serie 3</h3>
                 <?php include '/include/serie3.php'; ?>
             </div>
 
             <div id="lafin">
-                <h2>Tests</h2>
-                <?php if($fin)
-                    echo ""; ?>
+                <h2>Fin</h2>
             </div>
             
         </div>
