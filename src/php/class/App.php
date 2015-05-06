@@ -200,7 +200,7 @@ class App {
         } else {
             $r["valide"] = TRUE;
         }
-        return json_encode($r);
+        return $r;
     }
     
     public function getUses() {
