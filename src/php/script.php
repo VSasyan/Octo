@@ -59,6 +59,14 @@
         }
     }
     
+    if(isset($_GET['c']) &&  $_GET['c']=='maj'){
+        if( isset($_POST["json"]) ){
+            echo json_encode($app->updateCarte($_POST["json"]));
+        }else{
+            throw new Exception;
+        }
+    }
+    
     if(isset($_GET['u']) && $_GET['u']=='login'){
         if( isset($_POST["json"]) ){
             $tab = $app->authenticate($_POST["json"]);

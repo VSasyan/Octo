@@ -22,13 +22,13 @@
             
             <div id="part2">
                 <h2> Tests BDD </h2>
-                <h3>Test serie 1</h3>
+                <h3>Pages et Portails</h3>
                 <?php include '/include/serie1.php'; ?>
 
-                <h3>Test serie 2</h3>
+                <h3>Utilisateurs</h3>
                 <?php include '/include/serie2.php'; ?>
                 
-                <h3>Test serie 3</h3>
+                <h3>Cartes et Evenements</h3>
                 <?php include '/include/serie3.php'; ?>
             </div>
 

@@ -78,8 +78,8 @@ class Database {
 
         $r = $this->mysqli->errno;
         if ($this->mysqli->errno) {
-//           print_r($this->mysqli->error."\n"); 
-            $this->mysqli->rollback();
+           print_r($this->mysqli->error."\n"); 
+           $this->mysqli->rollback();
         } else {
             $this->mysqli->commit();
         }

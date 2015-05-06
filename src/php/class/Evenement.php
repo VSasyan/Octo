@@ -24,7 +24,11 @@ class Evenement {
                 . "\"".$this->theme."\", ".$this->idCarte.", ".$this->idPage.");";
     }
     
-    
+    public function getUpdateQuery($idE){
+        return "UPDATE evenement SET "
+            . "theme = \"".$this->theme."\" "
+            . "WHERE evenement.id=".$idE.";";
+    }
     
     
 }
