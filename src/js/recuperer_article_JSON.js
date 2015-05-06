@@ -107,7 +107,7 @@ function getLength(elm) {
 
 function getInfobox(rev) {
 	var rev = rev || [{'*':''}];
-	var infobox = /Infobox ([\w ]*)/.exec(rev[0]['*']);
+	var infobox = /Infobox (.*)/.exec(rev[0]['*']);
 	if (infobox) {return infobox[1];} else {return '';}
 }
 
