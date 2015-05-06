@@ -8,8 +8,6 @@
     </head>
     <body>
         <h1>Test Configuration</h1>
-        
-        
         <?php
         
             $mysqli = new mysqli($database[$uses]["host"], 

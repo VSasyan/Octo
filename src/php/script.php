@@ -67,6 +67,14 @@
         }
     }
     
+    if(isset($_GET['c']) &&  $_GET['c']=='del'){
+        if( isset($_POST["idC"]) ){
+            echo json_encode($app->deleteCarte($_POST["idC"]));
+        }else{
+            throw new Exception;
+        }
+    }
+    
     if(isset($_GET['u']) && $_GET['u']=='login'){
         if( isset($_POST["json"]) ){
             $tab = $app->authenticate($_POST["json"]);
