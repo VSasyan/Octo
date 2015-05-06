@@ -289,14 +289,14 @@ DELIMITER ;
 -- Export de la structure de fonction octo. languesMax
 DROP FUNCTION IF EXISTS `languesMax`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `languesMax`(idPo INT) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `languesMax`(`idPo` INT) RETURNS int(11)
 BEGIN
  	
- 	RETURN (SELECT max(pagescompletes.nb_langue)
- 	FROM pagescompletes
- 	WHERE pagescompletes.idPortail=idPo and
- 	pagescompletes.lon<>0 and
- 	pagescompletes.lat<>0);
+ 	RETURN (SELECT max(pages_completes.nb_langue)
+ 	FROM pages_completes
+ 	WHERE pages_completes.idPortail=idPo and
+ 	pages_completes.lon<>0 and
+ 	pages_completes.lat<>0);
  END//
 DELIMITER ;
 
@@ -304,13 +304,13 @@ DELIMITER ;
 -- Export de la structure de fonction octo. longueurMax
 DROP FUNCTION IF EXISTS `longueurMax`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `longueurMax`(idPor INT) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `longueurMax`(`idPor` INT) RETURNS int(11)
 BEGIN
- 	RETURN (SELECT max(pagescompletes.longueur)
- 	FROM pagescompletes
- 	WHERE pagescompletes.idPortail=idPor and
- 	pagescompletes.lon<>0 and
- 	pagescompletes.lat<>0);
+ 	RETURN (SELECT max(pages_completes.longueur)
+ 	FROM pages_completes
+ 	WHERE pages_completes.idPortail=idPor and
+ 	pages_completes.lon<>0 and
+ 	pages_completes.lat<>0);
  END//
 DELIMITER ;
 

@@ -12,8 +12,7 @@ function getConnection() {
         }
 }
 
-function changeConnection($param) {
-    
+function getPathToDB(){
     $path = "./";
     
     do {
@@ -24,6 +23,13 @@ function changeConnection($param) {
             $path = $path."../";
     } while (true);
     
+    return $path;
+}
+
+function changeConnection($param) {
+    
+    $path = getPathToDB();
+    
     $lines = file($path.'conf/database.php');
 
     $monfichier = fopen($path.'conf/database_new.php', 'a');
@@ -32,6 +38,45 @@ function changeConnection($param) {
 
         if (strpos($lineContent, "uses"))
             $lineContent = "    \$uses = \"" . $param . "\";\n";
+
+        fputs($monfichier, $lineContent);
+    }
+
+    fclose($monfichier);
+
+    unlink($path.'conf/database.php');
+    rename($path.'conf/database_new.php', $path.'/conf/database.php');
+}
+
+function changeCredential($hote, $user, $password){
+    $path = getPathToDB();
+    
+    $lines = file($path.'conf/database.php');
+
+    $monfichier = fopen($path.'conf/database_new.php', 'a');
+
+    foreach ($lines as $lineContent) {
+
+        if (strpos($lineContent, "\"user\"     => \"")){
+            $r = strpos($lineContent, " => \"");
+            $lineContent  = substr($lineContent, 0, $r+5);
+            $lineContent .= $user."\",\n";
+        }
+        
+        if (strpos($lineContent, "\"password\" => \"")){
+            $r = strpos($lineContent, " => \"");
+            $lineContent  = substr($lineContent, 0, $r+5);
+            $lineContent .= $password."\",\n";
+        }
+        
+        if (strpos($lineContent, "\"host\"     => \"")){
+            $r = strpos($lineContent, " => \"");
+            $lineContent  = substr($lineContent, 0, $r+5);
+            $lineContent .= $hote."\",\n";
+        }
+        
+        
+            //$lineContent = "    \$uses = \"" . $param . "\";\n";
 
         fputs($monfichier, $lineContent);
     }
@@ -75,7 +120,6 @@ function getNewBase($name) {
     $newTab[] = "CALL create_roles()";
     return $newTab;
 }
-
 
 function traiteProcedures($sql){
     $sql = substr($sql, 0, -4).";";

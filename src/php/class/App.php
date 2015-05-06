@@ -122,7 +122,7 @@ class App {
 
     public function getCarte($idCarte){
         
-        $sql1 = "SELECT id, titre, description, echelle_temps_haut, echelle_temps_bas, duree, debut_annee, fin_annee "
+        $sql1 = "SELECT id, titre, description, echelle_temps_haut, echelle_temps_bas, duree, debut_annee, fin_annee, idPortail "
                 . "FROM carte "
                 . "WHERE id=".$idCarte;
         
@@ -133,12 +133,17 @@ class App {
         }
         $carte = $res1[0];
         
+        $sql3 = "SELECT languesMax(".$carte["idPortail"].") AS lan, longueurMax(".$carte["idPortail"].") AS lon";
+        $r = $this->getConnect()->query($sql3);
+        $lan = $r[0]["lan"];
+        $lon = $r[0]["lon"];
+        
         $sql2 = "SELECT evenement.id AS ide, evenement.start, "
                 . "evenement.end, evenement.titre AS title, "
-                . "evenement.theme, page.id AS idp, page.lat, page.lon, lien.url, page.type_infobox AS infobox "
+                . "evenement.theme, page.id AS idp, page.lat, page.lon, lien.url, page.type_infobox AS infobox, "
+                . "importance(page.longueur, page.nb_langue, page.distance_portail, ".$lon.", ".$lan.") AS importance "
                 . "FROM evenement, page, lien "
                 . "WHERE evenement.idPage=page.id AND page.id=lien.idPage AND evenement.idCarte=".$idCarte;
-
         $res2 = $this->getConnect()->query($sql2);
         
         $carte["tabEvenements"] = [];
@@ -151,6 +156,7 @@ class App {
             $option["ide"]     = $event["ide"];
             $option["infobox"] = $event["infobox"];
             $option["url"]     = $event["url"];
+            $option["importance"] = $event["importance"];
             $e["start"]        = $event["start"];
             $e["end"]          = $event["end"];
             $e["title"]        = $event["title"];

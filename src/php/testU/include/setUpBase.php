@@ -41,7 +41,6 @@ if ($r){
                 $sql = traiteProcedures ($sql);
         if(strlen($sql)>1)
             if(!$mysqli->query($sql)){
-                var_dump($sql);
                 break;
             }
         $i++;
