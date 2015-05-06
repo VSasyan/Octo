@@ -203,6 +203,17 @@ class App {
         return $r;
     }
     
+    public function deleteCarte($idCarte){
+        $sql = "DELETE FROM carte WHERE id = ".$idCarte."; DELETE FROM evenement WHERE idCarte=".$idCarte.";";
+        $err = $this->getConnect()->multipleQuery($sql);
+        if ($err) {
+            $r["valide"] = FALSE;
+        } else {
+            $r["valide"] = TRUE;
+        }
+        return $r;
+    }
+    
     public function getUses() {
         return $this->getConnect()->getUses();
     }
