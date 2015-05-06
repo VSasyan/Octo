@@ -1,62 +1,127 @@
 /***
 /* Style general
 /***/
-h1, h2, h3 {text-align: center;}
+h1, h2 {text-align: center;}
 
 html, body {width: 100%; margin: 0; padding: 0;}
-.center {margin: auto; text-align: center;}
 
-div#wrap, div#menu {
-	margin: auto;
-	width: 600px;
-}
-
-div.talbe {
+div.table {
 	display: table;
+	margin: auto;
 }
 div.row {
 	display: table-row;
 }
 div.row>div {
 	display: table-cell;
+	padding-left: 5px;
+	padding-right: 5px;
 }
+
+body {
+	background-color: #FFFFF7;
+	font-family: "Roboto";
+}
+
+.center {margin: auto; text-align: center;}
+div.centrer {margin: auto;}
 /* fin style general */
 
 
-/***
-/* Style pour le menu
-/***/
+/**
+	STYLE DU MENU
+**/
+
 div#menu {
-	margin: auto;
-	width: 1000px;
 	text-align: center;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: rgba(255,255,255,0.9);
+	box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+	font-family: "Nunito";
 }
 
-div#menu ul {
+div#menu div#logo {
+	position: absolute;
+	left: 0px;
+	width: 44px;
+	height: 44px;
+	margin: 10px;
+}
+
+div#menu div#logo img {
+	width: 44px;
+	height: 44px;
+}
+
+div#menu nav ul {
+	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-div#menu ul li {
-	list-style: none;
+div#menu nav li {
 	display: inline-block;
-	padding: 5px 5px;
-	background-color: #999;
-	color: #FFF;
-	border: 1px solid #000;
+	cursor: pointer;
+	background-color: transparent;
+	transition: all 0.2s ease-in-out 0s;
+	margin: 10px;
+	padding: 10px;
+	font-size: 20px;
 }
 
-div#menu ul li:hover {
-	background-color: #FFF;
+div#menu nav li a, nav li a:hover, nav li a:visited {
 	color: #000;
+	text-decoration: none;
 }
 
-div#menu ul li a {
-	color: inherit;
+div#menu nav li.connect	 {
+	position: absolute;
+	right: 0px;
 }
-/* fin style le menu */
 
+div#menu nav li:hover {
+	text-decoration: underline;
+	background-color: #DDE6FF;
+}
 
+/**
+	FIN : STYLE DU MENU
+**/
+
+/**
+	STYLE DU HEADER
+**/
+div#header {
+	margin-top: 100px;
+}
+div#header h1, div#header h3 {
+	text-align: center;
+}
+
+/**
+	FIN : STYLE DU HEADER
+**/
+
+/**
+	STYLE DU WRAP
+**/
+div#wrap {
+	margin: auto;
+	border-radius: 5px;
+	box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+	width: 900px;
+	background-color: #FFF;
+	padding: 25px;
+	margin-bottom: 50px;
+}
+/**
+	FIN : STYLE DU WRAP
+**/
 
 
 /***
@@ -73,7 +138,7 @@ input.erreur {
 
 
 /***
-/* Style pour unregistered
+/* Style pour la creation de carte
 /***/
 
 .clickable:hover {
@@ -82,19 +147,8 @@ input.erreur {
 	text-decoration: underline;
 }
 
-/* fin style unregistered */
-
-
-
-
-/***
-/* Style pour edit et perso
-/***/
-
 form#type {text-align: center;}
-
-article#action {
-	margin: auto;
+div.form div.centrer {
 	width: 600px;
 }
 
@@ -105,8 +159,6 @@ article#action.loading div#loading {display: block !important;}
 #ajoutPortail #nom, #ajoutPortail #url {
 	width:350px;
 }
-
-.center {margin: auto; text-align: center;}
 
 ul.ui-autocomplete li {
 	border: 1px solid #000;
@@ -132,15 +184,84 @@ ul.ui-autocomplete li:last-child {
 	margin-left: 20px;
 }
 
-/* fin style pour edit et perso */
+p.button.center {
+	padding-top: 20px;
+}
+p.button button {
+
+}
+
+/* fin style pour la creation de carte */
 
 /***
 /* Style pour le viewer
 /***/
 
-#viewer div#wrap, article#action.viewer {
+div#top {
+	height: 25px;
 	width: 100%;
+	margin: 0;
+	padding: 0;
+	position: fixed;
+	z-index: 50000;
+	top: 100%;
+	text-align: center;
+	margin-top: -25px;
+	transition: all 0.42s ease-in-out 0s;
 }
+
+div#top #lecteur {
+	display: inline-block;
+	opacity: 0.7;
+	height: 25px;
+	text-align: center;
+	background-color: #000;
+	border-top-left-radius: 25px;
+	border-top-right-radius: 25px;
+	padding-right: 25px;
+	padding-left: 25px;
+	transition: all 0.42s ease-in-out 0s;
+}
+
+div#top #lecteur a {
+	color:#FFF;
+	font-size: 20px;
+	transition: all 0.42s ease-in-out 0s;
+}
+
+div#top:hover #lecteur {
+	margin-top: -50px;
+	border-top-left-radius: 50px;
+	border-top-right-radius: 50px;
+	padding-right: 50px;
+	padding-left: 50px;
+}
+
+div#top:hover #lecteur {
+	opacity: 1;
+	height: 50px;
+}
+
+div#top #lecteur:hover a {
+	color:#FFF;
+	font-size: 40px;
+}
+
+div#top>#lecteur>div {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+
+div#top #licence {
+	text-align: center;
+	cursor: pointer;
+}
+
+div#top #licence span:hover {
+	text-decoration: underline;
+}
+
 
 div, p {
 	font-family: Verdana, Arial, sans-serif;
@@ -158,28 +279,6 @@ div#help {
 }
 
 div#timemap {}
-
-div#timemap #top {
-	height: 25px;
-	margin: 0;
-	padding: 0;
-}
-
-div#timemap #top div {
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-}
-
-div#timemap #top #licence {
-	width: 80px;
-	text-align: center;
-	cursor: pointer;
-}
-
-div#timemap #top #licence span:hover {
-	text-decoration: underline;
-}
 
 div#timelinecontainer{
 	width: 100%;

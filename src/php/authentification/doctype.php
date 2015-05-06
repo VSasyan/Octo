@@ -4,9 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="author" content="Adélaïde LORIEUX, Simon FABRY, Manon GIRARD, Valentin SASYAN" />
 		<meta name="description" content="Cicérow" />
-		<!-- <link rel="stylesheet" type="text/css" href="normalize.css" /> -->
-		<!-- <link rel="stylesheet" type="text/css" href="style.css" /> -->
-		<title><?php echo $pages[$page][1]; ?></title>
+		<title><?php echo $pages[$page][1]; ?> - Cicérow</title>
 
 		<!-- Tous les scripts utiles : -->
 		<script type="text/javascript" src="../js/jquery.js"></script>
@@ -15,6 +13,12 @@
 		<link rel="stylesheet" type="text/css" href="../js/lib/jquery-ui.css" />
 		<script type="text/javascript" src="../js/utilitaires.js"></script>
 
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" type="text/css" href="../css/normalize.css" />
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
 
 <?php	if ($page == 'auth') { ?>

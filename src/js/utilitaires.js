@@ -139,6 +139,8 @@ function afficherCarte(eve, echelle) {
 	// On change la hauteur de la carte pour l'adapter à l'ecran :
 	adapterHauteur();
 	$(window).resize(function () {adapterHauteur();});
+	// Et la largeur de la page :
+	$('div#wrap, article#action').css({width: "100%",padding:"0",margin:'0'});
 
 	// On met à jour les sources :
 	var HTML = '';
@@ -194,12 +196,12 @@ function afficherCarte(eve, echelle) {
 	
 	// On scroll jusqu'à la timeline :
 	$('html, body').animate({
-				scrollTop: $('#timeline').offset().top
+		scrollTop: $('#timeline').offset().top
 	}, 'fast');
 }
 
 function adapterHauteur() {
-	var taille = $(window).height() - $('#anim').height() - $('#timelinecontainer').height();
+	var taille = $(window).height() - $('#timelinecontainer').height();
 	$('#mapcontainer').height(taille + 'px');
 }
 

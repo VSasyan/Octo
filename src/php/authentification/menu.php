@@ -1,5 +1,9 @@
 <div id="menu">
-	<ul>
+	<div id="logo">
+		<img src="../image/icone.png" />
+	</div>
+	<nav>
+		<ul>
 		<?php
 			$HTML = '';
 			if (isset($_SESSION['user']["role"])) {
@@ -11,15 +15,16 @@
 					// L'utilisateur est un editeur :
 					$HTML .= '<li><a href="index.php?page=edit">Gérer les portails</a></li>';
 				}
-				$HTML .= '<li><a href="index.php?deconnect">Déconnexion</a></li>';
+				$HTML .= '<li class="connect"><a href="index.php?deconnect">Déconnexion</a></li>';
 			} else {
 				// Utilisateur non connecté :
 				$HTML .= '<li><a href="index.php?page=viewer">Les cartes</a></li>';
 				$HTML .= '<li><a href="index.php?page=unregistered">Créer une carte</a></li>';
 				$HTML .= '<li><a href="index.php?page=auth">Se connecter</a></li>';
-				$HTML .= '<li><a href="index.php?page=signin">S\'inscrire</a></li>';
+				$HTML .= '<li class="connect"><a href="index.php?page=signin">S\'inscrire</a></li>';
 			}
 			echo $HTML;
 		?>
 		</ul>
+	</nav>
 </div>

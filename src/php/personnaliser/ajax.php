@@ -23,55 +23,57 @@
 
 ?>
 		<h3>Informations sur la carte</h3>
-		<p class="portail">
-			<span>Choisissez un portail :</span>
-			<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
-		</p>
-		<p>
-			<span>Titre de la carte :</span>
-			<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
-		</p>
-		<p>
-			<span>Description :</span>
-			<textarea id="description"  type="text" placeholder="Description de la Carte créée..."></textarea>
-		</p>
-		<p>
-			<span>Emprise historique :</span>
-			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
-			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
-		</p>
-		<p>
-			<span>Durée de l'animation :</span>
-			<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
-		</p>
-		<p>
-			<span>Echelle de temps globale :</span>
-			<select id="echelle_temps_bas">
-				<option value="4">Jour</option>
-				<option value="5">Semaine</option>
-				<option value="6">Mois</option>
-				<option value="7" selected="selected">Année</option>
-				<option value="8">Décénie</option>
-				<option value="9">Siècle</option>
-				<option value="10">Millénaire</option>
-			</select>
-		</p>
-		<p>
-			<span>Echelle de temps précise :</span>
-			<select id="echelle_temps_haut">
-				<option value="4" disabled="disabled">Jour</option>
-				<option value="5" disabled="disabled">Semaine</option>
-				<option value="6" disabled="disabled">Mois</option>
-				<option value="7" disabled="disabled">Année</option>
-				<option value="8" disabled="disabled">Décénie</option>
-				<option value="9" selected="selected">Siècle</option>
-				<option value="10">Millénaire</option>
-			</select>
-		</p>
-		<p class="verifierPortail">
-			<button id="verifierPortail">Valider</button>
-		</p>
-		<div id="resultat"></div>
+		<div class="centrer">
+			<p class="portail">
+				<span>Choisissez un portail :</span>
+				<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
+			</p>
+			<p>
+				<span>Titre de la carte :</span>
+				<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
+			</p>
+			<p>
+				<span>Description :</span>
+				<textarea id="description"  type="text" placeholder="Description de la Carte créée..."></textarea>
+			</p>
+			<p>
+				<span>Emprise historique :</span>
+				de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
+				à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
+			</p>
+			<p>
+				<span>Durée de l'animation :</span>
+				<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
+			</p>
+			<p>
+				<span>Echelle de temps globale :</span>
+				<select id="echelle_temps_bas">
+					<option value="4">Jour</option>
+					<option value="5">Semaine</option>
+					<option value="6">Mois</option>
+					<option value="7" selected="selected">Année</option>
+					<option value="8">Décénie</option>
+					<option value="9">Siècle</option>
+					<option value="10">Millénaire</option>
+				</select>
+			</p>
+			<p>
+				<span>Echelle de temps précise :</span>
+				<select id="echelle_temps_haut">
+					<option value="4" disabled="disabled">Jour</option>
+					<option value="5" disabled="disabled">Semaine</option>
+					<option value="6" disabled="disabled">Mois</option>
+					<option value="7" disabled="disabled">Année</option>
+					<option value="8" disabled="disabled">Décénie</option>
+					<option value="9" selected="selected">Siècle</option>
+					<option value="10">Millénaire</option>
+				</select>
+			</p>
+			<p class="verifierPortail">
+				<button id="verifierPortail">Valider</button>
+			</p>
+			<div id="resultat"></div>
+		</div>
 
 <?php
 
@@ -80,27 +82,29 @@
 ?>
 		
 		<h3>Informations sur la carte</h3>
-		<p class="portail">
-			<span>Choisissez un portail :</span>
-			<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
-		</p>
-		<p>
-			<span>Titre de la carte :</span>
-			<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
-		</p>
-		<p>
-			<span>Emprise historique :</span>
-			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
-			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
-		</p>
-		<p>
-			<span>Durée de l'animation :</span>
-			<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
-		</p>
-		<p class="verifierPortail">
-			<button id="verifierPortail">Valider</button>
-		</p>
-		<div id="resultat"></div>
+		<div class="centrer">
+			<p class="portail">
+				<span>Choisissez un portail :</span>
+				<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
+			</p>
+			<p>
+				<span>Titre de la carte :</span>
+				<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
+			</p>
+			<p>
+				<span>Emprise historique :</span>
+				de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
+				à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
+			</p>
+			<p>
+				<span>Durée de l'animation :</span>
+				<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
+			</p>
+			<p class="verifierPortail">
+				<button id="verifierPortail">Valider</button>
+			</p>
+			<div id="resultat"></div>
+		</div>
 
 <?php
 
@@ -111,14 +115,6 @@
 		<article id="action" class="loading viewer">
 			<div id="liste"></div>
 			<div id="timemap">
-				<div id="top">
-					<div id="licence"><a href="#viewSource">Source</a></div>
-					<div id="anim" class="center">
-						<input type="number" id="duration" value="30000"/>
-						<button id="animate">Animation !!!</button>
-						<button id="edition">Retour à l'édition</button>
-					</div>
-				</div>
 				<div id="timelinecontainer">
 					<div id="timeline"></div>
 				</div>
@@ -128,6 +124,15 @@
 			</div>
 			<div id="loading" class="center">
 				<img src="../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
+			</div>
+			<div id="top">
+				<div id="lecteur">
+					<a id="edition" href="#" title="Retour à l'édition"><i class="fa fa-arrow-left"></i></a>
+					<div id="licence"><a href="#viewSource" title="Voir les sources"><i class="fa fa-cog"></i></a></div>
+					<div id="anim">
+						<a id="animate" href="#" title="Animation"><i class="fa fa-play"></i></a>
+					</div>
+				</div>
 			</div>
 		</article>
 

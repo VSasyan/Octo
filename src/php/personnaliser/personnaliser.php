@@ -6,7 +6,6 @@
 		?>
 
 				<div id="creer">
-					<h2>Créer une carte</h2>
 					<div id="ajax" class="form"></div>
 				</div>
 
@@ -22,7 +21,6 @@
 		?>
 
 					<div id="perso">
-						<h2>Personnaliser la carte<span id="titre"></span></h2>
 						<div id="ajax" class="form"></div>
 						<div id="ajax" class="eve"></div>
 					</div>
@@ -35,7 +33,6 @@
 		?>
 
 					<div id="listeCartes">
-						<h2>Choississez une carte</h2>
 						<div id="ajax">
 							<ul id="cartes"></ul>
 						</div>

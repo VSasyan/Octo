@@ -9,13 +9,13 @@
 
 	// Page possibles :
 	$pages = array(
-		"moncompte" => array("authentification/moncompte.php", "Mon compte - Cicérow", false),
-		"personnaliser" => array("personnaliser/personnaliser.php", "Créer une carte - Cicérow", array('creer' => 'Créer une carte', 'editer' => 'Editer une carte','perso' => 'Personnaliser une carte')),
-		"unregistered" => array("personnaliser/unregistered.php", "Créer une carte - Cicérow", false),
-		"edit" => array("edit/edit.php", "Gestion des portails - Cicérow", false),
-		"viewer" => array("viewer/viewer.php", "Viewer - Cicérow", false),
-		"auth" => array("authentification/auth.php", "Authentification - Cicérow", false),
-		"signin" => array("inscription/inscription.php", "Inscription - Cicérow", false),
+		"moncompte" => array("authentification/moncompte.php", "Mon compte", false),
+		"personnaliser" => array("personnaliser/personnaliser.php", "Créer une carte", array('creer' => 'Créer une carte', 'editer' => 'Editer une carte','perso' => 'Personnaliser une carte')),
+		"unregistered" => array("personnaliser/unregistered.php", "Créer une carte", false),
+		"edit" => array("edit/edit.php", "Gestion des portails", false),
+		"viewer" => array("viewer/viewer.php", "Viewer", false),
+		"auth" => array("authentification/auth.php", "Authentification", false),
+		"signin" => array("inscription/inscription.php", "Inscription", false),
 	);
 
 	// Gestion de la page demandée :
@@ -24,6 +24,9 @@
 		// On doit définir un type ???
 		if ($pages[$page][2] != false) {
 			if (isset($_GET['type']) && isset($pages[$page][2][$_GET['type']])) {$type = $_GET['type'];} else {$type = 'creer';}
+			$titre = $pages[$page][2][$type];
+		} else {
+			$titre = $pages[$page][1];
 		}
 	} else {
 		// On redirige vers mon compte ou auth (si pas loggé)
@@ -34,6 +37,7 @@
 			$logue = false;
 			$page = 'auth';
 		}
+		$titre = $pages[$page][1];
 	}
 
 	include('authentification/doctype.php');

@@ -26,7 +26,7 @@ function recupererCartes() {
 		// Ok c'est fini, on les passe dans la variable globale :
 		cartes = tps;
 		// On affiche la liste :
-		$('#liste').html('<h2>Liste des cartes :</h2><ul id="cartes"></ul>');
+		$('#liste').html('<h3>Choississez une carte</h3><ul id="cartes"></ul>');
 		$.each(cartes, function(i, carte) {
 			$('#cartes').append('<li id="_'+i+'"><span class="nom">'+carte.nom+'</span> <span class="auteur">('+carte.auteur+')</span></li>');
 		});

@@ -187,16 +187,17 @@ Carte.prototype.filtrerArticlesNonCoches = function() {
 	this.tabArticles = tab;
 };
 
-Carte.prototype.changerTri = function(trierSelon) {
+Carte.prototype.changerTriArticles = function(trierSelon) {
 	this.trierSelon = (this.trierSelon == trierSelon ? '-'+trierSelon : trierSelon);
 	this.tabArticles.sort(sort_by(this.trierSelon, (this.trierSelon.search(/-/) != -1), false));
+}
+
+Carte.prototype.changerTriEvenements = function(trierSelon) {
+	this.trierSelon = (this.trierSelon == trierSelon ? '-'+trierSelon : trierSelon);
 	this.tabEvenements.sort(sort_by(this.trierSelon, (this.trierSelon.search(/-/) != -1), false));
 }
 
 Carte.prototype.afficherArticles = function() {
-	// On agrandit la page :
-	$('div#wrap').css({width: "700px"});
-	$('article#action').css({width: "700px"});
 	// On affiche le formulaire de selection d'evenements :
 	var HTML = '';
 	HTML += '<h3>Evénements à afficher sur la carte</h3>';
@@ -216,8 +217,10 @@ Carte.prototype.afficherArticles = function() {
 		HTML += '</div>';
 	});
 	HTML += '</div>';
-	HTML += '<button id="validerChangements">Valider les changements</button>';
+	HTML += '<p class="button center">';
+	HTML += '<button id="validerChangements">Valider</button>';
 	HTML += '<button id="choixStyles">Choisir les Styles</button>';
+	HTML += '</p>';
 	$(this.id+'.eve').html(HTML);
 
 	console.log(this.tabArticles)
@@ -230,15 +233,15 @@ Carte.prototype.fonctionsArticles = function () {
 	var that = this;
 	// On ajoute les fonction de tri sur le titre :
 	$(this.id+'.eve' + ' div.title.row div.titre').click(function() {
-		that.changerTri('titre');
+		that.changerTriArticles('titre');
 		that.afficherArticles();
 	}).addClass('clickable');
 	$(this.id+'.eve' + ' div.title.row div.dates').click(function() {
-		that.changerTri('debut_annee');
+		that.changerTriArticles('debut_annee');
 		that.afficherArticles();
 	}).addClass('clickable');
 	$(this.id+'.eve' + ' div.title.row div.position').click(function() {
-		that.changerTri('lat');
+		that.changerTriArticles('lat');
 		that.afficherArticles();
 	}).addClass('clickable');
 
@@ -259,10 +262,7 @@ Carte.prototype.conversionArticles = function() {
 }
 
 Carte.prototype.afficherEvenements = function() {
-	// On agrandit la page :
-	$('div#wrap').css({width: "700px"});
-	$('article#action').css({width: "700px"});
-
+	this.changerTriEvenements('title');
 	// Choix des themes :
 	var HTML_themes = '';
 	HTML_themes += '<select>';
@@ -292,10 +292,11 @@ Carte.prototype.afficherEvenements = function() {
 		HTML += '</div>';
 	});
 	HTML += '</div>';
-	HTML += '<button id="retourArticles" title="Retour au choix des articles">Retour</button>';
-	HTML += '<button id="validerStyles">Valider les changements</button>';
-	HTML += '<button id="razStyles">Annuler les changements</button>';
+	HTML += '<p class="button center">';
+	HTML += '<button id="razStyles">Annuler</button>';
+	HTML += '<button id="validerStyles">Valider</button>';
 	HTML += '<button id="voirCarte">Voir la carte</button>';
+	HTML += '</p>';
 	$(this.id+'.eve').html(HTML);
 
 	// On ajoute les fonctions associées :
@@ -309,25 +310,8 @@ Carte.prototype.afficherEvenements = function() {
 
 Carte.prototype.fonctionsEvenements = function() {
 	var that = this;
-	// On ajoute les fonction de tri sur le titre :
-	$(this.id + ' div.title.row div.titre').click(function() {
-		that.changerTri('titre');
-		that.afficherArticles();
-		that.fonctionsArticles();
-	}).addClass('clickable');
-	$(this.id + ' div.title.row div.dates').click(function() {
-		that.changerTri('debut_annee');
-		that.afficherArticles();
-		that.fonctionsArticles();
-	}).addClass('clickable');
-	$(this.id + ' div.title.row div.position').click(function() {
-		that.changerTri('lat');
-		that.afficherArticles();
-		that.fonctionsArticles();
-	}).addClass('clickable');
 
 	// On ajoute les fonctions de validation :
-	$(this.id + ' #retourArticles').click(function() {that.afficherArticles();});
 	$(this.id + ' #validerStyles').click(function() {
 		aSuppr = that.validerStylesFiltrerEvenementsNonCoches();
 		if (that.idC != -1) {
@@ -440,9 +424,6 @@ Carte.prototype.voirCarte = function(id) {
 		// Ajout du viewer  :
 		$('#wrap').html(data);
 		// On agrandit la page :
-		$('div#wrap').css({width: "100%"});
-		$('article#action').css({width: "100%"});
-		// On defini l'echelle :
 		var echelle = definirEchelle(that.tabEvenements);
 		// On affiche la timeline :
 		afficherCarte(that.tabEvenements, echelle);
@@ -467,6 +448,9 @@ Carte.prototype.retourEdition = function (id) {
 	}).done(function (data) {
 		// Ajout de l'editeur  :
 		$('#wrap').html(data);
+		// On remet la bonne taille :
+		$('div#wrap').css({width: "auto"});
+		$('article#action').css({width: "auto"});
 		// On affiche les evènements :
 		that.afficherEvenements(id);
 	});
