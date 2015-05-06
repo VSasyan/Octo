@@ -1,0 +1,4 @@
+
+Corriger viewer (voir ses propres cartes + divers);
+Ajouter styles auto (+ filtrerDate)
+Lecture / pause ?

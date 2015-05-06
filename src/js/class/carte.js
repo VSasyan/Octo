@@ -261,7 +261,7 @@ Carte.prototype.conversionArticles = function() {
 }
 
 Carte.prototype.afficherEvenements = function() {
-	this.changerTriEvenements('title');
+	//this.changerTriEvenements('title');
 	// Choix des themes :
 	var HTML_themes = '';
 	HTML_themes += '<select>';
@@ -277,7 +277,7 @@ Carte.prototype.afficherEvenements = function() {
 	HTML += '<div class="row title">';
 		HTML += '<div class="keep"></div>';
 		HTML += '<div class="titre">Titre de l\'évènement</div>';
-		//HTML += '<div class="dates">Date</div>';
+		HTML += '<div class="dates">Date</div>';
 		HTML += '<div class="position">Position</div>';
 		HTML += '<div class="theme">Thème</div>';
 	HTML += '</div>';
@@ -285,7 +285,7 @@ Carte.prototype.afficherEvenements = function() {
 		HTML += '<div class="row" id="_' + eve.options.idp + '">';
 			HTML += '<div class="keep"><input type="checkbox" checked="checked" class="checkbox" /></div>';
 			HTML += '<div class="titre"><a href="' + eve.options.url + '" title="' + eve.title + '">' + truncString(eve.title, 40) + '</a></div>';
-			//HTML += '<div class="dates">' + dateToInput(eve) + '</div>';
+			HTML += '<div class="dates">' + dateEvenementToStr(eve) + '</div>';
 			HTML += '<div class="position">(' + Math.round(eve.point.lat) + ',&nbsp;' + Math.round(eve.point.lon) + ')</div>';
 			HTML += '<div class="theme">' + HTML_themes + '</div>';
 		HTML += '</div>';
@@ -405,8 +405,10 @@ Carte.prototype.validerStylesFiltrerEvenementsNonCoches = function(id) {
 	$.each(this.tabEvenements, function (i, eve) {
 		var tps = $(that.id + ' #_' + eve.options.idp);
 		if (tps.find('input.checkbox').prop('checked')) {
-			eve.options.theme = tps.find('select option:selected').val();
-			tab.push(eve);
+			if (bonneDate(eve, that.debut_annee, that.fin_annee)) {
+				eve.options.theme = tps.find('select option:selected').val();
+				tab.push(eve);
+			} else {aSuppr.push(eve.options.ide);}
 		} else {aSuppr.push(eve.options.ide);}
 	});
 	this.tabEvenements = tab;
@@ -423,7 +425,7 @@ Carte.prototype.voirCarte = function(id) {
 		// Ajout du viewer  :
 		$('#wrap').html(data);
 		// On agrandit la page :
-		var echelle = definirEchelle(that.tabEvenements);
+		var echelle = {haut:that.echelle_temps_haut,bas:that.echelle_temps_bas};
 		// On affiche la timeline :
 		afficherCarte(that.tabEvenements, echelle);
 		// On ajoute la fonction d'animation :

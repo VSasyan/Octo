@@ -12,5 +12,4 @@
 	<div id='contenu'>
 		<p>Créer des cartes thématiques et personnalisez-les !</p>
 		<p><a href='index.php?page=unregistered'>Créer une carte en tant qu'anonyme</a></p>
-		<img src="viewer.png" alt="exemple" />
 	</div>

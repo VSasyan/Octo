@@ -56,6 +56,14 @@ function dateToStr(article) {
 	}
 }
 
+function dateEvenementToStr(eve) {
+	var tps1 = /(-?[0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/.exec(eve.start);
+	var tps2 = /(-?[0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/.exec(eve.end);
+	var article = {debut_annee:tps1[1], debut_mois:tps1[2], debut_jour:tps1[3], fin_annee:tps2[1], fin_mois:tps2[2], fin_jour:tps2[3]};
+
+	return dateToStr(article).replace(/1\/1\//g, '');
+}
+
 function printNonNul(n) {
 	if (n != 0) {return n+'/';} else {return '';}
 }
@@ -243,6 +251,12 @@ var sort_by = function(field, reverse, primer){
 //homes.sort(sort_by('price', true, parseInt));
 // Sort by city, case-insensitive, A-Z
 //homes.sort(sort_by('city', false, function(a){return a.toUpperCase()}));
+
+function bonneDate(eve, debut_annee, fin_annee) {
+	var tps1 = /(-?[0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/.exec(eve.start);
+	var tps2 = /(-?[0-9]{1,4})-([0-9]{1,2})-([0-9]{1,2})/.exec(eve.end);
+	return (parseInt(tps1[1]) >= parseInt(debut_annee) && parseInt(tps2[1]) <= parseInt(fin_annee));
+}
 
 // parser JSON fiable :
 JSON.p = function (str, def) {
