@@ -28,11 +28,11 @@
 				<span>Choisissez un portail :</span>
 				<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
 			</p>
-			<p>
+			<p class="titre">
 				<span>Titre de la carte :</span>
 				<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
 			</p>
-			<p>
+			<p class="description">
 				<span>Description :</span>
 				<textarea id="description"  type="text" placeholder="Description de la Carte créée..."></textarea>
 			</p>
@@ -51,54 +51,23 @@
 					<option value="4">Jour</option>
 					<option value="5">Semaine</option>
 					<option value="6">Mois</option>
-					<option value="7" selected="selected">Année</option>
+					<option value="7">Année</option>
 					<option value="8">Décénnie</option>
-					<option value="9">Siècle</option>
+					<option value="9" selected="selected">Siècle</option>
 					<option value="10">Millénaire</option>
 				</select>
 			</p>
 			<p>
 				<span>Echelle de temps précise :</span>
 				<select id="echelle_temps_haut">
-					<option value="4" disabled="disabled">Jour</option>
-					<option value="5" disabled="disabled">Semaine</option>
-					<option value="6" disabled="disabled">Mois</option>
-					<option value="7" disabled="disabled">Année</option>
-					<option value="8" disabled="disabled">Décénnie</option>
-					<option value="9" selected="selected">Siècle</option>
+					<option value="4">Jour</option>
+					<option value="5">Semaine</option>
+					<option value="6">Mois</option>
+					<option value="7" selected="selected">Année</option>
+					<option value="8">Décénnie</option>
+					<option value="9">Siècle</option>
 					<option value="10">Millénaire</option>
 				</select>
-			</p>
-			<p class="verifierPortail">
-				<button id="verifierPortail">Valider</button>
-			</p>
-			<div id="resultat"></div>
-		</div>
-
-<?php
-
-	} elseif ($fct == 'formulaire_portail_unregistered') {
-
-?>
-		
-		<h3>Informations sur la carte</h3>
-		<div class="centrer">
-			<p class="portail">
-				<span>Choisissez un portail :</span>
-				<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
-			</p>
-			<p>
-				<span>Titre de la carte :</span>
-				<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
-			</p>
-			<p>
-				<span>Emprise historique :</span>
-				de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
-				à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
-			</p>
-			<p>
-				<span>Durée de l'animation :</span>
-				<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
 			</p>
 			<p class="verifierPortail">
 				<button id="verifierPortail">Valider</button>
