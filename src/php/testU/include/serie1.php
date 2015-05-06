@@ -1,35 +1,8 @@
 <?php
      
-  
-  function testListePage(){
-  
-      //Liste des pages
-      $app = new App();
+  function comparePage($tab){
       
-      $idPortail = 1;
-      $json = $app->jsonPagesPortail($idPortail);   
-      
-      $app->close();
-      
-      $jsonCompare = "{\"id\":\"1\",\"nom\":\"Portail\",\"lien\":\"lien\",\"tabArticles\":[{\"titre\":\"Bataille de Corbione\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Corbione\",\"id\":\"8449414\",\"lon\":\"0\",\"lat\":\"0\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"8\",\"longueur\":\"8022\",\"debut_annee\":\"-446\",\"debut_mois\":\"0\",\"debut_jour\":\"0\",\"fin_annee\":\"-446\",\"fin_mois\":\"0\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\",\"id\":\"3019915\",\"lon\":\"44.5833\",\"lat\":\"33.1\",\"type_infobox\":\"conflit militaire\",\"nb_langue\":\"10\",\"longueur\":\"5801\",\"debut_annee\":\"363\",\"debut_mois\":\"0\",\"debut_jour\":\"0\",\"fin_annee\":\"363\",\"fin_mois\":\"0\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de Dyrrachium (48 av. J.-C.)\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Dyrrachium_(48_av._J.-C.)\",\"id\":\"732581\",\"lon\":\"0\",\"lat\":\"0\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"18\",\"longueur\":\"4208\",\"debut_annee\":\"-48\",\"debut_mois\":\"7\",\"debut_jour\":\"10\",\"fin_annee\":\"-48\",\"fin_mois\":\"7\",\"fin_jour\":\"10\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de Verdun (1916)\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\",\"id\":\"49111\",\"lon\":\"5.38842\",\"lat\":\"49.1608\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"53\",\"longueur\":\"65825\",\"debut_annee\":\"1916\",\"debut_mois\":\"2\",\"debut_jour\":\"21\",\"fin_annee\":\"1916\",\"fin_mois\":\"12\",\"fin_jour\":\"19\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de la Porte Colline\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_la_Porte_Colline\",\"id\":\"2895689\",\"lon\":\"0\",\"lat\":\"0\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"11\",\"longueur\":\"3098\",\"debut_annee\":\"-82\",\"debut_mois\":\"11\",\"debut_jour\":\"0\",\"fin_annee\":\"-82\",\"fin_mois\":\"11\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"},{\"titre\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\",\"id\":\"56637\",\"lon\":\"4.50028\",\"lat\":\"47.5372\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"37\",\"longueur\":\"82550\",\"debut_annee\":\"-52\",\"debut_mois\":\"0\",\"debut_jour\":\"0\",\"fin_annee\":\"-52\",\"fin_mois\":\"0\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"}]}";
-      
-      return $json==$jsonCompare;
-     
-  }
-  
-
-  function testAjoutPage($tab1, $tab2){
-  
-      //Enregistrer pages
-      $app = new App();
-      
-      $app->savePages(json_encode($tab1)); 
-      
-      $app->close();
-      
-      
-      
-      //Recuperer infos pages, status, liens
+      //Page, status, lien
       require "../conf/database.php";
       
       $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
@@ -48,21 +21,56 @@
       
       
       
-      //Comparaison $r et $tab2
+      //Comparaison $r et $tab
       foreach ($r as $n => $p) {
         foreach ($p as $m =>$q) {
                 
-                if (!is_int($m) && $q!=$tab2[$n][$m]){
+                if (!is_int($m) && $q!=$tab[$n][$m]){
                     return false;
                 }
         }
       }
       return true;
+  }
+  
+  function testListePage($idPortail, $jsonCompare){
+  
+      //Liste des pages
+      $app = new App();
+
+      $json = $app->jsonPagesPortail($idPortail);   
+      
+      $app->close();
+      
+ 
+      return $json==$jsonCompare;
      
+  }
+  
+
+  function testAjoutPage($tab1, $tab2, $compareRetour){
+  
+    //Enregistrer pages
+    $app = new App();
+      
+    $retour = $app->savePages(json_encode($tab1));
+      
+    $app->close();
+      
+      
+      
+    //Recuperer infos pages, status, liens
+    $tabBool[0] = comparePage($tab2);
+     
+      
+    //Retour
+    $tabBool[1] = ($retour == $compareRetour);
+      
+    return $tabBool;
   }
     
   
-  function testListePortail(){
+  function testListePortail($jsonCompare){
   
       //Liste des portails
       $app = new App();
@@ -71,7 +79,6 @@
       
       $app->close();
       
-      $jsonCompare = "[{\"id\":\"1\",\"nom\":\"Portail\",\"lien\":\"lien\"},{\"id\":\"2\",\"nom\":\"Portail\",\"lien\":\"lien\"}]";
       
       return $json==$jsonCompare;
      
@@ -128,12 +135,6 @@
     $sql = "TRUNCATE carte "; 
     $resultat = $mysqli->query($sql);
     
-    $sql = "TRUNCATE carteevenement "; 
-    $resultat = $mysqli->query($sql);
-    
-    $sql = "TRUNCATE checkcount "; 
-    $resultat = $mysqli->query($sql);
-    
     $sql = "TRUNCATE evenement "; 
     $resultat = $mysqli->query($sql);
     
@@ -143,28 +144,13 @@
     $sql = "TRUNCATE page "; 
     $resultat = $mysqli->query($sql);
     
-    $sql = "TRUNCATE pageimportance "; 
-    $resultat = $mysqli->query($sql);
-    
-    $sql = "TRUNCATE pagecompletes "; 
-    $resultat = $mysqli->query($sql);
-    
     $sql = "TRUNCATE portail "; 
-    $resultat = $mysqli->query($sql);
-    
-    $sql = "TRUNCATE portailmax "; 
     $resultat = $mysqli->query($sql);
     
     $sql = "TRUNCATE role "; 
     $resultat = $mysqli->query($sql);
     
     $sql = "TRUNCATE status "; 
-    $resultat = $mysqli->query($sql);
-    
-    $sql = "TRUNCATE test "; 
-    $resultat = $mysqli->query($sql);
-    
-    $sql = "TRUNCATE usersrole "; 
     $resultat = $mysqli->query($sql);
     
     $sql = "TRUNCATE utilisateur "; 
@@ -522,25 +508,49 @@ $tabPortail2 = array(
     );
     
     
+$jsonCompare1 = "{\"id\":\"1\",\"nom\":\"Portail\",\"lien\":\"lien\",\"tabArticles\":[{\"titre\":\"Bataille de Corbione\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Corbione\",\"id\":\"8449414\",\"lon\":\"0\",\"lat\":\"0\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"8\",\"longueur\":\"8022\",\"debut_annee\":\"-446\",\"debut_mois\":\"0\",\"debut_jour\":\"0\",\"fin_annee\":\"-446\",\"fin_mois\":\"0\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\",\"id\":\"3019915\",\"lon\":\"44.5833\",\"lat\":\"33.1\",\"type_infobox\":\"conflit militaire\",\"nb_langue\":\"10\",\"longueur\":\"5801\",\"debut_annee\":\"363\",\"debut_mois\":\"0\",\"debut_jour\":\"0\",\"fin_annee\":\"363\",\"fin_mois\":\"0\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de Dyrrachium (48 av. J.-C.)\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Dyrrachium_(48_av._J.-C.)\",\"id\":\"732581\",\"lon\":\"0\",\"lat\":\"0\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"18\",\"longueur\":\"4208\",\"debut_annee\":\"-48\",\"debut_mois\":\"7\",\"debut_jour\":\"10\",\"fin_annee\":\"-48\",\"fin_mois\":\"7\",\"fin_jour\":\"10\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de Verdun (1916)\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\",\"id\":\"49111\",\"lon\":\"5.38842\",\"lat\":\"49.1608\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"53\",\"longueur\":\"65825\",\"debut_annee\":\"1916\",\"debut_mois\":\"2\",\"debut_jour\":\"21\",\"fin_annee\":\"1916\",\"fin_mois\":\"12\",\"fin_jour\":\"19\",\"distance_portail\":\"2\"},{\"titre\":\"Bataille de la Porte Colline\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_la_Porte_Colline\",\"id\":\"2895689\",\"lon\":\"0\",\"lat\":\"0\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"11\",\"longueur\":\"3098\",\"debut_annee\":\"-82\",\"debut_mois\":\"11\",\"debut_jour\":\"0\",\"fin_annee\":\"-82\",\"fin_mois\":\"11\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"},{\"titre\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\",\"id\":\"56637\",\"lon\":\"4.50028\",\"lat\":\"47.5372\",\"type_infobox\":\"Conflit militaire\",\"nb_langue\":\"37\",\"longueur\":\"82550\",\"debut_annee\":\"-52\",\"debut_mois\":\"0\",\"debut_jour\":\"0\",\"fin_annee\":\"-52\",\"fin_mois\":\"0\",\"fin_jour\":\"0\",\"distance_portail\":\"2\"}]}";
+$jsonCompare2 = "[{\"id\":\"1\",\"nom\":\"Portail\",\"lien\":\"lien\"},{\"id\":\"2\",\"nom\":\"Portail\",\"lien\":\"lien\"}]";
+      
+$compareRetour ="{\"valide\":true}"; 
+
 
  videTables();
  ajoutRoles();
-  
- if(testAjoutPage($tab, $tab))
+ 
+ $tabBool = testAjoutPage($tab, $tab, $compareRetour);
+ if($tabBool==array(0 => true, 1 => true))
     echo "<p class='o'>Ajout de 6 pages</p>";
-  else
+  else {
     echo "<p class='e'>Erreur lors de l'ajout de pages</p>";
+      if ($tabBool[0]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement des données s'est mal déroulé.</p>";
+      if ($tabBool[1]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
+  }
   
- if(testAjoutPage($tab2, $tab))
+
+ $tabBool = testAjoutPage($tab2, $tab, $compareRetour);
+ if($tabBool==array(0 => true, 1 => true))
     echo "<p class='o'>Les pages identiques ne sont pas ajoutees.</p>";
-  else
-    echo "<p class='e'>Erreur lors de l'ajout de pages identiques</p>"; 
-   
- if(testAjoutPage($tab3, $tab33))
+  else {
+    echo "<p class='e'>Erreur lors de l'ajout de pages identiques</p>";
+      if ($tabBool[0]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement des données s'est mal déroulé.</p>";
+      if ($tabBool[1]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
+  }
+ 
+ $tabBool = testAjoutPage($tab3, $tab33, $compareRetour);
+ if($tabBool==array(0 => true, 1 => true))
     echo "<p class='o'>Modification d'une page avec succes</p>";
-  else
+  else {
     echo "<p class='e'>Erreur lors de la modification d'une page</p>";
-    
+      if ($tabBool[0]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement des données s'est mal dÃ©roulÃ©.</p>";
+      if ($tabBool[1]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
+  } 
+
  if(testAjoutPortail($tabPortail))
     echo "<p class='o'>Ajout d'un portail</p>";
   else
@@ -551,12 +561,12 @@ $tabPortail2 = array(
   else
     echo "<p class='e'>Erreur lors de l'ajout du second portail</p>";
      
- if(testListePage())
+ if(testListePage(1, $jsonCompare1))
     echo "<p class='o'>Recuperation des pages du portail d'identifiant 1 avec succès</p>";
   else
     echo "<p class='e'>Erreur lors de la recuperation des pages du portail d'identifiant 1</p>";
   
-  if(testListePortail())
+  if(testListePortail($jsonCompare2))
     echo "<p class='o'>Recuperation des portails avec succès</p>";
   else
     echo "<p class='e'>Erreur lors de la recuperation des portails</p>";

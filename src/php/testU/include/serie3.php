@@ -131,7 +131,7 @@ function testChoixCarte($id, $tabCarte, $tabEvent){
     return true;
 }
 
-function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
+function testModifCarte($jsonModif, $tabCarte, $tabEvent){
     
     //Modification d'une carte
     $app = new App();
@@ -151,7 +151,30 @@ function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
     
     
     //Retour
-    $tabBool[2] = ($retour == $jsonRetour);
+    $tabBool[2] = $retour["valide"];
+    
+    return $tabBool;
+}
+
+function testSuppressionCarte($id, $tabCarte, $tabEvent){
+    
+    //Suppression de la carte d'identifiant id
+    $app = new App();
+     
+    $retour = $app->deleteCarte($id);
+    
+    $app->close();
+    
+    
+    //Carte
+    $tabBool[0] = compareCarte($tabCarte);
+     
+    
+    //Evenement
+    $tabBool[1] = compareEvenement($tabEvent);
+    
+    //Retour
+    $tabBool[2] = $retour["valide"];
     
     return $tabBool;
 }
@@ -194,6 +217,20 @@ function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
       "duree" => 120,
       "debut_annee" => -55,
       "fin_annee" => 2014)
+    );
+ 
+ $tabCarte3 = array(
+  
+    0 => array(
+      "id" => 1,
+      "titre" => "Ma Vraie Rome",
+      "idPortail" => 1,
+      "description" => "petite description",
+      "echelle_temps_haut" => 9,
+      "echelle_temps_bas" => 7,
+      "duree" => 120,
+      "debut_annee" => -800,
+      "fin_annee" => 410)
     );
  
  $tabEvent = array(
@@ -282,6 +319,36 @@ function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
       "idPage" => 56637,
       "idCarte" => 2)
     );
+  
+  $tabEvent3 = array(
+  
+    0 => array(
+      "id" => 1,
+      "start" => "363-1-1",
+      "end" => "363-1-1",
+      "titre" => "Bataille de CtÃ©siphon (363)",
+      "theme" => "batailleGrand",
+      "idPage" => 3019915,
+      "idCarte" => 1),
+     
+    1 => array(
+      "id" => 2,
+      "start" => "1916-2-21",
+      "end" => "1916-12-19",
+      "titre" => "Bataille de Verdun (1916)",
+      "theme" => "defaut",
+      "idPage" => 49111,
+      "idCarte" => 1),
+     
+    2 => array(
+      "id" => 3,
+      "start" => "-52-1-1",
+      "end" => "-52-1-1",
+      "titre" => "SiÃ¨ge d'AlÃ©sia",
+      "theme" => "defaut",
+      "idPage" => 56637,
+      "idCarte" => 1), 
+    );
  
  $tabEventjson = array(
   
@@ -335,14 +402,15 @@ function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
     );
  
  
- $jsonCreate =  "{\"titre\":\"titreCarte\",\"idU\":\"1\",\"idP\":\"1\",\"description\":\"decrit\",\"echelle_temps_haut\":\"NULL\", \"echelle_temps_bas\":\"NULL\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"duree\":\"120\"}";
- $jsonModif = "";
  
+ $jsonCreate =  "{\"titre\":\"titreCarte\",\"idU\":\"1\",\"idP\":\"1\",\"description\":\"decrit\",\"echelle_temps_haut\":\"NULL\", \"echelle_temps_bas\":\"NULL\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"duree\":\"120\"}";
+ $jsonModif1 = "{\"carte\": {\"idCarte\":1, \"titre\": \"Ma Vraie Rome\", \"description\": \"petite description\", \"debut_annee\": \"-800\", \"echelle_temps_haut\": \"9\", \"echelle_temps_bas\": \"7\", \"fin_annee\": \"410\", \"duree\": \"120\"}, \"majEve\": {\"tabEvenements\": [{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"aSuppr\": [\"1565\", \"1566\", \"1567\", \"1568\", \"1569\", \"1570\"]}}";
+ $jsonModif2 = "{\"carte\": {\"idCarte\":1, \"titre\": \"Ma Vraie Rome\", \"description\": \"petite description\", \"debut_annee\": \"-800\", \"echelle_temps_haut\": \"9\", \"echelle_temps_bas\": \"7\", \"fin_annee\": \"410\", \"duree\": \"120\"}, \"majEve\": {\"tabEvenements\": [{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"batailleGrand\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"aSuppr\": [\"1565\", \"1566\", \"1567\", \"1568\", \"1569\", \"1570\"]}}";
  $jsonCompare ="[{\"id\":\"1\",\"titre\":\"titreCarte\",\"description\":\"decrit\"},{\"id\":\"2\",\"titre\":\"titreCarte\",\"description\":\"decrit\"}]";
  
  $jsonRetour1 = "{\"id\":\"1\",\"titre\":\"titreCarte\",\"description\":\"decrit\",\"echelle_temps_haut\":null,\"echelle_temps_bas\":null,\"duree\":\"120\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"tabEvenements\":[{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"valide\":true}";
  $jsonRetour2 = "{\"id\":\"2\",\"titre\":\"titreCarte\",\"description\":\"decrit\",\"echelle_temps_haut\":null,\"echelle_temps_bas\":null,\"duree\":\"120\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"tabEvenements\":[{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"3019915\",\"ide\":\"4\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"5\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"6\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"valide\":true}";
- $jsonRetour3 = ""; 
+ 
  
  
   
@@ -386,7 +454,21 @@ function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
     echo "<p class='e'>Erreur lors de la recuperation de la carte d'identifiant 1</p>";
   
   
- $tabBool = testModifCarte($jsonModif,$tabCarte3,$tabEvent3,$jsonRetour3);
+ $tabBool = testSuppressionCarte(2,$tabCarte,$tabEvent);
+ if($tabBool==array(0 => true, 1 => true, 2 => true))
+    echo "<p class='o'>Suppression de la carte d'identifiant 2 avec succès</p>";
+  else {
+    echo "<p class='e'>Erreur lors de la suppression de la carte d'identifiant 2</p>";
+      if ($tabBool[0]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La suppression de la carte s'est mal déroulé.</p>";
+      if ($tabBool[1]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La suppression des evenements s'est mal déroulé.</p>";
+      if ($tabBool[2]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
+  }
+  
+  
+ $tabBool = testModifCarte($jsonModif1,$tabCarte3,$tabEvent);
  if($tabBool==array(0 => true, 1 => true, 2 => true))
     echo "<p class='o'>Modification de la carte d'identifiant 1 avec succès</p>";
   else {
@@ -398,3 +480,19 @@ function testModifCarte($jsonModif, $tabCarte, $tabEvent, $jsonRetour){
       if ($tabBool[2]==false)
           echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
   }
+  
+ $tabBool = testModifCarte($jsonModif2,$tabCarte3,$tabEvent3);
+ if($tabBool==array(0 => true, 1 => true, 2 => true))
+    echo "<p class='o'>Modification du theme d'un evenement de la carte d'identifiant 1</p>";
+  else {
+    echo "<p class='e'>Erreur lors de la modification du theme d'un evenement de la carte d'identifiant 1</p>";
+      if ($tabBool[0]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement de la carte s'est mal déroulé.</p>";
+      if ($tabBool[1]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement des evenements s'est mal déroulé.</p>";
+      if ($tabBool[2]==false)
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
+  }
+  
+  
+

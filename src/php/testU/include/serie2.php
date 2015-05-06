@@ -145,7 +145,7 @@ $json3 = "{\"login\":\"login2\",\"mdp\":\"password1\"}";
       if ($tabBool[0]==false)
           echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement de l'utilisateur s'est mal déroulé.</p>";
       if ($tabBool[1]==false)
-          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'e retour n'est pas celui attendu.</p>";
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
   }
   
 
@@ -156,6 +156,7 @@ $json3 = "{\"login\":\"login2\",\"mdp\":\"password1\"}";
     echo "<p class='e'>Erreur lors de l'authentification de l'utilisateur</p>";
   
   
+  
  $tabBool = testAjoutUtilisateur($json2,$tabUsers,$tabRetourFalse);
  if($tabBool==array(0 => true, 1 => true))
     echo "<p class='o'>Un utilisateur n'est pas ajouté car le login est déjà attribué</p>";
@@ -164,8 +165,9 @@ $json3 = "{\"login\":\"login2\",\"mdp\":\"password1\"}";
       if ($tabBool[0]==false)
           echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement de l'utilisateur s'est mal déroulé.</p>";
       if ($tabBool[1]==false)
-          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'e retour n'est pas celui attendu.</p>";
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
   }
+  
   
  $tabBool = testAjoutUtilisateur($json3,$tabUsers2,$tabRetour2);
  if($tabBool==array(0 => true, 1 => true))
@@ -175,5 +177,5 @@ $json3 = "{\"login\":\"login2\",\"mdp\":\"password1\"}";
       if ($tabBool[0]==false)
           echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'enregistrement de l'utilisateur s'est mal déroulé.</p>";
       if ($tabBool[1]==false)
-          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L'e retour n'est pas celui attendu.</p>";
+          echo "<p class='e'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Le retour n'est pas celui attendu.</p>";
   }
