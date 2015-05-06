@@ -109,6 +109,7 @@ class App {
         $idCarte = $this->getConnect()->addQuery($carte->getCreateQuery());
         $p = $this->listPagesPortail($vals->idP, true); // true = je retire les elements non geolocalises et non dates
         $err = $this->getConnect()->multipleQuery($p->getAllEventsQuery($idCarte));
+
         $carte = [];
         if ($err) {
             $carte["valide"] = FALSE;
@@ -154,7 +155,7 @@ class App {
             $e["end"]          = $event["end"];
             $e["title"]        = $event["title"];
             $e["point"]        = $point;
-            $e["options"]       = $option;
+            $e["options"]      = $option;
             $carte["tabEvenements"][] = $e;
         }
         
@@ -167,6 +168,39 @@ class App {
         $sql = "SELECT id, titre, description FROM carte WHERE idUtilisateur=".$idUser;
         $res = $this->getConnect()->query($sql);
         return json_encode($res);
+    }
+    
+    public function updateCarte($json){
+        $vals = json_decode($json);
+        $carte = $vals->carte;
+        $sql = "";
+        $c = new Carte($carte->titre, 0, 0, $carte->description, $carte->debut_annee, $carte->fin_annee,
+                $carte->duree, $carte->echelle_temps_haut, $carte->echelle_temps_bas);
+        $sql = $c->getUpdateQuery($carte->idCarte)."\n";
+
+        
+        foreach ($vals->majEve->tabEvenements as $event) {
+            $st = explode("-", $event->start);
+            $en = explode("-", $event->end);
+            $e = new Evenement($st[0], $st[1], $st[2], $en[0], $en[1], $en[2],
+                $event->title, $event->options->theme, $carte->idCarte, $event->options->idp);
+            $sql .= $e->getUpdateQuery($event->options->ide)."\n";
+        }
+        
+        if(count($vals->majEve->aSuppr)>0)
+            $sql .= "DELETE FROM evenement WHERE ";
+        foreach ($vals->majEve->aSuppr as $ide) {
+            $sql .= "id=".$ide." OR ";
+        }
+        $sql = substr($sql, 0, -4).";";
+        
+        $err = $this->getConnect()->multipleQuery($sql);
+        if ($err) {
+            $r["valide"] = FALSE;
+        } else {
+            $r["valide"] = TRUE;
+        }
+        return json_encode($r);
     }
     
     public function getUses() {

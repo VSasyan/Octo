@@ -40,4 +40,16 @@ class Carte {
         .$this->duree.", $this->echelle_temps_haut, $this->echelle_temps_bas);";
     }
     
+    function getUpdateQuery($idCarte){
+        return "UPDATE carte SET "
+            . "titre = \"".$this->titre."\", "
+            . "description = \"".$this->description."\", "
+            . "debut_annee = ".$this->debut_annee.", "
+            . "fin_annee = ".$this->fin_annee.", "
+            . "duree = ".$this->duree.", "
+            . "echelle_temps_haut = ".$this->echelle_temps_haut.", "
+            . "echelle_temps_bas = ".$this->echelle_temps_bas." "
+            . "WHERE id=".$idCarte.";";
+    }
+    
 }
