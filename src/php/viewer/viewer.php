@@ -12,11 +12,14 @@
 		<img src="../image/load.gif" alt="Chargement en cours..." title="Chargement en cours...">
 	</div>
 	<div id="top">
-		<div id="licence"><a href="#viewSource">Source</a></div>
-		<div id="anim" class="center">
-			<input type="number" id="duration" value="30000"/>
-			<button id="animate">Animation !!!</button>
-			<button id="edition">Retour à l'édition</button>
+		<div id="lecteur">
+			<span id="edition" title="Retour à l'édition"><i class="fa fa-arrow-left"></i></span>
+			<div id="licence">
+				<a href="#viewSource" title="Voir les sources"><i class="fa fa-cog"></i></a>
+			</div>
+			<div id="anim">
+				<span id="animate" title="Animation"><i class="fa fa-play"></i></span>
+			</div>
 		</div>
 	</div>
 </article>
