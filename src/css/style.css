@@ -224,6 +224,19 @@ div#top {
 	text-align: center;
 	margin-top: -25px;
 	transition: all 0.42s ease-in-out 0s;
+	opacity: 0;
+}
+
+body.tm div#top {
+	animation-name: voirTop;
+	animation-duration: 2.2s;
+	opacity: 1;
+}
+
+@keyframes voirTop {
+	from {opacity: 0;}
+	30% {opacity: 0;}
+	to {opacity: 1;}
 }
 
 div#top #lecteur {
