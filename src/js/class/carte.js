@@ -80,7 +80,6 @@ Carte.prototype.ajouterCarteServeur = function(portail) {
 			fin_annee : this.fin_annee,
 			duree : this.duree
 		};
-		console.log(json)
 		// Initialisation de la requete :
 		$(this.ajax).html("<p>Création de la Carte...</p>" + html_chargement);
 		var lien = "script.php?c=add";
@@ -378,7 +377,7 @@ Carte.prototype.sauverSurServeur = function() {
 		type: "POST",
 		async: false,
 		url : lien,
-		data : myData,
+		data : {json: JSON.stringify(myData)},
 		success : function(data) {
 			retour = JSON.p(data, retour);
 		}
