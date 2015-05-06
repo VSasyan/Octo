@@ -127,10 +127,12 @@
 			</div>
 			<div id="top">
 				<div id="lecteur">
-					<a id="edition" href="#" title="Retour à l'édition"><i class="fa fa-arrow-left"></i></a>
-					<div id="licence"><a href="#viewSource" title="Voir les sources"><i class="fa fa-cog"></i></a></div>
+					<span id="edition" title="Retour à l'édition"><i class="fa fa-arrow-left"></i></span>
+					<div id="licence">
+						<a href="#viewSource" title="Voir les sources"><i class="fa fa-cog"></i></a>
+					</div>
 					<div id="anim">
-						<a id="animate" href="#" title="Animation"><i class="fa fa-play"></i></a>
+						<span id="animate" title="Animation"><i class="fa fa-play"></i></span>
 					</div>
 				</div>
 			</div>

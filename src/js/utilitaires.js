@@ -135,12 +135,13 @@ function definirEchelle(eve) {
 function afficherCarte(eve, echelle) {
 	// On passe en mode carte :
 	$('#action').removeClass('loading').addClass('tm');
+	$('body').addClass('tm');
 
 	// On change la hauteur de la carte pour l'adapter à l'ecran :
 	adapterHauteur();
 	$(window).resize(function () {adapterHauteur();});
 	// Et la largeur de la page :
-	$('div#wrap, article#action').css({width: "100%",padding:"0",margin:'0'});
+	//$('div#wrap, article#action').css({width: "100%",padding:"0",margin:'0'});
 
 	// On met à jour les sources :
 	var HTML = '';
@@ -160,43 +161,45 @@ function afficherCarte(eve, echelle) {
 	chargerThemes(themes.themes);
 
 	// On lance la time map :
-	tm = TimeMap.init({
-		mapId: "map",			   // Id of map div element (required)
-		timelineId: "timeline",	 // Id of timeline div element (required) 
-		options: {
-			eventIconPath: "../js/images/"
-		},
-		datasets: [
-			{
-				id: "cicerow",
-				title: "JSON",
-				type: "basic",
-				options: {
-					//items: evenements
-					items: eve
-				}
-			}
-		],
-		bandInfo: [
-			{
-			   width:		  "85%", 
-			   intervalUnit:   echelle.haut, 
-			   intervalPixels: 210
+	setTimeout(function() {
+		tm = TimeMap.init({
+			mapId: "map",			   // Id of map div element (required)
+			timelineId: "timeline",	 // Id of timeline div element (required) 
+			options: {
+				eventIconPath: "../js/images/"
 			},
-			{
-			   width:		  "15%", 
-			   intervalUnit:   echelle.bas, 
-			   intervalPixels: 150,
-			   showEventText:  false,
-			   trackHeight:	0.2,
-			   trackGap:	   0.2
-			}
-		]
-	});
+			datasets: [
+				{
+					id: "cicerow",
+					title: "JSON",
+					type: "basic",
+					options: {
+						//items: evenements
+						items: eve
+					}
+				}
+			],
+			bandInfo: [
+				{
+				   width:		  "85%", 
+				   intervalUnit:   echelle.haut, 
+				   intervalPixels: 210
+				},
+				{
+				   width:		  "15%", 
+				   intervalUnit:   echelle.bas, 
+				   intervalPixels: 150,
+				   showEventText:  false,
+				   trackHeight:	0.2,
+				   trackGap:	   0.2
+				}
+			]
+		});
+	},700);
 	
 	// On scroll jusqu'à la timeline :
 	$('html, body').animate({
-		scrollTop: $('#timeline').offset().top
+		scrollTop: $('#action').offset().top
 	}, 'fast');
 }
 

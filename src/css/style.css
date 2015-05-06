@@ -19,7 +19,7 @@ div.row>div {
 }
 
 body {
-	background-color: #FFFFF7;
+	background-color: #EDEDEE;
 	font-family: "Roboto";
 }
 
@@ -118,6 +118,9 @@ div#wrap {
 	background-color: #FFF;
 	padding: 25px;
 	margin-bottom: 50px;
+}
+article#action, div#wrap {
+	transition: all 0.6s ease-in-out 0s;
 }
 /**
 	FIN : STYLE DU WRAP
@@ -223,10 +226,13 @@ div#top #lecteur {
 	transition: all 0.42s ease-in-out 0s;
 }
 
-div#top #lecteur a {
+div#top #lecteur a, div#top #lecteur span {
 	color:#FFF;
 	font-size: 20px;
 	transition: all 0.42s ease-in-out 0s;
+	cursor:pointer;
+	padding-right: 5px;
+	padding-left: 5px;
 }
 
 div#top:hover #lecteur {
@@ -242,9 +248,15 @@ div#top:hover #lecteur {
 	height: 50px;
 }
 
-div#top #lecteur:hover a {
+div#top #lecteur:hover a, div#top #lecteur:hover span {
 	color:#FFF;
 	font-size: 40px;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+div#top #lecteur a:hover, div#top #lecteur span:hover {
+	color:#2C2DEE;
 }
 
 div#top>#lecteur>div {
@@ -375,6 +387,12 @@ div.custominfostyle {
 	text-decoration:none;
 	text-align:center;
 	font-weight:bold;
+}
+
+body.tm div#wrap, body.tm article#action {
+	width:100%;
+	padding:0;
+	margin:auto;
 }
 
 #viewSource:target, #viewSource:target + #cover{ display:block; opacity:2; }

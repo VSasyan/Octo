@@ -428,7 +428,7 @@ Carte.prototype.voirCarte = function(id) {
 		afficherCarte(that.tabEvenements, echelle);
 		// On ajoute la fonction d'animation :
 		$('#animate').click(function () {
-			var duration = parseInt($('#duration').val());
+			var duration = parseInt(that.duree*1000);
 			tm.animate(duration);
 		});
 		// Et la fonction Retour à l'edition :
@@ -441,6 +441,7 @@ Carte.prototype.voirCarte = function(id) {
 
 Carte.prototype.retourEdition = function (id) {
 	var that = this;
+	$('body').removeClass('tm');
 	$('#wrap').html('Chargement de \'interface d\'édition...' + html_chargement);
 	$.ajax({
 		url : 'personnaliser/ajax.php?fct=unregistered'
