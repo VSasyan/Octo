@@ -64,10 +64,26 @@ function chargerCartes(type) {
 		var reponse = JSON.p(data, []);
 		var HTML = '<ul id="cartes">';
 		$.each(reponse, function(i, elm) {
-			HTML += '<li><a href="index.php?page=personnaliser&type='+type+'&idC='+elm.id+'">'+elm.titre+'</li>'; // A modifier quand defini
+			HTML += '<li><a href="index.php?page=personnaliser&type='+type+'&idC='+elm.id+'">'+elm.titre+'</a><span class="deleteCarte" data-idc="'+elm.id+'" title="Supprimer la carte"><i class="fa fa-times"></i></span></li>'; // A modifier quand defini
 		});
-		HTML += '<li id="new"><a href="index.php?type=creer">Nouvelle carte...</a></li>';
+		HTML += '<li id="new"><a href="index.php?page=personnaliser&type=creer">Nouvelle carte...</a></li>';
 		HTML += '</ul>';
-		$('#ajax').html(HTML);console.log(HTML);
+		$('#ajax').html(HTML);
+
+		// Ajout de la fonction de suppression de la carte :
+		$('span.deleteCarte').click(function() {
+			var reponse = {valide:false, message:'Retour invalide !'};
+			$.ajax({
+				type : 'POST',
+				url: 'script.php?c=del',
+				data : {idC: $(this).data('idc')},
+				async : false
+			}).done(function(data) {
+				reponse = JSON.p(data,reponse);
+			});
+			if (reponse.valide) {
+				$(this).html('Carte supprimée avec succès.');
+			} else {$(this).html(retour.message);}
+		});
 	});
 }

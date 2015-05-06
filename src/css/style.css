@@ -155,6 +155,18 @@ div.form div.centrer {
 	width: 600px;
 }
 
+span.deleteCarte {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	font-size: 18px;
+	margin-left: 8px;
+	cursor: pointer;
+}
+span.deleteCarte:hover {
+	color:red;
+}
+
 article#action #loading {display: none;}
 article#action.loading>* {display: none;}
 article#action.loading div#loading {display: block !important;}
@@ -272,11 +284,6 @@ div#top #licence {
 
 div#top #licence span:hover {
 	text-decoration: underline;
-}
-
-
-div, p {
-	font-family: Verdana, Arial, sans-serif;
 }
 
 p.content {

@@ -52,7 +52,7 @@
 					<option value="5">Semaine</option>
 					<option value="6">Mois</option>
 					<option value="7" selected="selected">Année</option>
-					<option value="8">Décénie</option>
+					<option value="8">Décénnie</option>
 					<option value="9">Siècle</option>
 					<option value="10">Millénaire</option>
 				</select>
@@ -64,7 +64,7 @@
 					<option value="5" disabled="disabled">Semaine</option>
 					<option value="6" disabled="disabled">Mois</option>
 					<option value="7" disabled="disabled">Année</option>
-					<option value="8" disabled="disabled">Décénie</option>
+					<option value="8" disabled="disabled">Décénnie</option>
 					<option value="9" selected="selected">Siècle</option>
 					<option value="10">Millénaire</option>
 				</select>
