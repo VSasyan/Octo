@@ -22,28 +22,28 @@
 	} elseif ($fct == 'formulaire_portail') {
 
 ?>
-
-		<p>
+		<h3>Informations sur la carte</h3>
+		<p class="portail">
 			<span>Choisissez un portail :</span>
 			<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
 		</p>
 		<p>
 			<span>Titre de la carte :</span>
 			<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
-		<p>
+		</p>
 		<p>
 			<span>Description :</span>
 			<textarea id="description"  type="text" placeholder="Description de la Carte créée..."></textarea>
-		<p>
+		</p>
 		<p>
 			<span>Emprise historique :</span>
 			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
 			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
-		<p>
+		</p>
 		<p>
 			<span>Durée de l'animation :</span>
 			<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
-		<p>
+		</p>
 		<p>
 			<span>Echelle de temps globale :</span>
 			<select id="echelle_temps_bas">
@@ -55,7 +55,7 @@
 				<option value="9">Siècle</option>
 				<option value="10">Millénaire</option>
 			</select>
-		<p>
+		</p>
 		<p>
 			<span>Echelle de temps précise :</span>
 			<select id="echelle_temps_haut">
@@ -67,8 +67,8 @@
 				<option value="9" selected="selected">Siècle</option>
 				<option value="10">Millénaire</option>
 			</select>
-		<p>
 		</p>
+		<p class="verifierPortail">
 			<button id="verifierPortail">Valider</button>
 		</p>
 		<div id="resultat"></div>
@@ -78,25 +78,26 @@
 	} elseif ($fct == 'formulaire_portail_unregistered') {
 
 ?>
-
-		<p>
+		
+		<h3>Informations sur la carte</h3>
+		<p class="portail">
 			<span>Choisissez un portail :</span>
 			<input value="" id="portail"  type="text" pattern="Portail:.*" placeholder="Entrez le nom du portail avec le préfixe"/>
 		</p>
 		<p>
 			<span>Titre de la carte :</span>
 			<input value="" id="titre"  type="text" placeholder="Entrez le titre de la carte à créer"/>
-		<p>
+		</p>
 		<p>
 			<span>Emprise historique :</span>
 			de <input id="debut_annee"  type="number" placeholder="Année de début" value="-9999" />
 			à <input id="fin_annee"  type="number" placeholder="Année de fin" value="9999" />
-		<p>
+		</p>
 		<p>
 			<span>Durée de l'animation :</span>
 			<input value="120" id="duree"  type="text" placeholder="Durée en secondes" title="Durée de l'animation en seconde"/>
-		<p>
 		</p>
+		<p class="verifierPortail">
 			<button id="verifierPortail">Valider</button>
 		</p>
 		<div id="resultat"></div>

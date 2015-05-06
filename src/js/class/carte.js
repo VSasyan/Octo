@@ -1,4 +1,5 @@
-function Carte() {
+function Carte(id) {
+	this.id = '#'+id;
 	this.trierSelon = '';
 	this.tabArticles = [];
 	this.tabEvenements = [];
@@ -19,6 +20,48 @@ Carte.prototype.initialiserCarte = function(data) {
 	$.each(aCopier, function(i, name) {
 		if (data.hasOwnProperty(name)) {that[name] = data[name];}
 	});
+	console.log(this.titre, this)
+}
+
+Carte.prototype.verifierPortail = function(envoyerSurServeur) {
+	var that = this;
+	$('#resultat').html('<p>Vérifications en cours...</p>');
+	// On vérifie que le portail est dans la liste :
+	var portail = false;
+	var nom = $('#portail').val();
+	$.each(portails, function(i,elm) {if (elm.nom.toLowerCase() == nom.toLowerCase()) {portail = elm;}});
+	if (portail === false) {
+		// On charge le message d'erreur :
+		$(that.id).html(html_chargement);
+		$.ajax({
+			url: 'personnaliser/ajax.php?fct=erreur_portail&portail='+encodeURIComponent(nom)
+		}).done(function(data) {
+			$(that.id).html(data);
+			$('#nom').val(nom);
+		});
+	} else {
+		// On crée la carte :
+		var dataCarte = {
+			debut_annee : $('#debut_annee').val(),
+			fin_annee : $('#fin_annee').val(),
+			titre : $('#titre').val(),
+			description : $('#description').val(),
+			duree : $('#duree').val(),
+			echelle_temps_bas : $('#echelle_temps_bas').val(),
+			echelle_temps_haut : $('#echelle_temps_haut').val(),
+		};
+		that.initialiserCarte(dataCarte);
+		if (envoyerSurServeur) {
+			if (!carte.ajouterCarteServeur(portail)) {
+			$(that.id).html('<p>Impossible d\'ajouter la carte sur le serveur</p>');
+			}
+		} else {
+			that.recupererArticles(portail);
+			that.filtrerArticles();
+			that.filtrerArticlesDate();
+			that.afficherArticles();
+		}
+	}
 }
 
 Carte.prototype.ajouterCarteServeur = function(portail) {
@@ -37,8 +80,9 @@ Carte.prototype.ajouterCarteServeur = function(portail) {
 			fin_annee : this.fin_annee,
 			duree : this.duree
 		};
+		console.log(json)
 		// Initialisation de la requete :
-		$('#ajax').html("<p>Création de la Carte...</p>" + html_chargement);
+		$(this.ajax).html("<p>Création de la Carte...</p>" + html_chargement);
 		var lien = "script.php?c=add";
 		var myData = 'json=' + encodeURIComponent(JSON.stringify(json));
 		var retour = {valide:false, message:'<p>Retour invalide !</p>'};
@@ -54,15 +98,15 @@ Carte.prototype.ajouterCarteServeur = function(portail) {
 		});
 		if (retour.valide) {
 			this.envoyee = true;
-			$('#ajax').html('<p>Carte n°' + retour.id + ' créée avec succès !</p>');
-			$('#ajax').append('<p><a href="index.php?page=personnaliser&type=perso&idC='+retour.id+'">Personnaliser la carte</a></p>');
+			$(this.id).html('<p>Carte n°' + retour.id + ' créée avec succès !</p>');
+			$(this.id).append('<p><a href="index.php?page=personnaliser&type=perso&idC='+retour.id+'">Personnaliser la carte</a></p>');
 			return true;
 		} else {
-			$('#ajax').html(retour.message);
+			$(this.id).html(retour.message);
 			return false;
 		}
 	} else {
-		$('#ajax').html('<p>Utilisateur invalide !</p>');
+		$(this.id).html('<p>Utilisateur invalide !</p>');
 		return false;
 	}
 }
@@ -106,6 +150,7 @@ Carte.prototype.recupererArticles = function(portail) {
 	});
 	this.tabArticles = tab;
 	this.changerTri('debut_annee');
+	$('#ajax.form').html('');
 };
 
 Carte.prototype.filtrerArticles = function() {
@@ -131,10 +176,11 @@ Carte.prototype.filtrerArticlesDate = function() {
 	this.tabArticles = tab;
 };
 
-Carte.prototype.filtrerArticlesNonCoches = function(id) {
+Carte.prototype.filtrerArticlesNonCoches = function() {
+	var that = this;
 	var tab = [];
 	$.each(this.tabArticles, function (i, article) {
-		if ($('#'+id + ' #_' + article.id).prop('checked')) {
+		if ($(that.id + ' #_' + article.id).prop('checked')) {
 			tab.push(article);
 		}
 	});
@@ -147,13 +193,13 @@ Carte.prototype.changerTri = function(trierSelon) {
 	this.tabEvenements.sort(sort_by(this.trierSelon, (this.trierSelon.search(/-/) != -1), false));
 }
 
-Carte.prototype.afficherArticles = function(id) {
+Carte.prototype.afficherArticles = function() {
 	// On agrandit la page :
 	$('div#wrap').css({width: "700px"});
 	$('article#action').css({width: "700px"});
 	// On affiche le formulaire de selection d'evenements :
 	var HTML = '';
-	HTML += '<p>Décocher les événements à supprimer :</p>';
+	HTML += '<h3>Evénements à afficher sur la carte</h3>';
 	HTML += '<div class="table">';
 	HTML += '<div class="row title">';
 		HTML += '<div class="keep"></div>';
@@ -172,45 +218,47 @@ Carte.prototype.afficherArticles = function(id) {
 	HTML += '</div>';
 	HTML += '<button id="validerChangements">Valider les changements</button>';
 	HTML += '<button id="choixStyles">Choisir les Styles</button>';
-	$('#'+id).html(HTML);
+	$(this.id+'.eve').html(HTML);
+
+	console.log(this.tabArticles)
 
 	// On ajoute les fonctions associées :
-	this.fonctionsArticles(id);
+	this.fonctionsArticles();
 };
 
-Carte.prototype.fonctionsArticles = function (id) {
+Carte.prototype.fonctionsArticles = function () {
 	var that = this;
 	// On ajoute les fonction de tri sur le titre :
-	$('#'+id + ' div.title.row div.titre').click(function() {
+	$(this.id+'.eve' + ' div.title.row div.titre').click(function() {
 		that.changerTri('titre');
-		that.afficherArticles(id);
+		that.afficherArticles();
 	}).addClass('clickable');
-	$('#'+id + ' div.title.row div.dates').click(function() {
+	$(this.id+'.eve' + ' div.title.row div.dates').click(function() {
 		that.changerTri('debut_annee');
-		that.afficherArticles(id);
+		that.afficherArticles();
 	}).addClass('clickable');
-	$('#'+id + ' div.title.row div.position').click(function() {
+	$(this.id+'.eve' + ' div.title.row div.position').click(function() {
 		that.changerTri('lat');
-		that.afficherArticles(id);
+		that.afficherArticles();
 	}).addClass('clickable');
 
 	// On ajoute les fonctions de validation :
-	$('#'+id + ' #validerChangements').click(function() {
-		that.filtrerArticlesNonCoches(id);
-		that.afficherArticles(id);
+	$(this.id+'.eve' + ' #validerChangements').click(function() {
+		that.filtrerArticlesNonCoches();
+		that.afficherArticles();
 	});
-	$('#'+id + ' #choixStyles').click(function() {
+	$(this.id+'.eve' + ' #choixStyles').click(function() {
 		// On convertit tous les articles en evènements :
 		that.conversionArticles();
-		that.afficherEvenements(id);
-	});	
+		that.afficherEvenements();
+	});
 };
 
 Carte.prototype.conversionArticles = function() {
 	this.tabEvenements = conversionArticles(this.tabArticles);
 }
 
-Carte.prototype.afficherEvenements = function(id) {
+Carte.prototype.afficherEvenements = function() {
 	// On agrandit la page :
 	$('div#wrap').css({width: "700px"});
 	$('article#action').css({width: "700px"});
@@ -225,7 +273,7 @@ Carte.prototype.afficherEvenements = function(id) {
 
 	// On affiche le formulaire de selection de styles :
 	var HTML = '';
-	HTML += '<p>Choississez le thèmes des évènements :</p>';
+	HTML += '<h3>Choississez le thèmes des évènements</h3>';
 	HTML += '<div class="table">';
 	HTML += '<div class="row title">';
 		HTML += '<div class="keep"></div>';
@@ -248,45 +296,79 @@ Carte.prototype.afficherEvenements = function(id) {
 	HTML += '<button id="validerStyles">Valider les changements</button>';
 	HTML += '<button id="razStyles">Annuler les changements</button>';
 	HTML += '<button id="voirCarte">Voir la carte</button>';
-	$('#'+id).html(HTML);
+	$(this.id+'.eve').html(HTML);
 
 	// On ajoute les fonctions associées :
-	this.fonctionsEvenements(id);
-	this.razStyles(id);
+	this.fonctionsEvenements();
+	this.razStyles();
+	if (this.idC != -1) {
+		// La carte est enregistrée, on affiche aussi le formulaire :
+		this.afficherFormulaire(false, true);
+	}
 }
 
-Carte.prototype.fonctionsEvenements = function(id) {
+Carte.prototype.fonctionsEvenements = function() {
 	var that = this;
 	// On ajoute les fonction de tri sur le titre :
-	$('#'+id + ' div.title.row div.titre').click(function() {
+	$(this.id + ' div.title.row div.titre').click(function() {
 		that.changerTri('titre');
-		that.afficherArticles(id);
-		that.fonctionsArticles(id);
+		that.afficherArticles();
+		that.fonctionsArticles();
 	}).addClass('clickable');
-	$('#'+id + ' div.title.row div.dates').click(function() {
+	$(this.id + ' div.title.row div.dates').click(function() {
 		that.changerTri('debut_annee');
-		that.afficherArticles(id);
-		that.fonctionsArticles(id);
+		that.afficherArticles();
+		that.fonctionsArticles();
 	}).addClass('clickable');
-	$('#'+id + ' div.title.row div.position').click(function() {
+	$(this.id + ' div.title.row div.position').click(function() {
 		that.changerTri('lat');
-		that.afficherArticles(id);
-		that.fonctionsArticles(id);
+		that.afficherArticles();
+		that.fonctionsArticles();
 	}).addClass('clickable');
 
 	// On ajoute les fonctions de validation :
-	$('#'+id + ' #retourArticles').click(function() {that.afficherArticles(id);});
-	$('#'+id + ' #validerStyles').click(function() {
-		aSuppr = that.validerStylesFiltrerEvenementsNonCoches(id);
-		console.log(that);
+	$(this.id + ' #retourArticles').click(function() {that.afficherArticles();});
+	$(this.id + ' #validerStyles').click(function() {
+		aSuppr = that.validerStylesFiltrerEvenementsNonCoches();
 		if (that.idC != -1) {
 			// La carte est enregistrée, il faut donc la mettre à jour sur le serveur :
 			that.sauverSurServeur();
 		}
-		that.afficherEvenements(id);
+		that.afficherEvenements();
 	});
-	$('#'+id + ' #razStyles').click(function() {that.razStyles(id);});
-	$('#'+id + ' #voirCarte').click(function() {that.voirCarte(id);});
+	$(this.id + ' #razStyles').click(function() {that.razStyles();});
+	$(this.id + ' #voirCarte').click(function() {that.voirCarte();});
+}
+
+Carte.prototype.afficherFormulaire = function(changerPortail, envoyerSurServeur) {
+	var changerPortail = changerPortail || false;
+	var envoyerSurServeur = envoyerSurServeur || false;
+	var that = this;
+
+	$.ajax({
+		url : 'personnaliser/ajax.php?fct=formulaire_portail'+(envoyerSurServeur ? '' : '_unregistered')
+	}).done(function (data) {
+		// Ajout du formulaire :
+		$(that.id+'.form').html(data);
+		if (changerPortail) {
+			// Ajout fonction de listage des portails :
+			$('#portail').autocomplete({
+				source : portails,
+				min : 3
+			});
+			// Ajout de la fonction d'envoi du formulaire :
+			$('#verifierPortail').click(function() {that.verifierPortail(envoyerSurServeur)});
+		} else {
+			$('p.verifierPortail, p.portail').hide();
+			$(that.id+'.form #titre').val(that.titre);
+			$(that.id+'.form #description').val(that.description);
+			$(that.id+'.form #debut_annee').val(that.debut_annee);
+			$(that.id+'.form #fin_annee').val(that.fin_annee);
+			$(that.id+'.form #echelle_temps_haut').val(that.echelle_temps_haut);
+			$(that.id+'.form #echelle_temps_bas').val(that.echelle_temps_bas);
+			$(that.id+'.form #duree').val(that.duree);
+		}
+	});
 }
 
 Carte.prototype.sauverSurServeur = function() {
@@ -299,7 +381,8 @@ Carte.prototype.sauverSurServeur = function() {
 			echelle_temps_haut : this.echelle_temps_haut,
 			echelle_temps_bas : this.echelle_temps_bas,
 			fin_annee : this.fin_annee,
-			duree : this.duree
+			duree : this.duree,
+			idCarte : this.idC
 		},
 		majEve : {
 			tabEvenements : this.tabEvenements,
@@ -324,18 +407,20 @@ Carte.prototype.sauverSurServeur = function() {
 }
 
 Carte.prototype.razStyles = function(id) {
-	$('#'+id+' select option').prop('selected', false);
+	var that = this.id;
+	$(this.id +' select option').prop('selected', false);
 	$.each(this.tabEvenements, function (i, eve) {
-		$('#'+id+' #_' + eve.options.idp + ' select option[value=' + eve.options.theme + ']').prop('selected', true);
+		$(that.id +' #_' + eve.options.idp + ' select option[value=' + eve.options.theme + ']').prop('selected', true);
 	});
 }
 
 Carte.prototype.validerStylesFiltrerEvenementsNonCoches = function(id) {
+	var that = this;
 	// On met à jour les thèmes :
 	var tab = [];
 	var aSuppr = [];
 	$.each(this.tabEvenements, function (i, eve) {
-		var tps = $('#'+id + ' #_' + eve.options.idp);
+		var tps = $(that.id + ' #_' + eve.options.idp);
 		if (tps.find('input.checkbox').prop('checked')) {
 			eve.options.theme = tps.find('select option:selected').val();
 			tab.push(eve);

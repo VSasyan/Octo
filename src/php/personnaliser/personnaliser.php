@@ -7,8 +7,7 @@
 
 				<div id="creer">
 					<h2>Créer une carte</h2>
-						<div id="ajax">
-						</div>
+					<div id="ajax" class="form"></div>
 				</div>
 
 		<?php
@@ -24,7 +23,8 @@
 
 					<div id="perso">
 						<h2>Personnaliser la carte<span id="titre"></span></h2>
-						<div id="ajax"></div>
+						<div id="ajax" class="form"></div>
+						<div id="ajax" class="eve"></div>
 					</div>
 
 		<?php

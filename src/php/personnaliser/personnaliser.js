@@ -14,10 +14,10 @@ $(document).ready(function() {
 			var idC = $.url('idC');
 			if (idC) {
 				$('#ajax').html('Chargement de la Carte...' + html_chargement);
-				carte = new Carte();
+				carte = new Carte('ajax');
 				if (carte.ouvrirCarteServeur(idC)) {
 					// On charge les evenements pour que l'utilisateur personnalise la carte :
-					carte.afficherEvenements('ajax');
+					carte.afficherEvenements();
 				} else {
 					$('#ajax').html('Erreur lors du chargement !');
 				}
@@ -50,64 +50,9 @@ function recupererPortails() {
 		// Ok c'est fini, on les passe dans la variable globales :
 		portails = tps;
 		// On affiche le formulaire pour le portail :
-		$.ajax({
-			url : 'personnaliser/ajax.php?fct=formulaire_portail'
-		}).done(function (data) {
-			// Ajout du formulaire :
-			$('#ajax').html(data);
-			// Ajout fonction de listage des portails :
-			$('#portail').autocomplete({
-				source : portails,
-				min : 3
-			});
-			// Ajout de la fonction d'envoi du formulaire :
-			$('#verifierPortail').click(function() {verifierPortail()});
-		})
+		carte = new Carte('ajax');
+		carte.afficherFormulaire(true, true);
 	});
-}
-
-function verifierPortail() {
-	$('#resultat').html('<p>Vérifications en cours...</p>');
-	// On vérifie que le portail est dans la liste :
-	var portail = false;
-	var nom = $('#portail').val();
-	$.each(portails, function(i,elm) {if (elm.nom.toLowerCase() == nom.toLowerCase()) {portail = elm;}});
-	if (portail === false) {
-		// On charge le message d'erreur :
-		$('#ajax').html(html_chargement);
-		$.ajax({
-			url: 'personnaliser/ajax.php?fct=erreur_portail&portail='+encodeURIComponent(nom)
-		}).done(function(data) {
-			$('#ajax').html(data);
-			$('#nom').val(nom);
-		});
-	} else {
-		// On crée la carte :
-		carte = new Carte(
-			portail,
-			$('#debut_annee').val(),
-			$('#fin_annee').val(),
-			$('#titre').val(),
-			$('#description').val(),
-			$('#duree').val(),
-			true
-		);
-		carte = new Carte();
-		var dataCarte = {
-			debut_annee : $('#debut_annee').val(),
-			fin_annee : $('#fin_annee').val(),
-			titre : $('#titre').val(),
-			description : $('#description').val(),
-			duree : $('#duree').val(),
-			echelle_temps_bas : $('#echelle_temps_bas').val(),
-			echelle_temps_haut : $('#echelle_temps_haut').val(),
-		};
-		console.log(dataCarte);
-		carte.initialiserCarte(dataCarte);
-		if (carte.ajouterCarteServeur(portail)) {
-
-		}
-	}
 }
 
 function chargerCartes(type) {
