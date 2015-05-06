@@ -1,4 +1,3 @@
-
-Corriger viewer (voir ses propres cartes + divers);
-Ajouter styles auto (+ filtrerDate)
+Génération des cartes dans viewer
+Ajouter styles auto (refaire base + roles)
 Lecture / pause ?
