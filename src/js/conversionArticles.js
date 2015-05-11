@@ -31,8 +31,8 @@ function definirStyle(temp, mediane) {
 	// Definition du style d'après l'infobox :
 	var style = 'defaut';
 	var taille = '';
-	if (!(typeof(themes.infobox[temp.eve.options.theme]) === 'undefined')) {
-		style = themes.infobox[temp.eve.options.theme];
+	if (!(typeof(themes.infobox[temp.eve.options.theme.toLowerCase().replace(/ /g, '')]) === 'undefined')) {
+		style = themes.infobox[temp.eve.options.theme.toLowerCase().replace(/ /g, '')];
 	}
 	// Taille de la balise :
 	if (temp.importance > mediane) {taille = 'Grand';}

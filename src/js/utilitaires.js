@@ -167,7 +167,6 @@ function afficherCarte(eve, echelle) {
 
 	// On charge les themes :
 	chargerThemes(themes.themes);
-
 	// On lance la time map :
 	setTimeout(function() {
 		tm = TimeMap.init({
