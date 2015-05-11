@@ -1,3 +1,0 @@
-Génération des cartes dans viewer
-Ajouter styles auto (refaire base + roles)
-Lecture / pause ?
