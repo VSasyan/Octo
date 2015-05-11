@@ -1,4 +1,5 @@
 var cartes;
+var carte;
 var dir = '../';
 var tm;
 var session;
@@ -45,7 +46,6 @@ function recupererCartes() {
 			}
 		});
 	}
-	console.log(tps);
 
 	// Ok c'est fini, on les passe dans la variable globale :
 	cartes = tps;
@@ -59,28 +59,28 @@ function recupererCartes() {
 		// On récupère l'id du portail :
 		var i = /_([0-9]*)/.exec($(this).attr('id'));
 		if (i) {
-			var carte = cartes[i[1]];
-			if (carte.auteur == 'automatique') {
+			var carteChoisie = cartes[i[1]];
+			if (carteChoisie.auteur == 'automatique') {
+				// Creation de la carte :
+				carte = new Carte('');
 				$('#loading').html('Chargement de la carte...'+html_chargement);
 				$('#action').removeClass('liste').addClass('loading');
-				// La carte est une carte auto, on doit récupérer les articles et les transformer :
-				var eve = false;
-				var url = 'script.php?a=list';
-				var data = 'idPortail=' + carte.id;
-				$.post(url, data, function(data) {
-					var info = JSON.parse(data);
-					// On convertit les éléments :
-					var eve = conversionArticles(info.tabArticles);
-					// On definit l'échelle :
-					var echelle = definirEchelle(eve);
-					// On affiche la carte :
-					afficherCarte(eve, echelle);
-				});
-			} else {
-				// La carte est déjà faite, on récupère les événements :
-				var eve = false;
+				carte.recupererArticles(carteChoisie);
+				carte.filtrerArticles();
+				// Articles recuperés : on les convertis :
+				carte.conversionArticles();
+				// On defini l'échelle :
+				carte.definirEchelle();
 				// On affiche la carte :
-				afficherCarte(eve);
+				carte.voirCarte(false);
+			} else {
+				carte = new Carte('');
+				if (carte.ouvrirCarteServeur(carteChoisie.id)) {
+					carte.voirCarte(false);
+				} else {
+					// On affiche la carte :
+					$('#ajax').html('Erreur à l\'ouverture de la carte !');
+				}
 			}
 		}
 
