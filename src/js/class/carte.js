@@ -12,6 +12,8 @@ function Carte(id) {
 	this.echelle_temps_bas = 3;
 	this.duree = 30;
 	this.idC = -1;
+	this.animee = false;
+	this.pause = {current:0,timePassed:1,duration:0};
 }
 
 Carte.prototype.initialiserCarte = function(data) {
@@ -20,7 +22,6 @@ Carte.prototype.initialiserCarte = function(data) {
 	$.each(aCopier, function(i, name) {
 		if (data.hasOwnProperty(name)) {that[name] = data[name];}
 	});
-	console.log(this.titre, this)
 }
 
 Carte.prototype.verifierPortail = function(envoyerSurServeur) {
@@ -124,8 +125,31 @@ Carte.prototype.ajouterCarteServeur = function(portail) {
 	}
 }
 
-Carte.prototype.calculerThemesAuto = function() {
+Carte.prototype.calculerMediane = function() {
+	// On additionne toutes les importances :
+	var importances = 0;
+	$.each(this.tabEvenements, function(i, eve) {importances += Math.max(eve.options.importance);});
+	return importances / this.tabEvenements.length;
+}
 
+Carte.prototype.calculerThemesAuto = function() {
+	var mediane = this.calculerMediane();
+	// Definition du style d'après l'infobox :
+	var tab = [];
+	$.each(this.tabEvenements, function(i, eve) {
+		var style = 'defaut';
+		var taille = '';
+		// Type de la balise :
+		var infobox = eve.options.infobox.toLowerCase().replace(/ /g, '');
+		if (!(typeof(themes.infobox[infobox]) === 'undefined')) {style = themes.infobox[infobox];}
+		// Taille de la balise :
+		if (eve.options.importance > mediane) {taille = 'Grand';}
+		// On definit le theme :
+		eve.options.theme = style+taille;
+		tab.push(eve);
+		console.log(eve.options.infobox, eve.options.theme);
+	});
+	this.tabEvenements = tab;
 }
 
 Carte.prototype.ouvrirCarteServeur = function(idC) {
@@ -276,13 +300,19 @@ Carte.prototype.conversionArticles = function() {
 	this.tabEvenements = conversionArticles(this.tabArticles);
 }
 
+Carte.prototype.definirEchelle = function() {
+	var echelle = definirEchelle(this.tabEvenements);
+	this.echelle_temps_haut = parseInt(echelle.haut);
+	this.echelle_temps_bas = parseInt(echelle.bas);
+}
+
 Carte.prototype.afficherEvenements = function() {
 	//this.changerTriEvenements('title');
 	// Choix des themes :
 	var HTML_themes = '';
 	HTML_themes += '<select>';
 	$.each(themes.themes, function (i, theme) {
-		HTML_themes += '<option value="' + theme.nom + '">' + theme.nom + '</option>';
+		HTML_themes += '<option value="' + theme.nom + '">' + theme.titre + '</option>';
 	});
 	HTML_themes += '</select>';
 
@@ -329,8 +359,7 @@ Carte.prototype.fonctionsEvenements = function() {
 		aSuppr = that.validerStylesFiltrerEvenementsNonCoches();
 		if (that.idC != -1) {
 			// La carte est enregistrée, il faut donc la mettre à jour sur le serveur :
-			var retour = that.sauverSurServeur(aSuppr);
-			if (retour.valide === true) {
+			if (that.sauverSurServeur(aSuppr) === true) {
 				alert("Votre carte est bien sauvegardée sur le serveur !");
 			} else {
 				alert(retour.message);
@@ -339,7 +368,7 @@ Carte.prototype.fonctionsEvenements = function() {
 		that.afficherEvenements();
 	});
 	$(this.id + ' #razStyles').click(function() {that.razStyles();});
-	$(this.id + ' #voirCarte').click(function() {that.voirCarte();});
+	$(this.id + ' #voirCarte').click(function() {that.voirCarte(true);});
 }
 
 Carte.prototype.afficherFormulaire = function(changerPortail, envoyerSurServeur) {
@@ -418,11 +447,11 @@ Carte.prototype.sauverSurServeur = function(aSuppr) {
 	return retour.valide;
 }
 
-Carte.prototype.razStyles = function(id) {
+Carte.prototype.razStyles = function() {
 	var that = this.id;
-	$(this.id +' select option').prop('selected', false);
+	$(this.id+'.eve' +' select option').prop('selected', false);
 	$.each(this.tabEvenements, function (i, eve) {
-		$(that.id +' #_' + eve.options.idp + ' select option[value=' + eve.options.theme + ']').prop('selected', true);
+		$('#_' + eve.options.idp + ' select option[value=' + eve.options.theme + ']').prop('selected', true);
 	});
 }
 
@@ -456,7 +485,8 @@ Carte.prototype.validerStylesFiltrerEvenementsNonCoches = function(id) {
 	return aSuppr;
 }
 
-Carte.prototype.voirCarte = function(id) {
+Carte.prototype.voirCarte = function(retourPossible) {
+	var retourPossible = retourPossible || false;
 	var that = this;
 	// On charge la carte :
 	$('#wrap').html('Chargement de la Carte...' + html_chargement);
@@ -470,23 +500,64 @@ Carte.prototype.voirCarte = function(id) {
 			haut: parseInt(that.echelle_temps_haut),
 			bas: parseInt(that.echelle_temps_bas)
 		};
-		console.log(echelle)
 		// On affiche la timeline :
 		afficherCarte(that.tabEvenements, echelle);
-		// On ajoute la fonction d'animation :
-		$('#animate').click(function () {
-			var duration = parseInt(that.duree*1000);
-			tm.animate(duration);
-		});
+		// On ajoute les fonctions d'animation :
+		$('#play').click(function () {that.lancerAnimation();});
+		$('#pause').click(function () {that.pauseAnimation();});
+		$('#stop').click(function () {that.stopAnimation();});
 		// Et la fonction Retour à l'edition :
-		$('#edition').click(function () {
-			that.retourEdition(id);
-		});
+		console.log(retourPossible)
+		if (retourPossible === true) {
+			$('#edition').click(function () {
+				that.retourEdition();
+			});
+		} else {
+			$('#edition').remove();
+		}
 
 	});
 }
 
-Carte.prototype.retourEdition = function (id) {
+Carte.prototype.lancerAnimation = function () {
+	if (this.animee === false) {
+		this.animee = true;
+		this.animation = tm.animate(this.duree*1000);
+		$('span#animate .fa-play').addClass('fa-stop').removeClass('fa-play');
+		if (this.pause.timePassed < this.pause.duration) {
+			this.animation.current = this.pause.current;
+			this.animation.timePassed = this.pause.timePassed;
+		}
+		$('#play').hide(); $('#pause').show(); $('#stop').show();
+	}
+}
+
+Carte.prototype.pauseAnimation = function() {
+	if (this.animee === true) {
+		this.pause = {
+			current : this.animation.current,
+			timePassed : this.animation.timePassed,
+			duration : this.animation.duration
+		};
+		this.animation.to = this.animation.current;
+		this.animation.timePassed = this.animation.duration;
+		this.animee = false;
+		$('#pause').hide(); $('#play').show();
+	}
+}
+
+Carte.prototype.stopAnimation = function() {
+	if (this.animee === true) {
+		this.animation.to = this.animation.current;
+		this.animation.timePassed = this.animation.duration;
+		this.animee = false;
+		$('#pause').hide(); $('#play').show();
+	}
+	$('#pause').hide(); $('#play').show(); $('#stop').hide();
+	this.pause = {current:0,timePassed:1,duration:0};
+}
+
+Carte.prototype.retourEdition = function () {
 	var that = this;
 	$('body').removeClass('tm');
 	$('#wrap').html('Chargement de \'interface d\'édition...' + html_chargement);
@@ -496,6 +567,6 @@ Carte.prototype.retourEdition = function (id) {
 		// Ajout de l'editeur  :
 		$('#wrap').html(data);
 		// On affiche les evènements :
-		that.afficherEvenements(id);
+		that.afficherEvenements();
 	});
 }

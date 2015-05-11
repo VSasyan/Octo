@@ -7,7 +7,7 @@ var themes;
 $(document).ready(function() {
 	// On recupère les thèmes puis :
 	recupererThemes(function() {
-		session = recupererSession();console.log(session);
+		session = recupererSession();
 		var type = $.url('type', 'creer');
 		if (type == 'perso') {
 			// On tente de recuperer l'idC :

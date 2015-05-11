@@ -77,7 +77,7 @@
 
 <?php
 
-	} elseif ($fct == 'viewer_unregistered') {
+	} elseif ($fct == 'viewer_unregistered' || $fct == 'viewer') {
 
 ?>
 
@@ -101,7 +101,9 @@
 						<a href="#viewSource" title="Voir les sources"><i class="fa fa-cog"></i></a>
 					</div>
 					<div id="anim">
-						<span id="animate" title="Animation"><i class="fa fa-play"></i></span>
+						<span id="play" title="Lecture"><i class="fa fa-play"></i></span>
+						<span id="pause" title="Pause" style="display:none;"><i class="fa fa-pause"></i></span>
+						<span id="stop" title="Stop" style="display:none;"><i class="fa fa-stop"></i></span>
 					</div>
 				</div>
 			</div>
