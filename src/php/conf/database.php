@@ -16,8 +16,3 @@
             "database" => "octo-test"
         )
     );
-    
-    /**
-     * Path to the application
-     */
-    $PATH = "/octo/php/";

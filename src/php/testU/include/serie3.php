@@ -37,7 +37,7 @@ function compareEvenement($tabEvent){
       
     $mysqli = @new mysqli($database[$uses]["host"], $database[$uses]["user"], $database[$uses]["password"], $database[$uses]["database"]);
       
-    $sql = "SELECT id, start, end, titre, theme, idCarte, idPage
+    $sql = "SELECT id, start, end, titre, theme, importance, idCarte, idPage
     FROM evenement ";
  
     $resultat = $mysqli->query($sql);
@@ -241,6 +241,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "363-1-1",
       "titre" => "Bataille de CtÃ©siphon (363)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 3019915,
       "idCarte" => 1),
      
@@ -250,6 +251,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "1916-12-19",
       "titre" => "Bataille de Verdun (1916)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 49111,
       "idCarte" => 1),
      
@@ -259,6 +261,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "-52-1-1",
       "titre" => "SiÃ¨ge d'AlÃ©sia",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 56637,
       "idCarte" => 1)
     );
@@ -271,6 +274,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "363-1-1",
       "titre" => "Bataille de CtÃ©siphon (363)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 3019915,
       "idCarte" => 1),
      
@@ -280,6 +284,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "1916-12-19",
       "titre" => "Bataille de Verdun (1916)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 49111,
       "idCarte" => 1),
      
@@ -289,6 +294,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "-52-1-1",
       "titre" => "SiÃ¨ge d'AlÃ©sia",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 56637,
       "idCarte" => 1),
     
@@ -298,6 +304,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "363-1-1",
       "titre" => "Bataille de CtÃ©siphon (363)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 3019915,
       "idCarte" => 2),
      
@@ -307,6 +314,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "1916-12-19",
       "titre" => "Bataille de Verdun (1916)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 49111,
       "idCarte" => 2),
      
@@ -316,6 +324,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "-52-1-1",
       "titre" => "SiÃ¨ge d'AlÃ©sia",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 56637,
       "idCarte" => 2)
     );
@@ -328,6 +337,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "363-1-1",
       "titre" => "Bataille de CtÃ©siphon (363)",
       "theme" => "batailleGrand",
+      "importance"  => 0.5,
       "idPage" => 3019915,
       "idCarte" => 1),
      
@@ -337,6 +347,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "1916-12-19",
       "titre" => "Bataille de Verdun (1916)",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 49111,
       "idCarte" => 1),
      
@@ -346,6 +357,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       "end" => "-52-1-1",
       "titre" => "SiÃ¨ge d'AlÃ©sia",
       "theme" => "defaut",
+      "importance"  => 0.5,
       "idPage" => 56637,
       "idCarte" => 1), 
     );
@@ -362,6 +374,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       ),
       "options" => array(
           "theme" => "defaut",
+          "importance"  => 0.5,
           "ide" => 1,
           "idp" => 3019915,
           "infobox" => "conflit militaire",
@@ -378,6 +391,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       ),
       "options" => array(
           "theme" => "defaut",
+          "importance"  => 0.5,
           "ide" => 2,
           "idp" => 49111,
           "infobox" => "Conflit militaire",
@@ -394,6 +408,7 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
       ),
       "options" => array(
           "theme" => "defaut",
+          "importance"  => 0.5,
           "ide" => 3,
           "idp" => 56637,
           "infobox" => "Conflit militaire",
@@ -404,12 +419,12 @@ function testSuppressionCarte($id, $tabCarte, $tabEvent){
  
  
  $jsonCreate =  "{\"titre\":\"titreCarte\",\"idU\":\"1\",\"idP\":\"1\",\"description\":\"decrit\",\"echelle_temps_haut\":\"NULL\", \"echelle_temps_bas\":\"NULL\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"duree\":\"120\"}";
- $jsonModif1 = "{\"carte\": {\"idCarte\":1, \"titre\": \"Ma Vraie Rome\", \"description\": \"petite description\", \"debut_annee\": \"-800\", \"echelle_temps_haut\": \"9\", \"echelle_temps_bas\": \"7\", \"fin_annee\": \"410\", \"duree\": \"120\"}, \"majEve\": {\"tabEvenements\": [{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"aSuppr\": [\"1565\", \"1566\", \"1567\", \"1568\", \"1569\", \"1570\"]}}";
- $jsonModif2 = "{\"carte\": {\"idCarte\":1, \"titre\": \"Ma Vraie Rome\", \"description\": \"petite description\", \"debut_annee\": \"-800\", \"echelle_temps_haut\": \"9\", \"echelle_temps_bas\": \"7\", \"fin_annee\": \"410\", \"duree\": \"120\"}, \"majEve\": {\"tabEvenements\": [{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"batailleGrand\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"aSuppr\": [\"1565\", \"1566\", \"1567\", \"1568\", \"1569\", \"1570\"]}}";
+ $jsonModif1 = "{\"carte\": {\"idCarte\":1, \"titre\": \"Ma Vraie Rome\", \"description\": \"petite description\", \"debut_annee\": \"-800\", \"echelle_temps_haut\": \"9\", \"echelle_temps_bas\": \"7\", \"fin_annee\": \"410\", \"duree\": \"120\"}, \"majEve\": {\"tabEvenements\": [{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"aSuppr\": [\"1565\", \"1566\", \"1567\", \"1568\", \"1569\", \"1570\"]}}";
+ $jsonModif2 = "{\"carte\": {\"idCarte\":1, \"titre\": \"Ma Vraie Rome\", \"description\": \"petite description\", \"debut_annee\": \"-800\", \"echelle_temps_haut\": \"9\", \"echelle_temps_bas\": \"7\", \"fin_annee\": \"410\", \"duree\": \"120\"}, \"majEve\": {\"tabEvenements\": [{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"batailleGrand\",,\"importance\":\"0.5\"\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"aSuppr\": [\"1565\", \"1566\", \"1567\", \"1568\", \"1569\", \"1570\"]}}";
  $jsonCompare ="[{\"id\":\"1\",\"titre\":\"titreCarte\",\"description\":\"decrit\"},{\"id\":\"2\",\"titre\":\"titreCarte\",\"description\":\"decrit\"}]";
  
- $jsonRetour1 = "{\"id\":\"1\",\"titre\":\"titreCarte\",\"description\":\"decrit\",\"echelle_temps_haut\":null,\"echelle_temps_bas\":null,\"duree\":\"120\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"tabEvenements\":[{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"valide\":true}";
- $jsonRetour2 = "{\"id\":\"2\",\"titre\":\"titreCarte\",\"description\":\"decrit\",\"echelle_temps_haut\":null,\"echelle_temps_bas\":null,\"duree\":\"120\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"tabEvenements\":[{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"3019915\",\"ide\":\"4\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"49111\",\"ide\":\"5\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"idp\":\"56637\",\"ide\":\"6\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"valide\":true}";
+ $jsonRetour1 = "{\"id\":\"1\",\"titre\":\"titreCarte\",\"description\":\"decrit\",\"echelle_temps_haut\":null,\"echelle_temps_bas\":null,\"duree\":\"120\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"tabEvenements\":[{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"3019915\",\"ide\":\"1\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"49111\",\"ide\":\"2\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"56637\",\"ide\":\"3\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"valide\":true}";
+ $jsonRetour2 = "{\"id\":\"2\",\"titre\":\"titreCarte\",\"description\":\"decrit\",\"echelle_temps_haut\":null,\"echelle_temps_bas\":null,\"duree\":\"120\",\"debut_annee\":\"-55\",\"fin_annee\":\"2014\",\"tabEvenements\":[{\"start\":\"363-1-1\",\"end\":\"363-1-1\",\"title\":\"Bataille de Ct\u00c3\u00a9siphon (363)\",\"point\":{\"lat\":\"33.1\",\"lon\":\"44.5833\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"3019915\",\"ide\":\"4\",\"infobox\":\"conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Ct%C3%A9siphon_(363)\"}},{\"start\":\"1916-2-21\",\"end\":\"1916-12-19\",\"title\":\"Bataille de Verdun (1916)\",\"point\":{\"lat\":\"49.1608\",\"lon\":\"5.38842\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"49111\",\"ide\":\"5\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Bataille_de_Verdun_(1916)\"}},{\"start\":\"-52-1-1\",\"end\":\"-52-1-1\",\"title\":\"Si\u00c3\u00a8ge d'Al\u00c3\u00a9sia\",\"point\":{\"lat\":\"47.5372\",\"lon\":\"4.50028\"},\"options\":{\"theme\":\"defaut\",\"importance\":\"0.5\",\"idp\":\"56637\",\"ide\":\"6\",\"infobox\":\"Conflit militaire\",\"url\":\"http:\/\/fr.wikipedia.org\/wiki\/Si%C3%A8ge_d%27Al%C3%A9sia\"}}],\"valide\":true}";
  
  
  
