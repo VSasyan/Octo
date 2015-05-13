@@ -59,7 +59,7 @@ $(document).ready(function () {
 	});
 
 	/**
-		Vérifie que les deux mdp sont pareils, sinon colorise le 2eme champs
+		Vérifie que les deux mdp sont pareils, sinon colorise le 2eme champss
 		Entrée : null
 		Sortie : null
 	**/

@@ -54,11 +54,11 @@ function truncString(str, n) {
 }
 
 /**
-	Charge la liste des thèmes possibles sur le serveur en AJAX
-	Entrée : null
+	Charge la liste des thèmes possibles dans la TimeMap
+	Entrée : themes : liste des themes
 	Sortie : null, modifie directment la var globale TimeMap
 **/
-function chargerThemes() {
+function chargerThemes(themes) {
 	TimeMap.themes = {};
 	$.each(themes, function(i, theme) {
 		TimeMap.themes[theme.nom] = {
