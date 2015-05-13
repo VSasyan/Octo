@@ -8,7 +8,7 @@ class App {
     public function __construct() {
         
     }
-
+// Cette fonction renvoie la connexion à la base de données
     public function getConnect() {
         if (!isset($this->connect)) {
             $this->connect = new Database();
@@ -16,12 +16,16 @@ class App {
         return $this->connect;
     }
 
+	// Cette fonction permet d'ajouter un portail
+	// Elle prend en entrée un nom de portail et un url de portail
     public function addPortail($nom, $url) {
         // TODO check exist?
         $portail = new Portail($nom, $url);
         $portail->add($this->getConnect());
     }
 
+	// Cette fonction permet d'obtenir les portails déjà existants
+	// Elle renvoie les portails existants
     public function getPortails() {
         if (!isset($this->portails)) {
             $sql = "SELECT id, nom, date_MAJ, lien FROM portail";
@@ -34,6 +38,9 @@ class App {
         return $this->portails;
     }
 
+	// Cette fonction permet d'obtenir les portails déjà existants sous forme de données JSON
+	// Elle prend entrée les données 
+	// Elle renvoie les portails sous forme JSON
     public function getPortailsJSON($opt) {
         $json = [];
         foreach ($this->getPortails() as $n => $p) {
@@ -42,6 +49,9 @@ class App {
         return json_encode($json);
     }
 
+	// Cette fonction permet d'enregistrer une page
+	// Elle prend en entrée les données d'une page en json
+	//Renvoie valide=true si les pages ont pu être enregistrées, false sinon
     public function savePages($json) {
         $pages = json_decode($json);
 
@@ -82,7 +92,11 @@ class App {
         }
         return json_encode($json);
     }
-
+	
+	// Cette fonction permet de lister les pages relatives à un portail
+	// ELle prend en entrée l'identifiant du portail et un booléen qui 
+	//permet de filtrer les pages qui ne sont pas géolocalisées et non datées
+	// Elle renvoie sous forme de tableau les pages du portail
     public function listPagesPortail($idPortail, $filter=false) {
         $sql = "SELECT id, nom, lien FROM portail WHERE id=" . $idPortail;
         $portail = $this->getConnect()->query($sql);
@@ -95,14 +109,21 @@ class App {
             $p = array();
         return $p;
     }
-
+	
+	// Cette fonction permet de tranformer les données des pages d'un portail en données json
+	// Elle prend en entrée l'identifiant d'un portail
+	// Elle renvoie les données des pages sous forme de json
     public function jsonPagesPortail($idPortail) {
         $p = $this->listPagesPortail($idPortail);
         $opt = ['id', 'nom', 'lien', 'tabArticles'];
         $json = json_encode($p->getJSON($opt));
         return $json;
     }
-
+	
+	//Cette fonction permet de créer une carte et les événements associés à cette carte
+	//Elle prend en entrée un objet json contenant les données sur la cartes
+	// En sortie, elle renvoie valide=true si la carte a pu être créée, false sinon, et 
+	//les informations de la carte
     public function createCarte($json) {
         $vals = json_decode($json);
         $carte = new Carte($vals->titre, $vals->idU, $vals->idP, $vals->description, $vals->debut_annee, $vals->fin_annee, $vals->duree, $vals->echelle_temps_haut, $vals->echelle_temps_bas);
@@ -120,6 +141,9 @@ class App {
         return json_encode($carte);
     }
 
+	// Cette fonction permet de récupérer les informations d'une carte
+	// Prend en entrée l'identifiant d'une carte
+	// Renvoie les informations relatives à la carte
     public function getCarte($idCarte){
         
         $sql1 = "SELECT id, titre, description, echelle_temps_haut, echelle_temps_bas, duree, debut_annee, fin_annee, idPortail "
@@ -170,12 +194,18 @@ class App {
         return $carte;
     }
     
+	//Cette fonction renvoie les cartes d'un utilisateur dans un objet json
+	// Elle prend en entrée l'identifiant d'un utilisateur
+	//En sortie, renvoie l'identifiant, le titre et la description des cartes dans un objet json
     public function getCartesFromUser($idUser){
         $sql = "SELECT id, titre, description FROM carte WHERE idUtilisateur=".$idUser;
         $res = $this->getConnect()->query($sql);
         return json_encode($res);
     }
     
+	//Cette fonction permet la mise à jour de la carte
+	//Prend en entrée les données de la carte dans un objet json
+	//Renvoie valide=true si la carte a pu être modifiée, false sinon 
     public function updateCarte($json){
         $vals = json_decode($json);
         $carte = $vals->carte;
@@ -209,6 +239,9 @@ class App {
         return $r;
     }
     
+	// Cette fonction permet de supprimer une carte
+	// Elle prend en entrée l'identifiant d'une carte
+	// Elle renvoie en sortie valide=vrai si la carte a bien été supprimée, false sinon
     public function deleteCarte($idCarte){
         $sql = "DELETE FROM carte WHERE id = ".$idCarte."; DELETE FROM evenement WHERE idCarte=".$idCarte.";";
         $err = $this->getConnect()->multipleQuery($sql);
@@ -220,10 +253,15 @@ class App {
         return $r;
     }
     
+	// Cette fonction renvoie le mode de travail dans la base de données
+	//Renvoie test ou dev selon le mode de travail dans lequel on est
     public function getUses() {
         return $this->getConnect()->getUses();
     }
 
+	//Cette fonction permet de s'authentifier
+	// Elle prend en entrée un login est un mot de passe dans un objet json
+	// Elle renvoie en sortie valide=vrai si l'authentification a fonctionné, false sinon
     public function authenticate($json) {
         $vals = json_decode($json);
         $user = new User($vals->login, $vals->mdp);
@@ -237,6 +275,10 @@ class App {
         }
     }
 
+	// Cette fonction permet d'ajouter u utilisateur
+	//Elle prend en entrée un login est un mot de passe dans un objet json
+	// Elle renvoie un tableau contenant les informations relatives au nouvel utilisateur
+	// et valide=vrai si l'inscription a fonctionné, false sinon
     public function insertUser($json) {
         $vals = json_decode($json);
         $user = new User($vals->login, $vals->mdp);
@@ -258,6 +300,7 @@ class App {
         return $tab;
     }
 
+	//Cette fonction permet de se déconnecter à la base de données
     public function close() {
         if (isset($this->connect))
             $this->connect->close();

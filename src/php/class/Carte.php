@@ -21,6 +21,7 @@ class Carte {
     
     private $echelle_temps_bas;
     
+	// Constructeur de l'objet carte
     public function __construct($titre, $idUser, $idPortail, $description, $debut_annee, $fin_annee, $duree, $echelleTempsHaut, $echelleTempsBas) {
         $this->titre              = $titre;
         $this->idPortail          = $idPortail;
@@ -33,6 +34,9 @@ class Carte {
         $this->echelle_temps_bas  = $echelleTempsBas;
     }
     
+	//Cette fonction permet de créer la requête pour insérer dans la base de données les informations 
+	//relatives à la carte
+	// Elle renvoie en sortie la requête
     function getCreateQuery(){
         return "INSERT INTO carte(titre, idUtilisateur, idPortail, description, "
         . "debut_annee, fin_annee, duree, echelle_temps_haut, echelle_temps_bas) VALUES(\"".$this->titre."\", ".$this->idUser.", "
@@ -40,6 +44,10 @@ class Carte {
         .$this->duree.", $this->echelle_temps_haut, $this->echelle_temps_bas);";
     }
     
+	// Cette fonction permet de créer la requête pour insérer dans la base de données les modifications
+	// effectuées sur les informations relatives à la carte
+	// Elle prend en entrée l'identifiant de la carte
+	// Elle renvoie en sortie la requête
     function getUpdateQuery($idCarte){
         return "UPDATE carte SET "
             . "titre = \"".$this->titre."\", "

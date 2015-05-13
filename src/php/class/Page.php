@@ -20,13 +20,16 @@ class Page extends Lien{
      * @param type $json
      * @param type $database
      */
+	 // Constructeur de la classe Page
     public function __construct($json) {
         parent::__construct($json->lien, $json->titre, 1, 0, $json->id, $json->portail_id);
         $this->json = $json;
     }
     
     
-    
+	//Cette fonction permet de créer la requête pour insérer dans la base de données les informations
+	//relatives à la page
+	// Elle renvoie en sortie la requête    
     public function getInsertQuery(){
         $sql = "INSERT INTO page(id, lon, lat, nb_langue, longueur, debut_annee, debut_mois, "
                 . "debut_jour, fin_annee, fin_mois, fin_jour, date_MAJ, type_infobox, distance_portail, id_portail )"
@@ -40,7 +43,10 @@ class Page extends Lien{
         $sql = $sql.parent::getInsertQuery();
         return $sql;
     }
-    
+
+	// Cette fonction permet de créer la requête pour insérer dans la base de données les modifications 
+	//effectuées sur les informations relatives à une page
+	// En sortie, elle renvoie la requête    
     public function getUpdateQuery(){
         $sql = "UPDATE page "
             . "SET lon = ".$this->json->lon.", "
