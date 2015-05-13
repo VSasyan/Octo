@@ -1,4 +1,9 @@
-var valider = function(event){ 
+/**
+	Valide le formulaire d'inscription en effectue une requete AJAX pour inscrire l'utilisateur
+	Entrée : null
+	Sortie : null
+**/
+function valider(){
 	var login = $("#loginCice").val(); 
 	var mdp = $("#mdp").val();
 	var form_OK = true;
@@ -53,6 +58,11 @@ $(document).ready(function () {
 		valider();
 	});
 
+	/**
+		Vérifie que les deux mdp sont pareils, sinon colorise le 2eme champs
+		Entrée : null
+		Sortie : null
+	**/
 	$('#mdp, #mdp2').keyup(function() {
 		if ($('#mdp').val() != $('#mdp2').val()) {
 			$("#mdp2").addClass("erreur");

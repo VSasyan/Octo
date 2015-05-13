@@ -1,3 +1,7 @@
+/**
+	Constructeur de la classe Carte.
+	Entrée : id de l'element HHTML qui servira à afficer les informations (peut être vide '')
+**/
 function Carte(id) {
 	this.id = '#'+id;
 	this.trierSelon = '';
@@ -16,6 +20,10 @@ function Carte(id) {
 	this.pause = {current:0,timePassed:1,duration:0};
 }
 
+/**
+	Initialisation de la carte d'après une objet.
+	Entrée : data : l'objet contenant les informations
+**/
 Carte.prototype.initialiserCarte = function(data) {
 	aCopier = ['titre', 'description', 'debut_annee', 'fin_annee', 'duree', 'echelle_temps_bas', 'echelle_temps_haut', 'tabEvenements', 'tabArticles'];
 	var that = this;
@@ -24,6 +32,11 @@ Carte.prototype.initialiserCarte = function(data) {
 	});
 }
 
+/**
+	Vérifie que le portail associé à la carte existe. Si oui crée
+	la carte et l'envoi sur le serveur si demandé.
+	Entrée : envoyerSurServeur : bool, faut-il envoyer la carte sur le serveur ou non ?
+**/
 Carte.prototype.verifierPortail = function(envoyerSurServeur) {
 	var that = this;
 	$('#resultat').html('<p>Vérifications en cours...</p>');
@@ -65,6 +78,10 @@ Carte.prototype.verifierPortail = function(envoyerSurServeur) {
 	}
 }
 
+/**
+	Ajoute la carte sur le serveur
+	Entrée : portail associé à la carte : portail = {id:id du portail}
+**/
 Carte.prototype.ajouterCarteServeur = function(portail) {
 	$('#resultat').html('<p>Ajout du portail...</p>');
 	// verification de la session utilisateur :
@@ -125,15 +142,24 @@ Carte.prototype.ajouterCarteServeur = function(portail) {
 	}
 }
 
-Carte.prototype.calculerMediane = function() {
+/**
+	Calcul la moyenne de l'importance des évènements associés au portail.
+	Entrée : null
+	Sotie : la moyenne
+**/
+Carte.prototype.calculerMoyenne = function() {
 	// On additionne toutes les importances :
 	var importances = 0;
 	$.each(this.tabEvenements, function(i, eve) {importances += Math.max(eve.options.importance);});
 	return importances / this.tabEvenements.length;
 }
 
+/**
+	Associe automatiquement un thème à chaque évènement de la classe d'après leur infobox et leur importance
+	Entrée : null
+**/
 Carte.prototype.calculerThemesAuto = function() {
-	var mediane = this.calculerMediane();
+	var moyenne = this.calculerMoyenne();
 	// Definition du style d'après l'infobox :
 	var tab = [];
 	$.each(this.tabEvenements, function(i, eve) {
@@ -143,7 +169,7 @@ Carte.prototype.calculerThemesAuto = function() {
 		var infobox = eve.options.infobox.toLowerCase().replace(/ /g, '');
 		if (!(typeof(themes.infobox[infobox]) === 'undefined')) {style = themes.infobox[infobox];}
 		// Taille de la balise :
-		if (eve.options.importance > mediane) {taille = 'Grand';}
+		if (eve.options.importance > moyenne) {taille = 'Grand';}
 		// On definit le theme :
 		eve.options.theme = style+taille;
 		tab.push(eve);
@@ -152,6 +178,10 @@ Carte.prototype.calculerThemesAuto = function() {
 	this.tabEvenements = tab;
 }
 
+/**
+	Charge une carte présente sur le serveur d'après son identifiant idC
+	Entrée : null
+**/
 Carte.prototype.ouvrirCarteServeur = function(idC) {
 	var that = this;
 	// On recupere les cartes existants :
@@ -173,6 +203,10 @@ Carte.prototype.ouvrirCarteServeur = function(idC) {
 	return true;
 }
 
+/**
+	Recupere les articles associés à un portail sur la BDD puis les ajoute à la Carte.
+	Entrée : le portail à récuperer : portail = {id:identifiant du portail}
+**/
 Carte.prototype.recupererArticles = function(portail) {
 	var eve = false;
 	var lien = 'script.php?a=list';
@@ -194,6 +228,10 @@ Carte.prototype.recupererArticles = function(portail) {
 	$('#ajax.form').html('');
 };
 
+/**
+	Filtre les articles sans coordonnées ou sans date
+	Entrée : null
+**/
 Carte.prototype.filtrerArticles = function() {
 	var tab = [];
 	$.each(this.tabArticles, function(i, article) {
@@ -205,6 +243,10 @@ Carte.prototype.filtrerArticles = function() {
 	this.tabArticles = tab;
 };
 
+/**
+	Filtre les articles qui ne sont pas dans la période spécifiée
+	Entrée : null
+**/
 Carte.prototype.filtrerArticlesDate = function() {
 	var that = this;
 	var tab = [];
@@ -217,6 +259,11 @@ Carte.prototype.filtrerArticlesDate = function() {
 	this.tabArticles = tab;
 };
 
+/**
+	Filtre les articles non cochés dans le formulaire
+	Entrée : null
+	Sotie : la moyenne
+**/
 Carte.prototype.filtrerArticlesNonCoches = function() {
 	var that = this;
 	var tab = [];
@@ -228,16 +275,28 @@ Carte.prototype.filtrerArticlesNonCoches = function() {
 	this.tabArticles = tab;
 };
 
+/**
+	Change l'ordre des articles de la classe selon le critère passé en paramètre
+	Entrée : trierSelon : critère de tri
+**/
 Carte.prototype.changerTriArticles = function(trierSelon) {
 	this.trierSelon = (this.trierSelon == trierSelon ? '-'+trierSelon : trierSelon);
 	this.tabArticles.sort(sort_by(this.trierSelon, (this.trierSelon.search(/-/) != -1), false));
 }
 
+/**
+	Change l'ordre des evènements de la classe selon le critère passé en paramètre
+	Entrée : trierSelon : critère de tri
+**/
 Carte.prototype.changerTriEvenements = function(trierSelon) {
 	this.trierSelon = (this.trierSelon == trierSelon ? '-'+trierSelon : trierSelon);
 	this.tabEvenements.sort(sort_by(this.trierSelon, (this.trierSelon.search(/-/) != -1), false));
 }
 
+/**
+	Affiche les articles de la Classe
+	Entrée : null
+**/
 Carte.prototype.afficherArticles = function() {
 	// On affiche le formulaire de selection d'evenements :
 	var HTML = '';
@@ -268,6 +327,10 @@ Carte.prototype.afficherArticles = function() {
 	this.fonctionsArticles();
 };
 
+/**
+	Ajoute les évènements pour les fonctions JS associées au formulaire
+	Entrée : null
+**/
 Carte.prototype.fonctionsArticles = function () {
 	var that = this;
 	// On ajoute les fonction de tri sur le titre :
@@ -296,16 +359,29 @@ Carte.prototype.fonctionsArticles = function () {
 	});
 };
 
+/**
+	Convertit les Articles en Evenements
+	Entrée : null
+**/
 Carte.prototype.conversionArticles = function() {
 	this.tabEvenements = conversionArticles(this.tabArticles);
 }
 
+/**
+	Défini l'échelle temporelle de la classe en fonction des évènements
+	Entrée : null
+**/
 Carte.prototype.definirEchelle = function() {
 	var echelle = definirEchelle(this.tabEvenements);
 	this.echelle_temps_haut = parseInt(echelle.haut);
 	this.echelle_temps_bas = parseInt(echelle.bas);
 }
 
+/**
+	Affiche le formuaire d'édition des evènements associés à la classe
+	Entrée : null
+	Sotie : la moyenne
+**/
 Carte.prototype.afficherEvenements = function() {
 	//this.changerTriEvenements('title');
 	// Choix des themes :
@@ -350,6 +426,10 @@ Carte.prototype.afficherEvenements = function() {
 	this.razStyles();
 }
 
+/**
+	Ajoute les évènements pour les fonctions JS associées au formulaire
+	Entrée : null
+**/
 Carte.prototype.fonctionsEvenements = function() {
 	var that = this;
 
@@ -371,6 +451,12 @@ Carte.prototype.fonctionsEvenements = function() {
 	$(this.id + ' #voirCarte').click(function() {that.voirCarte(true);});
 }
 
+/**
+	Affiche le formulaire sur les informations de la Carte
+	Entrée : 
+		- changerPortail : bool, peut-on changer le portail (oui si la classe vient d'être créée, non si c'est une édition de carte)
+		- envoyerSurServeur : bool, doit-on envoyer la carte créée sur le serveur ?
+**/
 Carte.prototype.afficherFormulaire = function(changerPortail, envoyerSurServeur) {
 	var changerPortail = changerPortail || false;
 	var envoyerSurServeur = envoyerSurServeur || false;
@@ -406,6 +492,10 @@ Carte.prototype.afficherFormulaire = function(changerPortail, envoyerSurServeur)
 	});
 }
 
+/**
+	Récupère les données entrées dans le formulaire par l'utilisateur et met à jour les attributs de la classe
+	Entrée : null
+**/
 Carte.prototype.lireFormulaire = function() {
 	this.titre = $(this.id+'.form #titre').val();
 	this.description = $(this.id+'.form #description').val();
@@ -416,6 +506,10 @@ Carte.prototype.lireFormulaire = function() {
 	this.duree = $(this.id+'.form #duree').val();	
 }
 
+/**
+	Sauvegarde les modifications apportées à la carte et aux évènements qui lui sont associés
+	Entrée : null
+**/
 Carte.prototype.sauverSurServeur = function(aSuppr) {
 	var lien = "script.php?c=maj";
 	var myData = {
@@ -447,6 +541,10 @@ Carte.prototype.sauverSurServeur = function(aSuppr) {
 	return retour.valide;
 }
 
+/**
+	Remet à zéros les styles des évènements sur le formulaire.
+	Entrée : null
+**/
 Carte.prototype.razStyles = function() {
 	var that = this.id;
 	$(this.id+'.eve' +' select option').prop('selected', false);
@@ -455,6 +553,10 @@ Carte.prototype.razStyles = function() {
 	});
 }
 
+/**
+	Filtre les évènements associés à la carte selon la période historique de la carte
+	Entrée : null
+**/
 Carte.prototype.filtrerEvenementsDate = function() {
 	var that = this;
 	// On met à jour les thèmes :
@@ -469,6 +571,10 @@ Carte.prototype.filtrerEvenementsDate = function() {
 	return aSuppr;	
 }
 
+/**
+	Met à jour les styles des évènements associés à la carte, et suprime ceux qui ne sont plus cochés
+	Entrée : null
+**/
 Carte.prototype.validerStylesFiltrerEvenementsNonCoches = function(id) {
 	var that = this;
 	// On met à jour les thèmes :
@@ -485,6 +591,11 @@ Carte.prototype.validerStylesFiltrerEvenementsNonCoches = function(id) {
 	return aSuppr;
 }
 
+/**
+	Affiche la carte.
+	Entrée : retourPossible : bool, true si l'utilisateur peut revenir à la fentre d'édition de
+			 la carte (false quand il est dans le viewer en gros)
+**/
 Carte.prototype.voirCarte = function(retourPossible) {
 	var retourPossible = retourPossible || false;
 	var that = this;
@@ -519,6 +630,10 @@ Carte.prototype.voirCarte = function(retourPossible) {
 	});
 }
 
+/**
+	Lance l'animation de la carte et de la timeline
+	Entrée : null
+**/
 Carte.prototype.lancerAnimation = function () {
 	if (this.animee === false) {
 		this.animee = true;
@@ -532,6 +647,10 @@ Carte.prototype.lancerAnimation = function () {
 	}
 }
 
+/**
+	Pause (reprise possible) l'animation de la carte et de la timeline
+	Entrée : null
+**/
 Carte.prototype.pauseAnimation = function() {
 	if (this.animee === true) {
 		this.pause = {
@@ -546,6 +665,10 @@ Carte.prototype.pauseAnimation = function() {
 	}
 }
 
+/**
+	Stop (reprise impossible) l'animation de la carte et de la timeline
+	Entrée : null
+**/
 Carte.prototype.stopAnimation = function() {
 	if (this.animee === true) {
 		this.animation.to = this.animation.current;
@@ -557,6 +680,10 @@ Carte.prototype.stopAnimation = function() {
 	this.pause = {current:0,timePassed:1,duration:0};
 }
 
+/**
+	Retourne à l'édition de la carte
+	Entrée : null
+**/
 Carte.prototype.retourEdition = function () {
 	var that = this;
 	$('body').removeClass('tm');

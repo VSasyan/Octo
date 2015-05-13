@@ -20,9 +20,17 @@ var data = {
 };
 
 $.ready = function () {	
+	/**
+		Lancer les test si data.attendu != '', sinon genere le test
+	**/
 	if (data.attendu == '') {genererTests();} else {executerTests();}
 }
 
+/**
+	Execution des tests unitaires prévus dans la variable data.
+	Entrée : null, variable globale
+	Sortie : null, affichage direct dans la 
+**/
 function executerTests() {
 	$('#statut').html('Génération du test en cours...').addClass('en_cours');
 
@@ -58,6 +66,11 @@ function executerTests() {
 	}
 }
 
+/**
+	Generation des tests si le string attendu == ''. Le text est affiché dans la page (sortie null)
+	Entrée : null
+	Sortie : null
+**/
 function genererTests() {
 	$('#statut').html('Génération du test en cours...').addClass('en_cours');
 

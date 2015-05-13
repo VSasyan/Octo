@@ -1,4 +1,9 @@
-var valider = function(event){ 
+/**
+	Valide le formulaire de connexion et envoi les données pour tester connecter l'utilisateur
+	Entrée : null
+	Sortie : null
+**/
+function valider() {
 	var login = $("#loginCice").val();
 	var mdp = $("#mdp").val();
 	var form_OK = true;

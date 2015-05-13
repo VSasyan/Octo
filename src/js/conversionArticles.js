@@ -1,3 +1,9 @@
+/**
+	Convertit la liste d'articles passés en paramètre en évènements en générant
+	automatiquement les style selon l'infobox et l'importance
+	Entrée : articles, liste d'articles
+	Sortie : eves, liste d'evènements
+**/
 function conversionArticles(articles) {
 	// On recupere le max pour la longueur des articles et le nombre de langues !
 	var m_longueur = 0;
@@ -27,7 +33,14 @@ function conversionArticles(articles) {
 	return eves;
 }
 
-function definirStyle(temp, mediane) {
+/**
+	Définit le style d'un article en fonction de son infoxbox et de l'importance moyenne de tous les eve
+	Entrée :
+		- temp : temp : evenement temporaire
+		- moyenne : importance moyenne de tous les évènements
+	Sortie : eve : évènement
+**/
+function definirStyle(temp, moyenne) {
 	// Definition du style d'après l'infobox :
 	var style = 'defaut';
 	var taille = '';
@@ -35,7 +48,7 @@ function definirStyle(temp, mediane) {
 		style = themes.infobox[temp.eve.options.theme.toLowerCase().replace(/ /g, '')];
 	}
 	// Taille de la balise :
-	if (temp.importance > mediane) {taille = 'Grand';}
+	if (temp.importance > moyenne) {taille = 'Grand';}
 
 	// Retour :
 	var eve = temp.eve;
@@ -43,6 +56,14 @@ function definirStyle(temp, mediane) {
 	return eve;
 }
 
+/**
+	Converti un article en un evenement
+	Entrée :
+		- article : article
+		- m_longueur : longueur de l'article le plus long de la liste traitée
+		- m_nb_langue : nombre de langue de l'article le plus traduit de la liste traitée
+	Sortie : tps : evenement
+**/
 function articlesEnEvenement(article, m_longueur, m_nb_langue) {
 	var date = getDate(article);
 		

@@ -15,6 +15,11 @@ $(document).ready(function() {
 	});
 });
 
+/**
+	Recupere la listes des cartes de l'utilisateur et les cartes "autp", une par portail
+	Entrée : null
+	Sortie : null
+**/
 function recupererCartes() {
 	$('#action').addClass('loading');
 	// On récupère les cartes existantes :

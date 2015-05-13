@@ -1,3 +1,12 @@
+/**
+	FONCTIONS ET VARIABLES UTILITAIRES UTILISEES DANS TOUTES LES PAGES DU PROJET
+**/
+
+
+Array.prototype.shuffle = function () {
+	return this[Math.floor(Math.random() * this.length)]
+}
+
 var html_chargement = '<div class="center"><img src="../image/load.gif" alt="Chargement en cours..." title="Chargement en cours..."/></div>';
 
 function getMediane(values) {
@@ -5,10 +14,6 @@ function getMediane(values) {
     var half = Math.floor(values.length/2);
     if(values.length % 2) {return values[half];}
     else {return (values[half-1] + values[half]) / 2.0;}
-}
-
-Array.prototype.shuffle = function () {
-	return this[Math.floor(Math.random() * this.length)]
 }
 
 function rand(min, max) {
@@ -19,6 +24,11 @@ function RandR(min, max) {
 	return Math.random() * (max - min) + min;
 }
 
+/**
+	Recuperer la session ouverte via AJAX
+	Entrée : null
+	Sortie : null
+**/
 function recupererSession() {
 	// On demande à getSession.php les paramètres de session
 	var data = $.ajax({
@@ -30,13 +40,25 @@ function recupererSession() {
 	return session;
 }
 
+/**
+	Coupe un string trop long au bout de n-3 caractères et ajoute '...'
+	Entrée :
+		- str : string, la chaine à couper
+		- n : integer, la taille max
+	Sortie : null
+**/
 function truncString(str, n) {
 	if (str.length > n) {
 		return str.substr(0,n-3) + '...';
 	} else {return str;}
 }
 
-function chargerThemes(themes) {
+/**
+	Charge la liste des thèmes possibles sur le serveur en AJAX
+	Entrée : null
+	Sortie : null, modifie directment la var globale TimeMap
+**/
+function chargerThemes() {
 	TimeMap.themes = {};
 	$.each(themes, function(i, theme) {
 		TimeMap.themes[theme.nom] = {
@@ -140,6 +162,12 @@ function definirEchelle(eve) {
 	return echelle;
 }
 
+/**
+	Affiche la liste d'evenement dans une time map
+	Entrée : eve : liste d'évènement
+			 echelle : echelle de la timeline
+	Sortie : null
+**/
 function afficherCarte(eve, echelle) {
 	// On passe en mode carte :
 	$('#action').removeClass('loading').addClass('tm');
@@ -210,6 +238,11 @@ function afficherCarte(eve, echelle) {
 	}, 'fast');
 }
 
+/**
+	Adapt la hauteur de la TL à la fenêtre
+	Entrée : null
+	Sortie : null
+**/
 function adapterHauteur() {
 	var taille = $(window).height() - $('#timelinecontainer').height();
 	$('#mapcontainer').height(taille + 'px');

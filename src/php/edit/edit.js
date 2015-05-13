@@ -10,6 +10,11 @@ $(document).ready(function() {
 	$('#verifierPortail').click(function() {verifierPortail()});
 });
 
+/**
+	Vérifie que le portail est dans la liste
+	Entrée : null
+	Sortie : null, on modifie la page HTML
+**/
 function verifierPortail() {
 	// On vérifie que le portail est dans la liste :
 	var portail = false;
@@ -40,6 +45,11 @@ function verifierPortail() {
 	}
 }
 
+/**
+	Ajoute un portail en AJAX
+	Entrée : null, le portail mais depuis le formulaire
+	Sortie : null
+**/
 function ajouterPortail() {
 	$('#resultat').html('<p>Vérification du portail...</p>' + html_chargement);
 	var lien = "script.php?p=add";
@@ -78,6 +88,11 @@ function ajouterPortail() {
 	});
 }
 
+/**
+	Lance a mise à jours des articles associés au portail dans la BDD
+	Entrée : portail = {id:identifiant du portail}
+	Sortie : null
+**/
 function majArticlesPortail(portail) {
 	var startTime = new Date().getTime();
 	/***
@@ -175,6 +190,11 @@ function majArticlesPortail(portail) {
 	$('#resultat').append('<p id="recup_finie">Récupération terminée ! (effectué en ' + tps + ' s)</p>');
 }
 
+/**
+	Récupère la liste des portails existants en AJAX
+	Entrée : null
+	Sortie : null, lance une autre fonction
+**/
 function recupererPortails() {
 	// On recupere les portails existants :
 	$('#loading').html('Chargement de la liste des portails...'+html_chargement);

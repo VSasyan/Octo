@@ -3,6 +3,7 @@ function recuperer_portail_HTML(portail, page, test_unitaire) {
 		Entrée :
 			portail : titre du portail dont il faut récupérer les Articles Liés
 			page : page de la liste des articles où il faut commencer (par défaut = '')
+			test_unitaire : bool, lancer le parser en mode test-unitaire
 
 		Sortie : PAS au format JSON (PAS en string)
 			{
@@ -69,6 +70,11 @@ function recuperer_portail_HTML(portail, page, test_unitaire) {
 	return retour;
 }
 
+/**
+	Récupère le nombre de pages indéxés dans le portail
+	Entrée : portail : string, nom du portail
+	Sortie : integer, nombre de page
+**/
 function recuperer_nb_liens_portail_HTML(portail) {
 	proxy = dir+'js/proxy.php?url=';
 	url = 'http://fr.wikipedia.org/w/index.php?title=Catégorie:' + portail + '/Articles_liés';

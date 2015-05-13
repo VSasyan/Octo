@@ -8,7 +8,7 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 			test_unitaire : lancer l'opération en mode test unitaire (false par défaut)
 		Sortie :
 			sortie = PAS au format JSON (PAS en string)
-				un tableau de type 
+				un tableau d'objets 
 					{
 						id,
 						titre,
@@ -93,24 +93,43 @@ function recuperer_article_JSON(titres, distanceOrigine, portail_id, debug, test
 	return data;
 }
 
+/**
+	Recuperer les coordonnées en envoyant les coordonnées par défaut (0,0) si entrée invalide
+	Entrée : coor : [{lat:latitude,lon:longitude}]
+	Sortie : {lat:latitude,lon:longitude}
+**/
 function getCoor(coor) {
 	if (typeof coor != 'undefined') {
 		return {lat:coor[0].lat, lon:coor[0].lon};
 	} else {return {lat:0, lon:0};}
 }
 
+/**
+**/
 function getLength(elm) {
 	if (typeof elm != 'undefined') {
 		return elm.length;
 	} else {return 0;}
 }
 
+/**
+	Recupere le type de l'infobox d'un article
+	Entrée : text de l'article
+	Sortie : type de l'infobox, '' par défaut
+**/
 function getInfobox(rev) {
 	var rev = rev || [{'*':''}];
 	var infobox = /Infobox (.*)/.exec(rev[0]['*']);
 	if (infobox) {return infobox[1];} else {return '';}
 }
 
+/**
+	Recuperer la date en envoyant 10000 par défaut si entrée invalide
+	Entrée :
+		- rev : text de l'article
+		- debug : bool, true pour lancer la fonction en mode debugage et logguer les info
+	Sortie : date ou 0
+**/
 function getDate(rev, debug) {
 	var rev = rev || [{'*':''}];
 	var txt = rev[0]['*'].replace(/source[rs]?\|date/g, '').replace(/lier\|date/g, '').replace(/1er/g, '1');
@@ -140,6 +159,11 @@ function getDate(rev, debug) {
 	return date;
 }
 
+/**
+	Transforme les mois en lettres en chiffres
+	Entrée : mois en string
+	Sortie : mois en integer
+**/
 function moisEnChiffre(mois) {
 	if (typeof mois != undefined) {
 		var mois = (mois + '').toLowerCase();
@@ -166,6 +190,13 @@ function moisEnChiffre(mois) {
 	return retour;
 }
 
+/**
+	Parse la première date trouvée dans le corp de l'article
+	Entrée :
+		- txt : texte de l'article
+		- debug : bool, true pour lancer la fonction en mode debugage et logguer les info
+	Sortie : string date ou bool false
+**/
 function parserDateText(txt, debug) {
 	if (info = /([\wûÛéÉ]*) \[\[(-?[0-9]{1,4})\]\]/.exec(txt)) {
 		date = {debut_annee:info[2], debut_mois:info[1], debut_jour:0, fin_annee:info[2], fin_mois:info[1], fin_jour:0};
@@ -174,6 +205,13 @@ function parserDateText(txt, debug) {
 	return false;
 }
 
+/**
+	Parse la date contenue dans le text passer en paramètre, renvoi 10000 si impossible de trouver une date
+	Entrée :
+		- txt : texte de l'article
+		- debug : bool, true pour lancer la fonction en mode debugage et logguer les info
+	Sortie : string : date ou '10000'
+**/
 function parserDateInfobox(txt, debug) {
 	var date = false;
 	if (debug === true) {console.log(txt);}

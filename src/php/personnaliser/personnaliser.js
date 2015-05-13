@@ -55,6 +55,11 @@ function recupererPortails() {
 	});
 }
 
+/**
+	Charge les cartes déjà crées par l'utilisateur
+	Entrée : type : type des modifications à effectuer sur la carte (déprécié, = 'perso')
+	Sortie : null
+**/
 function chargerCartes(type) {
 	// On recupere les cartes existants :
 	$('#ajax').html('Chargement de vos Cartes...' + html_chargement);
