@@ -148,7 +148,7 @@
 			),
 			array(
 				'nom' => 'navirephare',
-				'titre' => 'Navir ou Phare',
+				'titre' => 'Navire ou Phare',
 				'icon' => "../image/theme/navire_phare.png",
 				'eventIconImage' => "../image/theme/navire_phare.png",
 				'iconSize' => [32,32],
@@ -156,7 +156,7 @@
 			),
 			array(
 				'nom' => 'navirephareGrand',
-				'titre' => 'Navir ou Phare (Important)',
+				'titre' => 'Navire ou Phare (Important)',
 				'icon' => "../image/theme/navire_phare.png",
 				'eventIconImage' => "../image/theme/navire_phare.png",
 				'iconSize' => [64,64],
